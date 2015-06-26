@@ -175,6 +175,19 @@ Begin Window WndEditor
       Visible         =   True
       Width           =   573
    End
+   Begin TBEditor tbToolbar
+      Enabled         =   True
+      Height          =   32
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   0
+      LockedInPosition=   False
+      Scope           =   2
+      TabPanelIndex   =   0
+      Top             =   0
+      Visible         =   True
+      Width           =   100
+   End
 End
 #tag EndWindow
 
@@ -355,6 +368,35 @@ End
 		  
 		  fldCode.ScrollPositionX = me.Value
 		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tbToolbar
+	#tag Event
+		Sub Action(item As ToolItem)
+		  XS.Source = fldCode.Text
+		  fldCode.ClearLineIcons
+		  fldCode.ClearHighlightedCharacterRanges
+		  
+		  //
+		  // Handle the compiling first
+		  //
+		  if not XS.Precompile( XojoScript.OptimizationLevels.High ) then
+		    #pragma warning "Finish this!"
+		    
+		    return
+		  end if
+		  
+		  select case item.Caption
+		  case "Compile"
+		    //
+		    // Nothing more to do
+		    //
+		    
+		  case "Run"
+		    XS.Run
+		    
+		  end select
 		End Sub
 	#tag EndEvent
 #tag EndEvents
