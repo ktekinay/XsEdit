@@ -7,10 +7,10 @@ Begin Window WndEditor
    Composite       =   False
    Frame           =   0
    FullScreen      =   False
-   FullScreenButton=   False
+   FullScreenButton=   True
    HasBackColor    =   False
    Height          =   400
-   ImplicitInstance=   True
+   ImplicitInstance=   False
    LiveResize      =   True
    MacProcID       =   0
    MaxHeight       =   32000
@@ -18,9 +18,9 @@ Begin Window WndEditor
    MaxWidth        =   32000
    MenuBar         =   503097343
    MenuBarVisible  =   True
-   MinHeight       =   64
+   MinHeight       =   400
    MinimizeButton  =   True
-   MinWidth        =   64
+   MinWidth        =   600
    Placement       =   0
    Resizeable      =   True
    Title           =   "Untitled"
@@ -34,7 +34,7 @@ Begin Window WndEditor
       LockedInPosition=   False
       Mode            =   0
       Period          =   50
-      Scope           =   0
+      Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
       Width           =   32
