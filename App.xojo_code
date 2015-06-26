@@ -26,6 +26,24 @@ Inherits Application
 	#tag EndMenuHandler
 
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  dim f as FolderItem = App.ExecutableFile.Parent
+			  
+			  #if TargetMacOS then
+			    f = f.Parent.Child( "Resources" )
+			  #else
+			    f = f.Child( "Resources" )
+			  #endif
+			  
+			  return f
+			End Get
+		#tag EndGetter
+		ResourcesFolder As FolderItem
+	#tag EndComputedProperty
+
+
 	#tag Constant, Name = kEditClear, Type = String, Dynamic = False, Default = \"&Delete", Scope = Public
 		#Tag Instance, Platform = Windows, Language = Default, Definition  = \"&Delete"
 		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"&Delete"
@@ -41,5 +59,7 @@ Inherits Application
 	#tag EndConstant
 
 
+	#tag ViewBehavior
+	#tag EndViewBehavior
 End Class
 #tag EndClass
