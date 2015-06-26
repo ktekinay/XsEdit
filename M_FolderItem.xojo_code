@@ -154,7 +154,7 @@ Protected Module M_FolderItem
 		    dim fileInDest as FolderItem = destination.Child( srcName )
 		    if fileInDest <> nil and fileInDest.Exists then // We have to overwrite the file
 		      
-		      // Set up a temporary folder to copy the file to 
+		      // Set up a temporary folder to copy the file to
 		      dim tempFolderName as string = destination.UniqueNameInFolder_MTC( "TempCopy" )
 		      dim tempFolder as FolderItem = destination.GetFolder_MTC( tempFolderName )
 		      
@@ -181,7 +181,7 @@ Protected Module M_FolderItem
 		  end if // overwrite and source.Exists and ...
 		  
 		  // Either this is just a straight copy, or there was an error and source needs to reflect it
-		  if doStraightCopy then 
+		  if doStraightCopy then
 		    source.CopyFileTo( destination )
 		  end if // doStraightCopy
 		  
@@ -541,7 +541,7 @@ Protected Module M_FolderItem
 		Protected Function MacBundleContentsFolder() As FolderItem
 		  #if TargetDesktop
 		    
-		    return App.MacBundleContentsFolder_MTC 
+		    return App.MacBundleContentsFolder_MTC
 		    
 		  #endif
 		End Function
@@ -549,7 +549,7 @@ Protected Module M_FolderItem
 
 	#tag Method, Flags = &h0, CompatibilityFlags = TargetHasGUI
 		Function MacBundleContentsFolder_MTC(Extends theApp As Application) As FolderItem
-		  #if TargetMacOS and TargetDesktop 
+		  #if TargetMacOS and TargetDesktop
 		    
 		    dim f as FolderItem = theApp.ExecutableFile.Parent.Parent
 		    return f
@@ -557,7 +557,7 @@ Protected Module M_FolderItem
 		  #else
 		    
 		    #pragma unused theApp
-		    return nil 
+		    return nil
 		    
 		  #endif
 		  
@@ -841,7 +841,7 @@ Protected Module M_FolderItem
 		        bookmarkData = CFURLCreateBookmarkDataFromFile( nil, url, errorRef )
 		        releaseStack.Append bookmarkData
 		        releaseStack.Append errorRef
-		      catch 
+		      catch
 		        bookmarkData = nil
 		      end
 		    end if
@@ -1109,6 +1109,8 @@ Protected Module M_FolderItem
 		    #if kMStringAvailable // If M_String is available
 		      r = r.Tail_MTC( trueNumOfParagraphs, eol )
 		    #else
+		      #pragma unused trueNumOfParagraphs
+		      
 		      dim pars() as string = r.SplitB( eol )
 		      dim lastPar as integer = pars.Ubound
 		      dim firstPar as integer = lastPar - numOfParagraphs + 1
