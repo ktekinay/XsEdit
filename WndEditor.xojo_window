@@ -29,6 +29,7 @@ Begin Window WndEditor
    Begin Timer tmrReindent
       Height          =   32
       Index           =   -2147483648
+      InitialParent   =   ""
       Left            =   0
       LockedInPosition=   False
       Mode            =   0
@@ -55,13 +56,16 @@ Begin Window WndEditor
       CaretPos        =   0
       ClearHighlightedRangesOnTextChange=   True
       DirtyLinesColor =   &cFF999900
+      disableReset    =   False
       DisplayDirtyLines=   False
       DisplayInvisibleCharacters=   False
       DisplayLineNumbers=   True
       DisplayRightMarginMarker=   False
+      DoubleBuffer    =   False
       EnableAutocomplete=   False
       Enabled         =   True
       EnableLineFoldings=   False
+      enableLineFoldingSetting=   False
       EraseBackground =   True
       GutterBackgroundColor=   &cEEEEEE00
       GutterSeparationLineColor=   &c88888800
@@ -71,6 +75,7 @@ Begin Window WndEditor
       HighlightBlocksOnMouseOverGutter=   True
       HighlightMatchingBrackets=   True
       HighlightMatchingBracketsMode=   0
+      ignoreRepaint   =   False
       IndentPixels    =   16
       IndentVisually  =   False
       Index           =   -2147483648
@@ -95,6 +100,7 @@ Begin Window WndEditor
       ScrollPositionX =   0
       selLength       =   0
       selStart        =   0
+      SelText         =   ""
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
@@ -174,6 +180,12 @@ End
 
 #tag WindowCode
 	#tag Event
+		Sub Activate()
+		  SetTitle()
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub Open()
 		  dim hd as new HighlightDefinition
 		  if not hd.LoadFromXml( App.ResourcesFolder.Child( "Syntax Definitions" ).Child( "XojoScript.xml" ) ) then
@@ -191,6 +203,21 @@ End
 	#tag EndEvent
 
 
+	#tag MenuHandler
+		Function FileClose() As Boolean Handles FileClose.Action
+			if FileClose.Text = "Close All" then
+			App.CloseAllWindows
+			return false
+			else
+			self.Close
+			return true
+			end if
+			
+			
+		End Function
+	#tag EndMenuHandler
+
+
 	#tag Method, Flags = &h0
 		Sub OpenDocument(f As FolderItem)
 		  if f is nil or not f.Exists then
@@ -198,12 +225,14 @@ End
 		    self.Close
 		  end if
 		  
-		  MyDocument = f
+		  MyDocumentAlias = f
 		  fldCode.Text = f.TextContents_MTC( Encodings.UTF8 )
 		  
 		  fldCode.ResetUndo
 		  fldCode.ResetUndoDirtyFlag
 		  
+		  self.ContentsChanged = false
+		  SetTitle()
 		End Sub
 	#tag EndMethod
 
@@ -236,13 +265,37 @@ End
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub SetTitle()
+		  if MyDocument is nil then
+		    self.Title = "Untitled"
+		  else
+		    self.Title = MyDocument.Name
+		  end if
+		End Sub
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h21
 		Private Autocompleter As PaTrie
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		MyDocument As FolderItemAlias
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  if MyDocumentAlias is nil then
+			    return nil
+			  else 
+			    return MyDocumentAlias.Resolve
+			  end if
+			  
+			End Get
+		#tag EndGetter
+		MyDocument As FolderItem
+	#tag EndComputedProperty
+
+	#tag Property, Flags = &h21
+		Private MyDocumentAlias As FolderItemAlias
 	#tag EndProperty
 
 
@@ -260,11 +313,13 @@ End
 		Sub TextChanged()
 		  tmrReindent.Mode = Timer.ModeSingle
 		  tmrReindent.Reset
+		  
+		  self.ContentsChanged = true
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Function ShouldTriggerAutocomplete(Key as string, hasAutocompleteOptions as boolean) As boolean
-		  return Key.Asc = 9 and hasAutocompleteOptions 
+		  return Key.Asc = 9 and hasAutocompleteOptions
 		End Function
 	#tag EndEvent
 	#tag Event
