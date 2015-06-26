@@ -241,6 +241,24 @@ End
 		End Function
 	#tag EndMenuHandler
 
+	#tag MenuHandler
+		Function FileSave() As Boolean Handles FileSave.Action
+			Save()
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function FileSaveAs() As Boolean Handles FileSaveAs.Action
+			SaveAs()
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
 
 	#tag Method, Flags = &h0
 		Sub OpenDocument(f As FolderItem)
@@ -257,6 +275,23 @@ End
 		  
 		  self.ContentsChanged = false
 		  SetTitle()
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub Save()
+		  if MyDocument is nil then
+		    SaveAs
+		    return
+		  end if
+		  
+		  #pragma warning "Finish this!"
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub SaveAs()
+		  #pragma warning "Finish this!"
 		End Sub
 	#tag EndMethod
 
@@ -424,7 +459,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Function CompilerError(location As XojoScriptLocation, error As XojoScript.Errors, errorInfo As Dictionary) As Boolean
-		  fldCode.HighlightCharacterRange( location.Character, location.EndColumn - location.Column, &cFF000000 )
+		  fldCode.HighlightCharacterRange( location.Character, location.EndColumn - location.Column, &cFF00007F )
 		End Function
 	#tag EndEvent
 	#tag Event
