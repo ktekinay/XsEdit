@@ -188,6 +188,17 @@ Begin Window WndEditor
       Visible         =   True
       Width           =   100
    End
+   Begin XojoScript XS
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   0
+      LockedInPosition=   False
+      Scope           =   2
+      Source          =   ""
+      TabPanelIndex   =   0
+      Top             =   0
+      Width           =   32
+   End
 End
 #tag EndWindow
 
@@ -397,6 +408,28 @@ End
 		    XS.Run
 		    
 		  end select
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events XS
+	#tag Event
+		Sub RuntimeError(error As RuntimeException)
+		  break
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub CompilerWarning(location As XojoScriptLocation, warning As XojoScript.Warnings, warningInfo As Dictionary)
+		  fldCode.HighlightCharacterRange( location.Character, location.EndColumn - location.Column, &cFF000000 )
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function CompilerError(location As XojoScriptLocation, error As XojoScript.Errors, errorInfo As Dictionary) As Boolean
+		  fldCode.HighlightCharacterRange( location.Character, location.EndColumn - location.Column, &cFF000000 )
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub Print(msg As String)
+		  MsgBox msg
 		End Sub
 	#tag EndEvent
 #tag EndEvents
