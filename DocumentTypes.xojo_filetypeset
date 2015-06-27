@@ -1,0 +1,28 @@
+#tag FileTypeSet
+	#tag FileType
+		CodeName=XojoScript
+		Extension=.xojo_script;.rbs
+		Flags=&h0
+		MacCreator=
+		MacType=
+		Name=text/script
+		UTIConformsTo=
+		Description=
+		MimeType=
+		Imported=True
+	#tag EndFileType
+
+	#tag FileType
+		CodeName=Text
+		Extension=.asc;.ascii;.bas;.c;.class;.cp;.cpp;.h;.hp;.hpp;.i3;.java;.m2;.m3;.mak;.text;.txt
+		Flags=&h0
+		MacCreator=????
+		MacType=TEXT
+		Name=text/plain
+		UTIConformsTo=
+		Description=
+		MimeType=
+		Imported=True
+	#tag EndFileType
+
+#tag EndFileTypeSet

@@ -6,6 +6,71 @@ Begin Menu MainMenuBar
       Index = -2147483648
       AutoEnable = True
       Visible = True
+      Begin MenuItem FileNew
+         SpecialMenu = 0
+         Text = "New"
+         Index = -2147483648
+         ShortcutKey = "N"
+         Shortcut = "Cmd+N"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem FileOpen
+         SpecialMenu = 0
+         Text = "Open..."
+         Index = -2147483648
+         ShortcutKey = "O"
+         Shortcut = "Cmd+O"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem FileClose
+         SpecialMenu = 0
+         Text = "Close"
+         Index = -2147483648
+         ShortcutKey = "W"
+         Shortcut = "Cmd+W"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem UntitledSeparator
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem FileSave
+         SpecialMenu = 0
+         Text = "Save"
+         Index = -2147483648
+         ShortcutKey = "S"
+         Shortcut = "Cmd+S"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem FileSaveAs
+         SpecialMenu = 0
+         Text = "Save As..."
+         Index = -2147483648
+         ShortcutKey = "S"
+         Shortcut = "Cmd+Shift+S"
+         MenuModifier = True
+         AltMenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem UntitledSeparator0
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
       Begin QuitMenuItem FileQuit
          SpecialMenu = 0
          Text = "#App.kFileQuit"
