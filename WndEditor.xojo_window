@@ -191,6 +191,7 @@ Begin Window WndEditor
    Begin XojoScript XS
       Height          =   32
       Index           =   -2147483648
+      InitialParent   =   ""
       Left            =   0
       LockedInPosition=   False
       Scope           =   2
@@ -281,17 +282,31 @@ End
 	#tag Method, Flags = &h21
 		Private Sub Save()
 		  if MyDocument is nil then
-		    SaveAs
+		    SaveAs()
 		    return
 		  end if
 		  
-		  #pragma warning "Finish this!"
+		  MyDocument.TextContents_MTC = fldCode.Text
+		  ContentsChanged = false
+		  fldCode.ClearDirtyLines
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Sub SaveAs()
-		  #pragma warning "Finish this!"
+		  dim dlg as new SaveAsDialog
+		  dlg.PromptText = "Save the script:"
+		  dlg.Filter = DocumentTypes.XojoScript
+		  dlg.SuggestedFileName = "Script.xojo_script"
+		  
+		  dim f as FolderItem = dlg.ShowModalWithin( self )
+		  if f is nil then
+		    return
+		  end if
+		  
+		  MyDocumentAlias = f
+		  Save()
+		  
 		End Sub
 	#tag EndMethod
 
@@ -344,7 +359,7 @@ End
 			Get
 			  if MyDocumentAlias is nil then
 			    return nil
-			  else 
+			  else
 			    return MyDocumentAlias.Resolve
 			  end if
 			  
