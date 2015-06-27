@@ -62,7 +62,7 @@ Begin Window WndEditor
       DisplayLineNumbers=   True
       DisplayRightMarginMarker=   False
       DoubleBuffer    =   False
-      EnableAutocomplete=   False
+      EnableAutocomplete=   True
       Enabled         =   True
       EnableLineFoldings=   False
       enableLineFoldingSetting=   False
@@ -313,7 +313,10 @@ End
 	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
 		  Autocompleter = new PaTrie
-		  call Autocompleter.AddKey( "select", "some data" )
+		  
+		  for each keyword as String in kAutoCompleteKeywords.Split(",")
+		    call Autocompleter.addKey(keyword, nil)
+		  next
 		  
 		End Sub
 	#tag EndMethod
@@ -371,6 +374,10 @@ End
 	#tag Property, Flags = &h21
 		Private MyDocumentAlias As FolderItemAlias
 	#tag EndProperty
+
+
+	#tag Constant, Name = kAutoCompleteKeywords, Type = String, Dynamic = False, Default = \"AddHandler\x2CAddressOf\x2CArray\x2CAs\x2CAssigns\x2CBreak\x2CByRef\x2CByVal\x2CCall\x2CCase\x2CCatch\x2CClass\x2CConst\x2CContinue\x2CCType\x2CDeclare\x2CDim\x2CDo\x2CDownTo\x2CEach\x2CElse\x2CElseIf\x2CEnd\x2CEnum\x2CEvent\x2CException\x2CExit\x2CExtends\x2CFalse\x2CFinally\x2CFor\x2CFunction\x2CGetTypeInfo\x2CGOTO\x2CHandles\x2CIf\x2CImplements\x2CInterface\x2CIn\x2CInherits\x2CLib\x2CLoop\x2CModule\x2CNext\x2CNil\x2COptional\x2CParamArray\x2CPrivate\x2CProtected\x2CRaise\x2CRaiseEvent\x2CRedim\x2CRemoveHandler\x2CReturn\x2CSelect\x2CSoft\x2CStatic\x2CStep\x2CStructure\x2CSub\x2CSuper\x2CThen\x2CTo\x2CTrue\x2CTry\x2CUntil\x2CWend\x2CWhile", Scope = Private
+	#tag EndConstant
 
 
 #tag EndWindowCode
