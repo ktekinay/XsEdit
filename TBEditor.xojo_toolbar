@@ -4,13 +4,13 @@ Begin Toolbar TBEditor
 		Caption = "Run"
 		HelpTag = ""
 		Style = 0
-		Icon = 1631662079
+		Icon = 971927551
 	End
 	Begin ToolButton btnCompile
 		Caption = "Compile"
 		HelpTag = ""
 		Style = 0
-		Icon = 1810896895
+		Icon = 977608703
 	End
 End
 #tag EndToolbar
