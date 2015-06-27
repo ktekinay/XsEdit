@@ -200,6 +200,18 @@ Begin Window WndEditor
       Top             =   0
       Width           =   32
    End
+   Begin IPCSocket IDESocket
+      Height          =   32
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   0
+      LockedInPosition=   False
+      Path            =   ""
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   0
+      Width           =   32
+   End
 End
 #tag EndWindow
 
@@ -311,6 +323,87 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub ScriptCompile()
+		  XS.Source = fldCode.Text
+		  
+		  fldCode.ClearLineIcons
+		  fldCode.ClearHighlightedCharacterRanges
+		  
+		  //
+		  // Handle the compiling first
+		  //
+		  
+		  if not XS.Precompile( XojoScript.OptimizationLevels.High ) then
+		    #pragma warning "Finish this!"
+		    
+		    return
+		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub ScriptRun()
+		  ScriptCompile
+		  
+		  XS.Run
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub ScriptRunInIDE()
+		  try
+		    dim endTime as Integer = Ticks + 7200
+		    IDESocket.Path = IDECommunicator.FindIPCPath
+		    
+		    if IDESocket.Path = "" then
+		      dim ex as new RuntimeException
+		      ex.Message = "Could not find XojoIDE IPC socket"
+		      raise ex
+		    end if
+		    
+		    IDESocket.Connect
+		    
+		    while Ticks < endTime
+		      while not IDESocket.IsConnected and IDESocket.LastErrorCode = 0
+		        IDESocket.Poll
+		      wend
+		      
+		      if IDESocket.IsConnected then
+		        exit
+		      end if
+		    wend
+		    
+		    if IDESocket.LastErrorCode <> 0 then
+		      dim ex as new RuntimeException
+		      ex.ErrorNumber = IDESocket.LastErrorCode
+		      ex.Message = "Could not connect to IDE"
+		      raise ex
+		    end if
+		    
+		    IDESocket.Write fldCode.Text
+		    while IDESocket.BytesLeftToSend > 0
+		      IDESocket.Poll
+		      if IDESocket.LastErrorCode <> 0 then
+		        dim ex as new RuntimeException
+		        ex.ErrorNumber = IDESocket.LastErrorCode
+		        ex.Message = "Could not communicate with IDE"
+		        raise ex
+		      end if
+		    wend
+		    
+		    IDESocket.Close
+		    
+		  catch ex as RuntimeException
+		    if IDESocket.IsConnected then
+		      IDESocket.Close
+		    end if
+		    
+		    MsgBox ex.Message + ": " + Str(ex.ErrorNumber)
+		  end try
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
 		  Autocompleter = new PaTrie
 		  call Autocompleter.AddKey( "select", "some data" )
@@ -371,6 +464,16 @@ End
 	#tag Property, Flags = &h21
 		Private MyDocumentAlias As FolderItemAlias
 	#tag EndProperty
+
+
+	#tag Constant, Name = kToolbarCompile, Type = String, Dynamic = False, Default = \"Compile", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kToolbarRun, Type = String, Dynamic = False, Default = \"Run", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kToolbarRunInIDE, Type = String, Dynamic = False, Default = \"Run in IDE", Scope = Public
+	#tag EndConstant
 
 
 #tag EndWindowCode
@@ -435,28 +538,15 @@ End
 #tag Events tbToolbar
 	#tag Event
 		Sub Action(item As ToolItem)
-		  XS.Source = fldCode.Text
-		  fldCode.ClearLineIcons
-		  fldCode.ClearHighlightedCharacterRanges
-		  
-		  //
-		  // Handle the compiling first
-		  //
-		  if not XS.Precompile( XojoScript.OptimizationLevels.High ) then
-		    #pragma warning "Finish this!"
-		    
-		    return
-		  end if
-		  
 		  select case item.Caption
-		  case "Compile"
-		    //
-		    // Nothing more to do
-		    //
+		  case kToolbarCompile
+		    ScriptCompile
 		    
-		  case "Run"
-		    XS.Run
+		  case kToolbarRun
+		    ScriptRun
 		    
+		  case kToolbarRunInIDE
+		    ScriptRunInIDE
 		  end select
 		End Sub
 	#tag EndEvent
