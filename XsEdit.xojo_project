@@ -78,6 +78,7 @@ Picture=arrowrightdouble3;Images/arrow-right-double-3.png;&h33A1B7FF;&h3F391FFF;
 Folder=Plists;Plists;&h73DF87FF;&h0;false
 Folder=Third Party Classes;Third Party Classes;&h344E0FFF;&h0;false
 Plist=Retinize;Other Files/Retinize.plist;&h5799FFFF;&h73DF87FF;false
+Module=M_XojoScript;Helpers/M_XojoScript.xojo_code;&h3EA6C7FF;&h6F7957FF;false
 DefaultWindow=WndEditor
 AppMenuBar=MainMenuBar
 MajorVersion=1
