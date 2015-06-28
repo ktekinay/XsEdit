@@ -1,3 +1,4 @@
 *.xojo_uistate
 .DS_Store
 Builds - XsEdit.xojo_project
+*.obsolete_*
