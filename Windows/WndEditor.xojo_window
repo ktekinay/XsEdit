@@ -728,6 +728,12 @@ End
 #tag Events XS
 	#tag Event
 		Sub RuntimeError(error As RuntimeException)
+		  if error isa EndException or error isa ThreadEndException then
+		    #pragma BreakOnExceptions false
+		    raise error // Pass it on
+		    #pragma BreakOnExceptions default
+		  end if
+		  
 		  dim ti as Introspection.TypeInfo = Introspection.GetType( error )
 		  dim type as string = ti.Name
 		  
