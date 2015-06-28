@@ -637,7 +637,10 @@ End
 		  me.ClearLineIcons
 		  me.HelpTag = ""
 		  
-		  self.ContentsChanged = StrComp( CodeBeforeChanges, fldCode.Text, 0 ) <> 0
+		  ContentsChanged = StrComp( CodeBeforeChanges, fldCode.Text, 0 ) <> 0
+		  if not ContentsChanged then
+		    me.ClearDirtyLines
+		  end if
 		End Sub
 	#tag EndEvent
 	#tag Event
