@@ -159,5 +159,43 @@ Begin Menu MainMenuBar
          Visible = True
       End
    End
+   Begin MenuItem ScriptMenu
+      SpecialMenu = 0
+      Text = "Script"
+      Index = -2147483648
+      AutoEnable = True
+      Visible = True
+      Begin MenuItem ScriptCompile
+         SpecialMenu = 0
+         Text = "Compile"
+         Index = -2147483648
+         ShortcutKey = "K"
+         Shortcut = "Cmd+K"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ScriptRun
+         SpecialMenu = 0
+         Text = "Run"
+         Index = -2147483648
+         ShortcutKey = "R"
+         Shortcut = "Cmd+R"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ScriptRunInIDE
+         SpecialMenu = 0
+         Text = "Run In IDE"
+         Index = -2147483648
+         ShortcutKey = "R"
+         Shortcut = "Cmd+Shift+R"
+         MenuModifier = True
+         AltMenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+   End
 End
 #tag EndMenu
