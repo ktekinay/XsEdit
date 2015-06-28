@@ -70,7 +70,7 @@ Begin Window WndEditor
       GutterBackgroundColor=   &cEEEEEE00
       GutterSeparationLineColor=   &c88888800
       GutterWidth     =   0
-      Height          =   332
+      Height          =   385
       HelpTag         =   ""
       HighlightBlocksOnMouseOverGutter=   True
       HighlightMatchingBrackets=   True
@@ -113,17 +113,17 @@ Begin Window WndEditor
       TextSelectionColor=   &c00000000
       TextSize        =   0
       ThickInsertionPoint=   True
-      Top             =   48
+      Top             =   0
       Transparent     =   True
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   580
+      Width           =   585
    End
    Begin ScrollBar sbVertical
       AcceptFocus     =   True
       AutoDeactivate  =   True
       Enabled         =   True
-      Height          =   332
+      Height          =   385
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -142,7 +142,7 @@ Begin Window WndEditor
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
-      Top             =   48
+      Top             =   0
       Value           =   0
       Visible         =   True
       Width           =   15
@@ -173,7 +173,7 @@ Begin Window WndEditor
       Top             =   385
       Value           =   0
       Visible         =   True
-      Width           =   573
+      Width           =   585
    End
    Begin TBEditor tbToolbar
       Enabled         =   True
