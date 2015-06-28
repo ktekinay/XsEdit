@@ -928,12 +928,36 @@ Inherits TextSegment
 
 	#tag ViewBehavior
 		#tag ViewProperty
+			Name="BackgroundColor"
+			Group="Behavior"
+			InitialValue="&h000000"
+			Type="color"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="blockIndentation"
 			Group="Behavior"
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="bold"
+			Group="Behavior"
+			InitialValue="0"
+			Type="boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="DebugDescription"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="delimiterLength"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="EndOffset"
 			Group="Behavior"
 			InitialValue="0"
 			Type="Integer"
@@ -945,10 +969,21 @@ Inherits TextSegment
 			Type="boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="HasBackgroundColor"
+			Group="Behavior"
+			Type="boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="icon"
 			Group="Behavior"
 			InitialValue="0"
 			Type="Picture"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ID"
+			Group="Behavior"
+			Type="string"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="indent"
@@ -999,9 +1034,21 @@ Inherits TextSegment
 			Type="boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="italic"
+			Group="Behavior"
+			InitialValue="0"
+			Type="boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
+			InitialValue="0"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="length"
+			Group="Behavior"
 			InitialValue="0"
 			Type="Integer"
 		#tag EndViewProperty
@@ -1017,6 +1064,12 @@ Inherits TextSegment
 			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="offset"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="ScreenWidth"
 			Group="Behavior"
 			InitialValue="0"
@@ -1029,6 +1082,12 @@ Inherits TextSegment
 			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="TextColor"
+			Group="Behavior"
+			InitialValue="&h000000"
+			Type="color"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
@@ -1036,10 +1095,28 @@ Inherits TextSegment
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="Type"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="underline"
+			Group="Behavior"
+			InitialValue="0"
+			Type="boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="visible"
 			Group="Behavior"
 			InitialValue="0"
 			Type="boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="width"
+			Group="Behavior"
+			InitialValue="0"
+			Type="double"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
