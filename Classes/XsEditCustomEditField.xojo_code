@@ -3,8 +3,10 @@ Protected Class XsEditCustomEditField
 Inherits CustomEditField
 	#tag Event
 		Function KeyDown(key as string) As boolean
+		  dim ascKey as Integer = Asc( key )
+		  
 		  if Keyboard.CommandKey then
-		    select case Asc( key )
+		    select case ascKey
 		    case KeyboardKeys.kLeftArrow
 		      MoveBeginningOfLine
 		      return True
@@ -15,12 +17,12 @@ Inherits CustomEditField
 		    end select
 		    
 		  elseif Keyboard.ControlKey then
-		    select case Asc( key )
-		    case KeyboardKeys.kA
+		    select case ascKey
+		    case KeyboardKeys.kControlA
 		      MoveBeginningOfLine
 		      return True
 		      
-		    case KeyboardKeys.kE
+		    case KeyboardKeys.kControlE
 		      MoveEndOfLine
 		      return True
 		    end select
