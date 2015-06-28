@@ -252,6 +252,14 @@ End
 	#tag EndEvent
 
 	#tag Event
+		Sub EnableMenuItems()
+		  EditUndo.Enabled = fldCode.CanUndo
+		  EditRedo.Enabled = fldCode.CanRedo
+		  
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub Open()
 		  dim hd as new HighlightDefinition
 		  if not hd.LoadFromXml( App.ResourcesFolder.Child( "Syntax Definitions" ).Child( "XojoScript.xml" ) ) then
@@ -268,6 +276,22 @@ End
 		End Sub
 	#tag EndEvent
 
+
+	#tag MenuHandler
+		Function EditRedo() As Boolean Handles EditRedo.Action
+			fldCode.Redo
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditUndo() As Boolean Handles EditUndo.Action
+			fldCode.Undo
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
 
 	#tag MenuHandler
 		Function FileClose() As Boolean Handles FileClose.Action
