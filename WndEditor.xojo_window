@@ -407,8 +407,8 @@ End
 		Private Sub SetAutocompleteWords()
 		  Autocompleter = new PaTrie
 		  
-		  for each keyword as String in kAutoCompleteKeywords.Split(",")
-		    call Autocompleter.addKey(keyword, nil)
+		  for each keyword as String in ReplaceLineEndings( kAutoCompleteKeywords, &uA ).Trim.Split( &uA )
+		    call Autocompleter.AddKey( keyword, nil )
 		  next
 		  
 		End Sub
@@ -469,7 +469,7 @@ End
 	#tag EndProperty
 
 
-	#tag Constant, Name = kAutoCompleteKeywords, Type = String, Dynamic = False, Default = \"AddHandler\x2CAddressOf\x2CArray\x2CAs\x2CAssigns\x2CBreak\x2CByRef\x2CByVal\x2CCall\x2CCase\x2CCatch\x2CClass\x2CConst\x2CContinue\x2CCType\x2CDeclare\x2CDim\x2CDo\x2CDownTo\x2CEach\x2CElse\x2CElseIf\x2CEnd\x2CEnum\x2CEvent\x2CException\x2CExit\x2CExtends\x2CFalse\x2CFinally\x2CFor\x2CFunction\x2CGetTypeInfo\x2CGOTO\x2CHandles\x2CIf\x2CImplements\x2CInterface\x2CIn\x2CInherits\x2CLib\x2CLoop\x2CModule\x2CNext\x2CNil\x2COptional\x2CParamArray\x2CPrint\x2CPrivate\x2CProtected\x2CRaise\x2CRaiseEvent\x2CRedim\x2CRemoveHandler\x2CReturn\x2CSelect\x2CSoft\x2CStatic\x2CStep\x2CStructure\x2CSub\x2CSuper\x2CThen\x2CTo\x2CTrue\x2CTry\x2CUntil\x2CUsing\x2CWend\x2CWhile", Scope = Private
+	#tag Constant, Name = kAutoCompleteKeywords, Type = String, Dynamic = False, Default = \"AddHandler\nAddressOf\nArray\nAs\nAssigns\nBreak\nByRef\nByVal\nCall\nCase\nCatch\nClass\nConst\nContinue\nCType\nDeclare\nDim\nDo\nDownTo\nEach\nElse\nElseIf\nEnd\nEnum\nEvent\nException\nExit\nExtends\nFalse\nFinally\nFor\nFunction\nGetTypeInfo\nGOTO\nHandles\nIf\nImplements\nInterface\nIn\nInherits\nLib\nLoop\nModule\nNext\nNil\nOptional\nParamArray\nPrint\nPrivate\nProtected\nRaise\nRaiseEvent\nRedim\nRemoveHandler\nReturn\nSelect\nSoft\nStatic\nStep\nStructure\nSub\nSuper\nThen\nTo\nTrue\nTry\nUntil\nUsing\nWend\nWhile", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kToolbarCompile, Type = String, Dynamic = False, Default = \"Compile", Scope = Public
