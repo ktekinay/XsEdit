@@ -27,8 +27,7 @@ Begin Window WndEditor
    Visible         =   True
    Width           =   600
    Begin Timer tmrReindent
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -38,8 +37,7 @@ Begin Window WndEditor
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin CustomEditField fldCode
       AcceptFocus     =   False
@@ -185,16 +183,13 @@ Begin Window WndEditor
       Left            =   0
       LockedInPosition=   False
       Scope           =   2
-      TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   0
       Visible         =   True
       Width           =   100
    End
    Begin XojoScript XS
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -203,12 +198,10 @@ Begin Window WndEditor
       Source          =   ""
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin IPCSocket IDESocket
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -217,8 +210,7 @@ Begin Window WndEditor
       Scope           =   0
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
 End
 #tag EndWindow
@@ -228,6 +220,35 @@ End
 		Sub Activate()
 		  SetTitle()
 		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Function CancelClose(appQuitting as Boolean) As Boolean
+		  if not ContentsChanged then
+		    return false
+		  end if
+		  
+		  //
+		  // The contents have changed
+		  //
+		  
+		  dim dlg as new MessageDialog
+		  dlg.Message = "Save changes before closing?"
+		  dlg.ActionButton.Caption = "&Save"
+		  dlg.CancelButton.Caption = "&Cancel"
+		  dlg.CancelButton.Visible = true
+		  dlg.AlternateActionButton.Caption = "&Don't Save"
+		  dlg.AlternateActionButton.Visible = true
+		  
+		  dim btn as MessageDialogButton = dlg.ShowModalWithin( self )
+		  if btn is dlg.CancelButton then
+		    return true
+		  elseif btn is dlg.AlternateActionButton then
+		    return false
+		  else // Save button
+		    return ( not Save() )
+		  end if
+		End Function
 	#tag EndEvent
 
 	#tag Event
@@ -264,7 +285,7 @@ End
 
 	#tag MenuHandler
 		Function FileSave() As Boolean Handles FileSave.Action
-			Save()
+			call Save()
 			
 			Return True
 			
@@ -273,7 +294,7 @@ End
 
 	#tag MenuHandler
 		Function FileSaveAs() As Boolean Handles FileSaveAs.Action
-			SaveAs()
+			call SaveAs()
 			
 			Return True
 			
@@ -327,20 +348,21 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub Save()
+		Private Function Save() As Boolean
 		  if MyDocument is nil then
-		    SaveAs()
-		    return
+		    return SaveAs()
 		  end if
 		  
 		  MyDocument.TextContents_MTC = fldCode.Text
 		  ContentsChanged = false
 		  fldCode.ClearDirtyLines
-		End Sub
+		  
+		  return true
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub SaveAs()
+		Private Function SaveAs() As Boolean
 		  dim dlg as new SaveAsDialog
 		  dlg.PromptText = "Save the script:"
 		  dlg.Filter = DocumentTypes.XojoScript
@@ -348,13 +370,13 @@ End
 		  
 		  dim f as FolderItem = dlg.ShowModalWithin( self )
 		  if f is nil then
-		    return
+		    return false
 		  end if
 		  
 		  MyDocumentAlias = f
-		  Save()
+		  return Save()
 		  
-		End Sub
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
