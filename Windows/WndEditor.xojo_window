@@ -656,6 +656,31 @@ End
 		  return options
 		End Function
 	#tag EndEvent
+	#tag Event
+		Function KeyDown(key as string) As boolean
+		  #pragma unused key
+		  
+		  //
+		  // Ignore the command keys
+		  //
+		  
+		  #if TargetMacOS then
+		    
+		    if Keyboard.CommandKey then
+		      beep
+		      return true
+		    end if
+		    
+		  #else
+		    
+		    if Keyboard.ControlKey then
+		      beep
+		      return true
+		    end if
+		    
+		  #endif
+		End Function
+	#tag EndEvent
 #tag EndEvents
 #tag Events sbVertical
 	#tag Event
