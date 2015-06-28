@@ -770,6 +770,12 @@ End
 		  MsgBox msg
 		End Sub
 	#tag EndEvent
+	#tag Event
+		Function Input(prompt As String) As String
+		  dim dlg as new DlgInput
+		  return dlg.ShowModalWithin( self, prompt )
+		End Function
+	#tag EndEvent
 #tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
