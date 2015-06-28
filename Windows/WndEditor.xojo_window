@@ -767,7 +767,12 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Print(msg As String)
-		  MsgBox msg
+		  dim dlg as new MessageDialog
+		  dlg.Title = "Print"
+		  dlg.Message = msg
+		  dlg.CancelButton.Visible = false
+		  
+		  call dlg.ShowModalWithin( self )
 		End Sub
 	#tag EndEvent
 	#tag Event
