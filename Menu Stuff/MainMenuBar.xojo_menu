@@ -97,6 +97,17 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin MenuItem EditRedo
+         SpecialMenu = 0
+         Text = "Redo"
+         Index = -2147483648
+         ShortcutKey = "Z"
+         Shortcut = "Cmd+Shift+Z"
+         MenuModifier = True
+         AltMenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
       Begin MenuItem EditSeparator1
          SpecialMenu = 0
          Text = "-"
