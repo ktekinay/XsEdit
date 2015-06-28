@@ -352,7 +352,7 @@ End
 	#tag Method, Flags = &h21
 		Private Sub ScriptRunInIDE()
 		  try
-		    dim endTime as Integer = Ticks + 7200
+		    dim endTime as Integer = Ticks + 120
 		    IDESocket.Path = IDECommunicator.FindIPCPath
 		    
 		    if IDESocket.Path = "" then
