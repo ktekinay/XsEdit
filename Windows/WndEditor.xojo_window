@@ -329,6 +329,38 @@ End
 	#tag EndMenuHandler
 
 
+	#tag Method, Flags = &h21
+		Private Sub HighlightCode(location As XojoScriptLocation, msg As String, c As Color, lineIcon As Picture)
+		  dim startPosition as integer = location.Character
+		  dim endPosition as integer = location.EndCharacter
+		  dim length as integer = endPosition - startPosition
+		  
+		  fldCode.HighlightCharacterRange( startPosition, length, c )
+		  
+		  if lineIcon isa Picture then
+		    dim startLine as integer = fldCode.LineNumAtCharPos( startPosition )
+		    dim endLine as integer = fldCode.LineNumAtCharPos( endPosition )
+		    
+		    for l as integer = startLine to endLine
+		      fldCode.LineIcon( l ) = lineIcon
+		    next
+		  end if
+		  
+		  fldCode.HelpTag = msg
+		  
+		  #pragma warning "How to handle the msg?"
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub HighlightCode(location As XojoScriptLocation, error As XojoScript.Errors, errorInfo As Dictionary, c As Color)
+		  dim errorString as string = M_XojoScript.ErrorToString( error, errorInfo )
+		  
+		  
+		  HighlightCode( location, errorString, c, errordata )
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub OpenDocument(f As FolderItem)
 		  if f is nil or not f.Exists then
