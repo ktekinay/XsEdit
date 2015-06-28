@@ -394,6 +394,7 @@ End
 		  
 		  MyDocumentAlias = f
 		  fldCode.Text = f.TextContents_MTC( Encodings.UTF8 )
+		  CodeBeforeChanges = fldCode.Text
 		  
 		  fldCode.ResetUndo
 		  fldCode.ResetUndoDirtyFlag
@@ -412,6 +413,8 @@ End
 		  MyDocument.TextContents_MTC = fldCode.Text
 		  ContentsChanged = false
 		  fldCode.ClearDirtyLines
+		  
+		  CodeBeforeChanges = fldCode.Text
 		  
 		  return true
 		End Function
@@ -570,6 +573,10 @@ End
 		Private Autocompleter As PaTrie
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private CodeBeforeChanges As String
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
@@ -630,7 +637,7 @@ End
 		  me.ClearLineIcons
 		  me.HelpTag = ""
 		  
-		  self.ContentsChanged = true
+		  self.ContentsChanged = StrComp( CodeBeforeChanges, fldCode.Text, 0 ) <> 0
 		End Sub
 	#tag EndEvent
 	#tag Event
