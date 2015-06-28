@@ -39,7 +39,7 @@ Begin Window WndEditor
       Top             =   0
       Width           =   32
    End
-   Begin CustomEditField fldCode
+   Begin XsEditCustomEditField fldCode
       AcceptFocus     =   False
       AcceptTabs      =   False
       AutoCloseBrackets=   False
