@@ -440,7 +440,7 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub ScriptCompile()
-		  WasCompileError = false
+		  LastCompilerErrorCode = -1
 		  
 		  XS.Source = fldCode.Text
 		  
@@ -462,7 +462,7 @@ End
 		Private Sub ScriptRun()
 		  ScriptCompile
 		  
-		  if not WasCompileError then
+		  if LastCompilerErrorCode = -1 then
 		    #pragma BreakOnExceptions false
 		    XS.Run
 		    #pragma BreakOnExceptions default
@@ -577,6 +577,10 @@ End
 		Private CodeBeforeChanges As String
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private LastCompilerErrorCode As Integer = -1
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
@@ -593,10 +597,6 @@ End
 
 	#tag Property, Flags = &h21
 		Private MyDocumentAlias As FolderItemAlias
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private WasCompileError As Boolean
 	#tag EndProperty
 
 
