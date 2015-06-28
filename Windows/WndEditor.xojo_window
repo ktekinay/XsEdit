@@ -413,19 +413,20 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub ScriptCompile()
+		  WasCompileError = false
+		  
 		  XS.Source = fldCode.Text
 		  
 		  fldCode.ClearLineIcons
 		  fldCode.ClearHighlightedCharacterRanges
+		  fldCode.HelpTag = ""
 		  
 		  //
 		  // Handle the compiling first
 		  //
 		  
 		  if not XS.Precompile( XojoScript.OptimizationLevels.High ) then
-		    #pragma warning "Finish this!"
-		    
-		    return
+		    WasCompileError = true
 		  end if
 		End Sub
 	#tag EndMethod
@@ -434,7 +435,11 @@ End
 		Private Sub ScriptRun()
 		  ScriptCompile
 		  
-		  XS.Run
+		  if not WasCompileError then
+		    #pragma BreakOnExceptions false
+		    XS.Run
+		    #pragma BreakOnExceptions default
+		  end if
 		End Sub
 	#tag EndMethod
 
@@ -521,6 +526,8 @@ End
 		  fldCode.EnableAutocomplete = true
 		  fldCode.AutocompleteAppliesStandardCase = false
 		  
+		  fldCode.ClearHighlightedRangesOnTextChange = true
+		  
 		End Sub
 	#tag EndMethod
 
@@ -557,8 +564,12 @@ End
 		Private MyDocumentAlias As FolderItemAlias
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private WasCompileError As Boolean
+	#tag EndProperty
 
-	#tag Constant, Name = kAutoCompleteKeywords, Type = String, Dynamic = False, Default = \"AddHandler\nAddressOf\nArray\nAs\nAssigns\nBreak\nByRef\nByVal\nCall\nCase\nCatch\nClass\nConst\nContinue\nCType\nDeclare\nDim\nDo\nDownTo\nEach\nElse\nElseIf\nEnd\nEnum\nEvent\nException\nExit\nExtends\nFalse\nFinally\nFor\nFunction\nGetTypeInfo\nGOTO\nHandles\nIf\nImplements\nInterface\nIn\nInherits\nLib\nLoop\nModule\nNext\nNil\nOptional\nParamArray\nPrint\nPrivate\nProtected\nRaise\nRaiseEvent\nRedim\nRemoveHandler\nReturn\nSelect\nSoft\nStatic\nStep\nStructure\nSub\nSuper\nThen\nTo\nTrue\nTry\nUntil\nUsing\nWend\nWhile", Scope = Private
+
+	#tag Constant, Name = kAutoCompleteKeywords, Type = String, Dynamic = False, Default = \"AddHandler\nAddressOf\nArray\nAs\nAssigns\nBreak\nByRef\nByte\nByVal\nCall\nCase\nCatch\nClass\nConst\nContinue\nCType\nDeclare\nDim\nDo\nDouble\nDownTo\nEach\nElse\nElseIf\nEnd\nEnum\nEvent\nException\nExit\nExtends\nFalse\nFinally\nFor\nFunction\nGetTypeInfo\nGOTO\nHandles\nIf\nImplements\nInterface\nIn\nInherits\nInt8\nInt16\nInt32\nInt64\nInteger\nLib\nLoop\nModule\nNext\nNil\nOptional\nParamArray\nPrint\nPrivate\nProtected\nRaise\nRaiseEvent\nRedim\nRemoveHandler\nReturn\nSelect\nSoft\nStatic\nStep\nString\nStructure\nSub\nSuper\nThen\nTo\nTrue\nTry\nUint8\nUInt16\nUInt32\nUInt64\nUInteger\nUntil\nUsing\nWend\nWhile", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kColorError, Type = Color, Dynamic = False, Default = \"&cFF00007F", Scope = Private
@@ -591,6 +602,9 @@ End
 		Sub TextChanged()
 		  tmrReindent.Mode = Timer.ModeSingle
 		  tmrReindent.Reset
+		  
+		  me.ClearLineIcons
+		  me.HelpTag = ""
 		  
 		  self.ContentsChanged = true
 		End Sub
@@ -655,17 +669,35 @@ End
 #tag Events XS
 	#tag Event
 		Sub RuntimeError(error As RuntimeException)
-		  break
+		  dim ti as Introspection.TypeInfo = Introspection.GetType( error )
+		  dim type as string = ti.Name
+		  
+		  dim msg as string = "A runtime exception of type " + type + " has been raised. I wish I knew where."
+		  
+		  dim dlg as new MessageDialog
+		  dlg.Message = msg
+		  dlg.CancelButton.Visible = false
+		  dlg.ActionButton.Caption = "Darn"
+		  
+		  call dlg.ShowModalWithin( self )
+		  
+		  #pragma warning "Finish this!"
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub CompilerWarning(location As XojoScriptLocation, warning As XojoScript.Warnings, warningInfo As Dictionary)
-		  fldCode.HighlightCharacterRange( location.Character, location.EndColumn - location.Column, &cFF000000 )
+		  #if false then
+		    dim msg as string = M_XojoScript.WarningToString( warning, warningInfo )
+		    HighlightCode( location, msg, kColorWarning, nil )
+		  #endif
+		  
+		  #pragma warning "Not handling compiler warnings at all right now"
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Function CompilerError(location As XojoScriptLocation, error As XojoScript.Errors, errorInfo As Dictionary) As Boolean
-		  fldCode.HighlightCharacterRange( location.Character, location.EndColumn - location.Column, &cFF00007F )
+		  HighlightCode( location, error, errorInfo, kColorError )
+		  return true // one at a time
 		End Function
 	#tag EndEvent
 	#tag Event
