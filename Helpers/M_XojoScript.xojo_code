@@ -643,20 +643,116 @@ Protected Module M_XojoScript
 		    
 		  end select
 		  
-		  if errorInfo IsA Dictionary then
-		    dim lastIndex as integer = errorInfo.Count - 1
-		    for i as integer = 0 to lastIndex
-		      dim param as string = "%" + str( i + 1 )
-		      dim key as variant = errorInfo.Key( i )
-		      dim value as variant = errorInfo.Value( key )
-		      r = r.Replace( param, value )
-		    next
-		  end if
+		  r = ExpandMessage( r, errorInfo  )
 		  
 		  return r
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function ExpandMessage(msg As String, info As Dictionary) As String
+		  if info IsA Dictionary then
+		    dim lastIndex as integer = info.Count - 1
+		    for i as integer = 0 to lastIndex
+		      dim param as string = "%" + str( i + 1 )
+		      dim key as variant = info.Key( i )
+		      dim value as variant = info.Value( key )
+		      msg = msg.Replace( param, value )
+		    next
+		  end if
+		  
+		  return msg
+		End Function
+	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function WarningToString(warning As XojoScript.Warnings, warningInfo As Dictionary) As String
+		  dim r as string = "Uknown warning"
+		  
+		  select case warning
+		  case XojoScript.Warnings.ConversionPrecision
+		    r = "Conversion precision"
+		    
+		  case XojoScript.Warnings.ConversionSign
+		    r = "Conversion sign"
+		    
+		  case XojoScript.Warnings.Deprecated
+		    r = "This has been deprecated"
+		    
+		  case XojoScript.Warnings.DeprecatedWithReplacement
+		    r = "%1 has been deprecated, use %2 instead"
+		    
+		  case XojoScript.Warnings.FloatingPointComparison
+		    r = "Floating point comparison"
+		    
+		  case XojoScript.Warnings.NameLookupChange
+		    r = "Name lookup change"
+		    
+		  case XojoScript.Warnings.OldStyleConstructor
+		    r = "Using old-style Constructor"
+		    
+		  case XojoScript.Warnings.ShadowedConstant
+		    r = "Shadowed constant"
+		    
+		  case XojoScript.Warnings.ShadowedProperty
+		    r = "Shadowed property"
+		    
+		  case XojoScript.Warnings.UnknownPragmaWarning
+		    r = "Unknown pragma"
+		    
+		  case XojoScript.Warnings.UnusedEventParameter
+		    r = "Unused event parameter"
+		    
+		  case XojoScript.Warnings.UnusedLocal
+		    r = "Unused local variable"
+		    
+		  case XojoScript.Warnings.UnusedMethodParameter
+		    r = "Unused method parameter"
+		    
+		  end select
+		  
+		  r = ExpandMessage( r, warningInfo )
+		  
+		  return r
+		  
+		End Function
+	#tag EndMethod
+
+
+	#tag ViewBehavior
+		#tag ViewProperty
+			Name="Index"
+			Visible=true
+			Group="ID"
+			InitialValue="-2147483648"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Left"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Name"
+			Visible=true
+			Group="ID"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Super"
+			Visible=true
+			Group="ID"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Top"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			Type="Integer"
+		#tag EndViewProperty
+	#tag EndViewBehavior
 End Module
 #tag EndModule
