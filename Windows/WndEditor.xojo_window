@@ -452,9 +452,9 @@ End
 		  // Handle the compiling first
 		  //
 		  
-		  if not XS.Precompile( XojoScript.OptimizationLevels.High ) then
-		    WasCompileError = true
-		  end if
+		  XS.Reset
+		  call XS.Precompile( XojoScript.OptimizationLevels.High )
+		  
 		End Sub
 	#tag EndMethod
 
