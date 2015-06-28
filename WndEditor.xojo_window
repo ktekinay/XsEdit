@@ -70,7 +70,7 @@ Begin Window WndEditor
       GutterBackgroundColor=   &cEEEEEE00
       GutterSeparationLineColor=   &c88888800
       GutterWidth     =   0
-      Height          =   332
+      Height          =   385
       HelpTag         =   ""
       HighlightBlocksOnMouseOverGutter=   True
       HighlightMatchingBrackets=   True
@@ -113,17 +113,17 @@ Begin Window WndEditor
       TextSelectionColor=   &c00000000
       TextSize        =   0
       ThickInsertionPoint=   True
-      Top             =   48
+      Top             =   0
       Transparent     =   True
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   580
+      Width           =   585
    End
    Begin ScrollBar sbVertical
       AcceptFocus     =   True
       AutoDeactivate  =   True
       Enabled         =   True
-      Height          =   332
+      Height          =   385
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -142,7 +142,7 @@ Begin Window WndEditor
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
-      Top             =   48
+      Top             =   0
       Value           =   0
       Visible         =   True
       Width           =   15
@@ -173,7 +173,7 @@ Begin Window WndEditor
       Top             =   385
       Value           =   0
       Visible         =   True
-      Width           =   573
+      Width           =   585
    End
    Begin TBEditor tbToolbar
       Enabled         =   True
@@ -196,6 +196,18 @@ Begin Window WndEditor
       LockedInPosition=   False
       Scope           =   2
       Source          =   ""
+      TabPanelIndex   =   0
+      Top             =   0
+      Width           =   32
+   End
+   Begin IPCSocket IDESocket
+      Height          =   32
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   0
+      LockedInPosition=   False
+      Path            =   ""
+      Scope           =   0
       TabPanelIndex   =   0
       Top             =   0
       Width           =   32
@@ -260,6 +272,33 @@ End
 		End Function
 	#tag EndMenuHandler
 
+	#tag MenuHandler
+		Function ScriptCompile() As Boolean Handles ScriptCompile.Action
+			self.ScriptCompile
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function ScriptRun() As Boolean Handles ScriptRun.Action
+			self.ScriptRun
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function ScriptRunInIDE() As Boolean Handles ScriptRunInIDE.Action
+			self.ScriptRunInIDE
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
 
 	#tag Method, Flags = &h0
 		Sub OpenDocument(f As FolderItem)
@@ -311,11 +350,92 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub ScriptCompile()
+		  XS.Source = fldCode.Text
+		  
+		  fldCode.ClearLineIcons
+		  fldCode.ClearHighlightedCharacterRanges
+		  
+		  //
+		  // Handle the compiling first
+		  //
+		  
+		  if not XS.Precompile( XojoScript.OptimizationLevels.High ) then
+		    #pragma warning "Finish this!"
+		    
+		    return
+		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub ScriptRun()
+		  ScriptCompile
+		  
+		  XS.Run
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub ScriptRunInIDE()
+		  try
+		    dim endTime as Integer = Ticks + 120
+		    IDESocket.Path = IDECommunicator.FindIPCPath
+		    
+		    if IDESocket.Path = "" then
+		      dim ex as new RuntimeException
+		      ex.Message = "Could not find XojoIDE IPC socket"
+		      raise ex
+		    end if
+		    
+		    IDESocket.Connect
+		    
+		    while Ticks < endTime
+		      while not IDESocket.IsConnected and IDESocket.LastErrorCode = 0
+		        IDESocket.Poll
+		      wend
+		      
+		      if IDESocket.IsConnected then
+		        exit
+		      end if
+		    wend
+		    
+		    if IDESocket.LastErrorCode <> 0 then
+		      dim ex as new RuntimeException
+		      ex.ErrorNumber = IDESocket.LastErrorCode
+		      ex.Message = "Could not connect to IDE"
+		      raise ex
+		    end if
+		    
+		    IDESocket.Write fldCode.Text
+		    while IDESocket.BytesLeftToSend > 0
+		      IDESocket.Poll
+		      if IDESocket.LastErrorCode <> 0 then
+		        dim ex as new RuntimeException
+		        ex.ErrorNumber = IDESocket.LastErrorCode
+		        ex.Message = "Could not communicate with IDE"
+		        raise ex
+		      end if
+		    wend
+		    
+		    IDESocket.Close
+		    
+		  catch ex as RuntimeException
+		    if IDESocket.IsConnected then
+		      IDESocket.Close
+		    end if
+		    
+		    MsgBox ex.Message + ": " + Str(ex.ErrorNumber)
+		  end try
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
 		  Autocompleter = new PaTrie
 		  
-		  for each keyword as String in kAutoCompleteKeywords.Split(",")
-		    call Autocompleter.addKey(keyword, nil)
+		  for each keyword as String in ReplaceLineEndings( kAutoCompleteKeywords, &uA ).Trim.Split( &uA )
+		    call Autocompleter.AddKey( keyword, nil )
 		  next
 		  
 		End Sub
@@ -376,7 +496,16 @@ End
 	#tag EndProperty
 
 
-	#tag Constant, Name = kAutoCompleteKeywords, Type = String, Dynamic = False, Default = \"AddHandler\x2CAddressOf\x2CArray\x2CAs\x2CAssigns\x2CBreak\x2CByRef\x2CByVal\x2CCall\x2CCase\x2CCatch\x2CClass\x2CConst\x2CContinue\x2CCType\x2CDeclare\x2CDim\x2CDo\x2CDownTo\x2CEach\x2CElse\x2CElseIf\x2CEnd\x2CEnum\x2CEvent\x2CException\x2CExit\x2CExtends\x2CFalse\x2CFinally\x2CFor\x2CFunction\x2CGetTypeInfo\x2CGOTO\x2CHandles\x2CIf\x2CImplements\x2CInterface\x2CIn\x2CInherits\x2CLib\x2CLoop\x2CModule\x2CNext\x2CNil\x2COptional\x2CParamArray\x2CPrivate\x2CProtected\x2CRaise\x2CRaiseEvent\x2CRedim\x2CRemoveHandler\x2CReturn\x2CSelect\x2CSoft\x2CStatic\x2CStep\x2CStructure\x2CSub\x2CSuper\x2CThen\x2CTo\x2CTrue\x2CTry\x2CUntil\x2CWend\x2CWhile", Scope = Private
+	#tag Constant, Name = kAutoCompleteKeywords, Type = String, Dynamic = False, Default = \"AddHandler\nAddressOf\nArray\nAs\nAssigns\nBreak\nByRef\nByVal\nCall\nCase\nCatch\nClass\nConst\nContinue\nCType\nDeclare\nDim\nDo\nDownTo\nEach\nElse\nElseIf\nEnd\nEnum\nEvent\nException\nExit\nExtends\nFalse\nFinally\nFor\nFunction\nGetTypeInfo\nGOTO\nHandles\nIf\nImplements\nInterface\nIn\nInherits\nLib\nLoop\nModule\nNext\nNil\nOptional\nParamArray\nPrint\nPrivate\nProtected\nRaise\nRaiseEvent\nRedim\nRemoveHandler\nReturn\nSelect\nSoft\nStatic\nStep\nStructure\nSub\nSuper\nThen\nTo\nTrue\nTry\nUntil\nUsing\nWend\nWhile", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kToolbarCompile, Type = String, Dynamic = False, Default = \"Compile", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kToolbarRun, Type = String, Dynamic = False, Default = \"Run", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kToolbarRunInIDE, Type = String, Dynamic = False, Default = \"Run in IDE", Scope = Public
 	#tag EndConstant
 
 
@@ -442,28 +571,15 @@ End
 #tag Events tbToolbar
 	#tag Event
 		Sub Action(item As ToolItem)
-		  XS.Source = fldCode.Text
-		  fldCode.ClearLineIcons
-		  fldCode.ClearHighlightedCharacterRanges
-		  
-		  //
-		  // Handle the compiling first
-		  //
-		  if not XS.Precompile( XojoScript.OptimizationLevels.High ) then
-		    #pragma warning "Finish this!"
-		    
-		    return
-		  end if
-		  
 		  select case item.Caption
-		  case "Compile"
-		    //
-		    // Nothing more to do
-		    //
+		  case kToolbarCompile
+		    ScriptCompile
 		    
-		  case "Run"
-		    XS.Run
+		  case kToolbarRun
+		    ScriptRun
 		    
+		  case kToolbarRunInIDE
+		    ScriptRunInIDE
 		  end select
 		End Sub
 	#tag EndEvent
