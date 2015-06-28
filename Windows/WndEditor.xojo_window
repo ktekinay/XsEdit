@@ -761,8 +761,16 @@ End
 	#tag EndEvent
 	#tag Event
 		Function CompilerError(location As XojoScriptLocation, error As XojoScript.Errors, errorInfo As Dictionary) As Boolean
+		  'select case integer( error )
+		  'case 4, 87 // Obsolete, ignore it
+		  'return false
+		  '
+		  'case else
+		  LastCompilerErrorCode = integer( error )
 		  HighlightCode( location, error, errorInfo, kColorError )
-		  return true // one at a time
+		  return true // One at a time
+		  
+		  'end select
 		End Function
 	#tag EndEvent
 	#tag Event
