@@ -214,6 +214,34 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin MenuItem UntitledSeparator2
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ScriptGoToLine
+         SpecialMenu = 0
+         Text = "Go To Line..."
+         Index = -2147483648
+         ShortcutKey = "G"
+         Shortcut = "Cmd+Shift+G"
+         MenuModifier = True
+         AltMenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ScriptGoToErrorLine
+         SpecialMenu = 0
+         Text = "Go To Error Line"
+         Index = -2147483648
+         ShortcutKey = "E"
+         Shortcut = "Cmd+E"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
    End
    Begin MenuItem HelpMenu
       SpecialMenu = 0
