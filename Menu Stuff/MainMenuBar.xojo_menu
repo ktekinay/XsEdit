@@ -223,22 +223,59 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem ScriptGoToLine
          SpecialMenu = 0
-         Text = "Go To Line..."
+         Text = "Go To &Line..."
          Index = -2147483648
-         ShortcutKey = "G"
-         Shortcut = "Cmd+Shift+G"
+         ShortcutKey = "L"
+         Shortcut = "Cmd+L"
          MenuModifier = True
-         AltMenuModifier = True
          AutoEnable = True
          Visible = True
       End
       Begin MenuItem ScriptGoToErrorLine
          SpecialMenu = 0
-         Text = "Go To Error Line"
+         Text = "Go To &Error Line"
          Index = -2147483648
          ShortcutKey = "E"
          Shortcut = "Cmd+E"
          MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem UntitledSeparator3
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ScriptFind
+         SpecialMenu = 0
+         Text = "Find"
+         Index = -2147483648
+         ShortcutKey = "F"
+         Shortcut = "Cmd+F"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ScriptFindNext
+         SpecialMenu = 0
+         Text = "Find Next"
+         Index = -2147483648
+         ShortcutKey = "G"
+         Shortcut = "Cmd+G"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ScriptFindPrevious
+         SpecialMenu = 0
+         Text = "Find Previous"
+         Index = -2147483648
+         ShortcutKey = "G"
+         Shortcut = "Cmd+Shift+G"
+         MenuModifier = True
+         AltMenuModifier = True
          AutoEnable = True
          Visible = True
       End
