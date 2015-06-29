@@ -48,6 +48,7 @@ Begin Window WndGoToLine
       Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Line Number:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -115,6 +116,7 @@ Begin Window WndGoToLine
       HasBackColor    =   False
       Height          =   54
       HelpTag         =   ""
+      Index           =   -2147483648
       InitialParent   =   ""
       Left            =   -148
       LockBottom      =   False
@@ -153,6 +155,8 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub ShowModalWithin(parentWindow As Window)
+		  #pragma unused parentWindow
+		  
 		  raise new RuntimeException
 		  // Shouldn't be used
 		End Sub
@@ -406,11 +410,6 @@ End
 		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="Result"
-		Group="Behavior"
-		Type="Integer"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Super"
