@@ -267,6 +267,16 @@ End
 
 	#tag Event
 		Sub FindAll(find As String)
+		  FindTerm = find
+		  
+		  if find = "" then
+		    beep
+		    return
+		  end if
+		  
+		  fldCode.ClearHighlightedCharacterRanges
+		  fldCode.ClearLineIcons
+		  
 		  dim s as string = fldCode.Text
 		  dim findLen as integer = find.Len
 		  
@@ -277,9 +287,9 @@ End
 		  end if
 		  
 		  dim firstPos as integer = pos 
-		  while pos > 0
+		  while pos <> 0
 		    fldCode.HighlightCharacterRange pos - 1, findLen, kColorFindAll
-		    pos = s.InStr( pos + 1 + findLen, find )
+		    pos = s.InStr( pos + findLen, find )
 		  wend
 		  
 		  fldCode.ScrollPosition = fldCode.LineNumAtCharPos( firstPos - 1 ) - 1
@@ -320,7 +330,34 @@ End
 
 	#tag Event
 		Sub ReplaceAll(find As String, replacement As String)
+		  FindTerm = find
+		  ReplaceTerm = replacement
 		  
+		  if find = "" then
+		    return
+		  end if
+		  
+		  fldCode.ClearHighlightedCharacterRanges
+		  fldCode.ClearLineIcons
+		  
+		  dim eventID as integer = Ticks
+		  
+		  dim findLen as integer = find.Len
+		  dim replaceLen as integer = replacement.Len
+		  
+		  dim pos as integer = fldCode.Text.InStr( find )
+		  if pos = 0 then
+		    beep
+		    return
+		  end if
+		  
+		  fldCode.IgnoreRepaint = true
+		  while pos <> 0
+		    fldCode.Private_Replace( pos - 1, findLen, replacement, true, eventID )
+		    pos = fldCode.Text.InStr( pos + replaceLen, find )
+		  wend
+		  fldCode.IgnoreRepaint = false
+		  fldCode.Invalidate
 		End Sub
 	#tag EndEvent
 
@@ -490,7 +527,6 @@ End
 		  
 		  dim s as string = fldCode.Text
 		  
-		  dim start as integer
 		  dim pos as integer = -1 // This is zero-based
 		  dim nextPos as integer = s.InStr( find )
 		  if nextPos = 0 then
@@ -515,6 +551,9 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub DoFindNext()
+		  fldCode.ClearHighlightedCharacterRanges
+		  fldCode.ClearLineIcons
+		  
 		  dim pos as integer = CharPosOfNext( FindTerm )
 		  if pos > -1 then
 		    fldCode.SelStart = pos
@@ -527,6 +566,9 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub DoFindPrevious()
+		  fldCode.ClearHighlightedCharacterRanges
+		  fldCode.ClearLineIcons
+		  
 		  dim pos as integer = CharPosOfPrevious( FindTerm )
 		  if pos > -1 then
 		    fldCode.SelStart = pos
