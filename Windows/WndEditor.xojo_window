@@ -511,6 +511,15 @@ End
 		    
 		    IDESocket.Close
 		    
+		    //
+		    // If we get here, we assume it worked, so activate it
+		    //
+		    
+		    #if TargetMacOS then
+		      dim sh as new Shell
+		      sh.Execute "osascript -e 'tell app id ""com.xojo.xojo"" to activate'"
+		    #endif
+		    
 		  catch ex as RuntimeException
 		    if IDESocket.IsConnected then
 		      IDESocket.Close
