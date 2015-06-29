@@ -258,6 +258,7 @@ End
 		  EditUndo.Enabled = fldCode.CanUndo
 		  EditRedo.Enabled = fldCode.CanRedo
 		  
+		  ScriptGoToErrorLine.Enabled = LastCompilerErrorLine > 0
 		End Sub
 	#tag EndEvent
 
@@ -337,6 +338,23 @@ End
 	#tag EndMenuHandler
 
 	#tag MenuHandler
+		Function ScriptGoToErrorLine() As Boolean Handles ScriptGoToErrorLine.Action
+			ScrollToErrorLine
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function ScriptGoToLine() As Boolean Handles ScriptGoToLine.Action
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function ScriptRun() As Boolean Handles ScriptRun.Action
 			self.ScriptTestRun
 			
@@ -375,7 +393,8 @@ End
 		  //
 		  // Scroll to that line
 		  //
-		  fldCode.ScrollPosition = startLine - 1 // One before that line
+		  LastCompilerErrorLine = startLine
+		  ScrollToErrorLine
 		  
 		  fldCode.HelpTag = msg
 		  
@@ -448,6 +467,7 @@ End
 	#tag Method, Flags = &h21
 		Private Sub ScriptCompile()
 		  LastCompilerErrorCode = -1
+		  LastCompilerErrorLine = -1
 		  
 		  XS.Source = fldCode.Text
 		  
@@ -548,6 +568,16 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub ScrollToErrorLine()
+		  if LastCompilerErrorLine < 1 then
+		    beep
+		  else
+		    fldCode.ScrollPosition = LastCompilerErrorLine - 1 // The line before
+		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
 		  Autocompleter = new PaTrie
 		  
@@ -626,6 +656,10 @@ End
 
 	#tag Property, Flags = &h21
 		Private LastCompilerErrorCode As Integer = -1
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private LastCompilerErrorLine As Integer = -1
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
