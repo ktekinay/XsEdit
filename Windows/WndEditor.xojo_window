@@ -363,14 +363,19 @@ End
 		  
 		  fldCode.HighlightCharacterRange( startPosition, length, c )
 		  
+		  dim startLine as integer = fldCode.LineNumAtCharPos( startPosition )
 		  if lineIcon isa Picture then
-		    dim startLine as integer = fldCode.LineNumAtCharPos( startPosition )
 		    dim endLine as integer = fldCode.LineNumAtCharPos( endPosition )
 		    
 		    for l as integer = startLine to endLine
 		      fldCode.LineIcon( l ) = lineIcon
 		    next
 		  end if
+		  
+		  //
+		  // Scroll to that line
+		  //
+		  fldCode.ScrollPosition = startLine - 1 // One before that line
 		  
 		  fldCode.HelpTag = msg
 		  
