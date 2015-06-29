@@ -95,7 +95,7 @@ Begin Window WndEditor
       ReadOnly        =   False
       RightMarginAtPixel=   0
       RightScrollMargin=   150
-      Scope           =   0
+      Scope           =   2
       ScrollPosition  =   0
       ScrollPositionX =   0
       selLength       =   0
@@ -166,7 +166,7 @@ Begin Window WndEditor
       Maximum         =   100
       Minimum         =   0
       PageStep        =   20
-      Scope           =   0
+      Scope           =   2
       TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True
@@ -207,7 +207,7 @@ Begin Window WndEditor
       Left            =   0
       LockedInPosition=   False
       Path            =   ""
-      Scope           =   0
+      Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
       Width           =   32
