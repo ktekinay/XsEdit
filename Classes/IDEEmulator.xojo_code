@@ -8,12 +8,18 @@ Protected Class IDEEmulator
 
 	#tag Method, Flags = &h1
 		Protected Function BuildApp(buildType As Integer, reveal As Boolean = False) As String
-		  
+		  #pragma unused buildType
+		  #pragma unused reveal
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub ChangeDeclaration(name As String, parameters As String, returnType As String, scope As Integer, implement As String)
+		  #pragma unused name
+		  #pragma unused parameters
+		  #pragma unused returnType
+		  #pragma unused scope
+		  #pragma unused implement
 		  
 		End Sub
 	#tag EndMethod
@@ -51,31 +57,34 @@ Protected Class IDEEmulator
 
 	#tag Method, Flags = &h1
 		Protected Function DecryptItem(password As String) As Boolean
-		  
+		  #pragma unused password
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub DoCommand(cmd As String)
-		  
+		  #pragma unused cmd
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function DoShellCommand(cmd As String) As String
-		  
+		  #pragma unused cmd
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function DoShellCommand(cmd As String, timeOut As Integer, ByRef resultCode As Integer) As String
+		  #pragma unused cmd
+		  #pragma unused timeOut
+		  #pragma unused resultCode
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function EncryptItem(password As String) As Boolean
-		  
+		  #pragma unused password
 		End Function
 	#tag EndMethod
 
@@ -105,7 +114,7 @@ Protected Class IDEEmulator
 
 	#tag Method, Flags = &h1
 		Protected Sub OpenFile(filePath As String)
-		  
+		  #pragma unused filePath
 		End Sub
 	#tag EndMethod
 
@@ -136,55 +145,61 @@ Protected Class IDEEmulator
 
 	#tag Method, Flags = &h1
 		Protected Sub QuitIDE(saveChanges As Boolean)
-		  
+		  #pragma unused saveChanges
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub RunScript(name As String)
-		  
+		  #pragma unused name
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function SelectProjectItem(itemPath As String) As Boolean
-		  
+		  #pragma unused itemPath
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub SelectWindow(index As Integer)
-		  
+		  #pragma unused index
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub SelectWindow(windowTitle As String)
-		  
+		  #pragma unused windowTitle
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String, CancelButtonCaption As String, altButtonCaption As String, icon As Integer) As String
+		  #pragma unused message
+		  #pragma unused explanation
+		  #pragma unused defaultButtonCaption
+		  #pragma unused CancelButtonCaption
+		  #pragma unused altButtonCaption
+		  #pragma unused icon
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub ShowURL(url As String)
-		  
+		  #pragma unused url
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub Speak(s As String)
-		  
+		  #pragma unused s
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function SubLocation(baseLocation As String) As String
-		  
+		  #pragma unused baseLocation
 		End Function
 	#tag EndMethod
 
@@ -202,7 +217,7 @@ Protected Class IDEEmulator
 
 	#tag Method, Flags = &h1
 		Protected Sub WindowTitle(index As Integer)
-		  
+		  #pragma unused index
 		End Sub
 	#tag EndMethod
 
