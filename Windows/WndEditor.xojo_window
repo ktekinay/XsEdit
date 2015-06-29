@@ -336,7 +336,7 @@ End
 
 	#tag MenuHandler
 		Function ScriptRun() As Boolean Handles ScriptRun.Action
-			self.ScriptRun
+			self.ScriptTestRun
 			
 			Return True
 			
@@ -461,18 +461,6 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub ScriptRun()
-		  ScriptCompile
-		  
-		  if LastCompilerErrorCode = -1 then
-		    #pragma BreakOnExceptions false
-		    XS.Run
-		    #pragma BreakOnExceptions default
-		  end if
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
 		Private Sub ScriptRunInIDE()
 		  try
 		    dim endTime as Integer = Ticks + 120
@@ -523,6 +511,18 @@ End
 		    
 		    MsgBox ex.Message + ": " + Str(ex.ErrorNumber)
 		  end try
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub ScriptTestRun()
+		  ScriptCompile
+		  
+		  if LastCompilerErrorCode = -1 then
+		    #pragma BreakOnExceptions false
+		    XS.Run
+		    #pragma BreakOnExceptions default
+		  end if
 		End Sub
 	#tag EndMethod
 
@@ -638,10 +638,10 @@ End
 	#tag Constant, Name = kToolbarCompile, Type = String, Dynamic = False, Default = \"Compile", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = kToolbarRun, Type = String, Dynamic = False, Default = \"Run", Scope = Public
+	#tag Constant, Name = kToolbarRunInIDE, Type = String, Dynamic = False, Default = \"Run in IDE", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = kToolbarRunInIDE, Type = String, Dynamic = False, Default = \"Run in IDE", Scope = Public
+	#tag Constant, Name = kToolbarTestRun, Type = String, Dynamic = False, Default = \"Test Run", Scope = Public
 	#tag EndConstant
 
 
@@ -742,8 +742,8 @@ End
 		  case kToolbarCompile
 		    ScriptCompile
 		    
-		  case kToolbarRun
-		    ScriptRun
+		  case kToolbarTestRun
+		    ScriptTestRun
 		    
 		  case kToolbarRunInIDE
 		    ScriptRunInIDE
