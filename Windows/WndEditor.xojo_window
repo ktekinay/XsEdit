@@ -1,5 +1,5 @@
 #tag Window
-Begin Window WndEditor
+Begin FindReceiverBaseWindow WndEditor
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
    CloseButton     =   True
@@ -259,6 +259,45 @@ End
 		  EditRedo.Enabled = fldCode.CanRedo
 		  
 		  ScriptGoToErrorLine.Enabled = LastCompilerErrorLine > 0
+		  
+		  ScriptFindNext.Enabled = FindTerm <> ""
+		  ScriptFindPrevious.Enabled = FindTerm <> ""
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub FindAll(find As String)
+		  dim s as string = fldCode.Text
+		  dim findLen as integer = find.Len
+		  
+		  dim pos as integer = s.InStr( find )
+		  if pos = 0 then
+		    beep
+		    return
+		  end if
+		  
+		  dim firstPos as integer = pos 
+		  while pos > 0
+		    fldCode.HighlightCharacterRange pos - 1, findLen, kColorFindAll
+		    pos = s.InStr( pos + 1 + findLen, find )
+		  wend
+		  
+		  fldCode.ScrollPosition = fldCode.LineNumAtCharPos( firstPos - 1 ) - 1
+		  
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub FindNext(find As String)
+		  FindTerm = find
+		  DoFindNext
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub FindPrevious(find As String)
+		  FindTerm = find
+		  DoFindPrevious
 		End Sub
 	#tag EndEvent
 
@@ -276,6 +315,24 @@ End
 		  SetCEDPrefs()
 		  
 		  fldCode.SetScrollbars( sbHorizontal, sbVertical )
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub ReplaceAll(find As String, replacement As String)
+		  
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub ReplaceAndFindNext(find As String, replacement As String)
+		  
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub ReplaceOne(find As String, replacement As String)
+		  
 		End Sub
 	#tag EndEvent
 
@@ -338,6 +395,24 @@ End
 	#tag EndMenuHandler
 
 	#tag MenuHandler
+		Function ScriptFindNext() As Boolean Handles ScriptFindNext.Action
+			DoFindNext
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function ScriptFindPrevious() As Boolean Handles ScriptFindPrevious.Action
+			DoFindPrevious
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function ScriptGoToErrorLine() As Boolean Handles ScriptGoToErrorLine.Action
 			ScrollToErrorLine
 			
@@ -380,6 +455,87 @@ End
 		End Function
 	#tag EndMenuHandler
 
+
+	#tag Method, Flags = &h21
+		Private Function CharPosOfNext(find As String) As Integer
+		  //
+		  // Wrap around
+		  //
+		  
+		  dim s as string = fldCode.Text
+		  dim pos as integer = s.InStr( fldCode.SelStart + 1 + fldCode.SelLength, find )
+		  if pos = 0 then
+		    pos = s.InStr( find )
+		  end if
+		  
+		  return pos - 1 // Zero based
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function CharPosOfPrevious(find As String) As Integer
+		  //
+		  // Wrap around
+		  //
+		  if find = "" then
+		    return -1
+		  end if
+		  
+		  dim findLen as integer = find.Len
+		  
+		  dim curPos as integer = fldCode.SelStart + 1
+		  if curPos = 0 then
+		    return -1
+		  end if
+		  
+		  dim s as string = fldCode.Text
+		  
+		  dim start as integer
+		  dim pos as integer = -1 // This is zero-based
+		  dim nextPos as integer = s.InStr( find )
+		  if nextPos = 0 then
+		    return -1
+		  end if
+		  
+		  //
+		  // See if we have to wrap around
+		  //
+		  if nextPos >= curPos then
+		    curPos = s.Len + 1
+		  end if
+		  
+		  while nextPos > 0 and nextPos < curPos
+		    pos = nextPos - 1
+		    nextPos = s.InStr( nextPos + findLen, find )
+		  wend
+		  
+		  return pos
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub DoFindNext()
+		  dim pos as integer = CharPosOfNext( FindTerm )
+		  if pos > -1 then
+		    fldCode.SelStart = pos
+		    fldCode.SelLength = FindTerm.Len
+		  else
+		    beep
+		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub DoFindPrevious()
+		  dim pos as integer = CharPosOfPrevious( FindTerm )
+		  if pos > -1 then
+		    fldCode.SelStart = pos
+		    fldCode.SelLength = FindTerm.Len
+		  else
+		    beep
+		  end if
+		End Sub
+	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Sub HighlightCode(location As XojoScriptLocation, msg As String, c As Color, lineIcon As Picture)
@@ -663,6 +819,10 @@ End
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private FindTerm As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private LastCompilerErrorCode As Integer = -1
 	#tag EndProperty
 
@@ -688,6 +848,10 @@ End
 		Private MyDocumentAlias As FolderItemAlias
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private ReplaceTerm As String
+	#tag EndProperty
+
 
 	#tag Constant, Name = kAutoCompleteKeywords, Type = String, Dynamic = False, Default = \"AddHandler\nAddressOf\nArray\nAs\nAssigns\nBreak\nByRef\nByte\nByVal\nCall\nCase\nCatch\nClass\nConst\nContinue\nCType\nDeclare\nDim\nDo\nDouble\nDownTo\nEach\nElse\nElseIf\nEnd\nEnum\nEvent\nException\nExit\nExtends\nFalse\nFinally\nFor\nFunction\nGetTypeInfo\nGOTO\nHandles\nIf\nImplements\nInput\nInterface\nIn\nInherits\nInt8\nInt16\nInt32\nInt64\nInteger\nLib\nLoop\nModule\nNext\nNil\nOptional\nParamArray\nPrint\nPrivate\nProtected\nRaise\nRaiseEvent\nRedim\nRemoveHandler\nReturn\nSelect\nSoft\nStatic\nStep\nString\nStructure\nSub\nSuper\nText\nThen\nTo\nTrue\nTry\nUint8\nUInt16\nUInt32\nUInt64\nUInteger\nUntil\nUsing\nWend\nWhile", Scope = Private
 	#tag EndConstant
@@ -696,6 +860,9 @@ End
 	#tag EndConstant
 
 	#tag Constant, Name = kColorError, Type = Color, Dynamic = False, Default = \"&cFF00007F", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kColorFindAll, Type = Color, Dynamic = False, Default = \"&c00FF00", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kColorWarning, Type = Color, Dynamic = False, Default = \"&cDCE83D7F", Scope = Private
