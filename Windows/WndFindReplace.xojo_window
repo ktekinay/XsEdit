@@ -414,6 +414,15 @@ End
 	#tag EndEvent
 
 
+	#tag MenuHandler
+		Function FileClose() As Boolean Handles FileClose.Action
+			self.Close
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+
 	#tag Method, Flags = &h0
 		Sub AdjustControls()
 		  dim windowOpen as boolean = FindReceiverBaseWindow.ActiveWindow IsA Window and IsActive
