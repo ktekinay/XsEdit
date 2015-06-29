@@ -464,6 +464,11 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub ScriptRunInIDE()
+		  ScriptCompile
+		  if LastCompilerErrorCode <> -1 then
+		    return
+		  end if
+		  
 		  try
 		    dim endTime as Integer = Ticks + 120
 		    IDESocket.Path = IDECommunicator.FindIPCPath
