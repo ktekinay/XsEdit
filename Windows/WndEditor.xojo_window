@@ -457,7 +457,7 @@ End
 		  XS.Reset
 		  XS.Context = new IDEEmulator
 		  
-		  call XS.Precompile( XojoScript.OptimizationLevels.High )
+		  call XS.Precompile( XojoScript.OptimizationLevels.None )
 		  
 		End Sub
 	#tag EndMethod
