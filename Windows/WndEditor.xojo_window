@@ -95,7 +95,7 @@ Begin Window WndEditor
       ReadOnly        =   False
       RightMarginAtPixel=   0
       RightScrollMargin=   150
-      Scope           =   0
+      Scope           =   2
       ScrollPosition  =   0
       ScrollPositionX =   0
       selLength       =   0
@@ -166,7 +166,7 @@ Begin Window WndEditor
       Maximum         =   100
       Minimum         =   0
       PageStep        =   20
-      Scope           =   0
+      Scope           =   2
       TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True
@@ -207,7 +207,7 @@ Begin Window WndEditor
       Left            =   0
       LockedInPosition=   False
       Path            =   ""
-      Scope           =   0
+      Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
       Width           =   32
@@ -258,6 +258,7 @@ End
 		  EditUndo.Enabled = fldCode.CanUndo
 		  EditRedo.Enabled = fldCode.CanRedo
 		  
+		  ScriptGoToErrorLine.Enabled = LastCompilerErrorLine > 0
 		End Sub
 	#tag EndEvent
 
@@ -337,6 +338,31 @@ End
 	#tag EndMenuHandler
 
 	#tag MenuHandler
+		Function ScriptGoToErrorLine() As Boolean Handles ScriptGoToErrorLine.Action
+			ScrollToErrorLine
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function ScriptGoToLine() As Boolean Handles ScriptGoToLine.Action
+			dim l as integer = WndGoToLine.ShowModalWithin( self, fldCode.LineCount )
+			if l > -1 then
+			//
+			// l is one-based but lines are zro-based
+			//
+			fldCode.ScrollPosition = l - 2
+			fldCode.SelectLine l - 1
+			end if
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function ScriptRun() As Boolean Handles ScriptRun.Action
 			self.ScriptTestRun
 			
@@ -363,14 +389,20 @@ End
 		  
 		  fldCode.HighlightCharacterRange( startPosition, length, c )
 		  
+		  dim startLine as integer = fldCode.LineNumAtCharPos( startPosition )
 		  if lineIcon isa Picture then
-		    dim startLine as integer = fldCode.LineNumAtCharPos( startPosition )
 		    dim endLine as integer = fldCode.LineNumAtCharPos( endPosition )
 		    
 		    for l as integer = startLine to endLine
 		      fldCode.LineIcon( l ) = lineIcon
 		    next
 		  end if
+		  
+		  //
+		  // Scroll to that line
+		  //
+		  LastCompilerErrorLine = startLine
+		  ScrollToErrorLine
 		  
 		  fldCode.HelpTag = msg
 		  
@@ -443,6 +475,7 @@ End
 	#tag Method, Flags = &h21
 		Private Sub ScriptCompile()
 		  LastCompilerErrorCode = -1
+		  LastCompilerErrorLine = -1
 		  
 		  XS.Source = fldCode.Text
 		  
@@ -543,6 +576,16 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub ScrollToErrorLine()
+		  if LastCompilerErrorLine < 1 then
+		    beep
+		  else
+		    fldCode.ScrollPosition = LastCompilerErrorLine - 1 // The line before
+		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
 		  Autocompleter = new PaTrie
 		  
@@ -623,6 +666,10 @@ End
 		Private LastCompilerErrorCode As Integer = -1
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private LastCompilerErrorLine As Integer = -1
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
@@ -643,6 +690,9 @@ End
 
 
 	#tag Constant, Name = kAutoCompleteKeywords, Type = String, Dynamic = False, Default = \"AddHandler\nAddressOf\nArray\nAs\nAssigns\nBreak\nByRef\nByte\nByVal\nCall\nCase\nCatch\nClass\nConst\nContinue\nCType\nDeclare\nDim\nDo\nDouble\nDownTo\nEach\nElse\nElseIf\nEnd\nEnum\nEvent\nException\nExit\nExtends\nFalse\nFinally\nFor\nFunction\nGetTypeInfo\nGOTO\nHandles\nIf\nImplements\nInput\nInterface\nIn\nInherits\nInt8\nInt16\nInt32\nInt64\nInteger\nLib\nLoop\nModule\nNext\nNil\nOptional\nParamArray\nPrint\nPrivate\nProtected\nRaise\nRaiseEvent\nRedim\nRemoveHandler\nReturn\nSelect\nSoft\nStatic\nStep\nString\nStructure\nSub\nSuper\nText\nThen\nTo\nTrue\nTry\nUint8\nUInt16\nUInt32\nUInt64\nUInteger\nUntil\nUsing\nWend\nWhile", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kColorCurrentLine, Type = Color, Dynamic = False, Default = \"&cF4FF9C", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = kColorError, Type = Color, Dynamic = False, Default = \"&cFF00007F", Scope = Private
@@ -724,6 +774,17 @@ End
 		    end if
 		    
 		  #endif
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function UseBackgroundColorForLine(lineIndex as integer, byref lineBackgroundColor as color) As boolean
+		  dim startLine as integer = me.LineNumAtCharPos( me.SelStart )
+		  dim endLine as integer = me.LineNumAtCharPos( me.SelStart + me.SelLength )
+		  
+		  if lineIndex >= startLine and lineIndex <= endLine then
+		    lineBackgroundColor = kColorCurrentLine
+		    return true
+		  end if
 		End Function
 	#tag EndEvent
 #tag EndEvents

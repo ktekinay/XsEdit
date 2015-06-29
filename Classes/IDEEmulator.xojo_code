@@ -174,6 +174,36 @@ Protected Class IDEEmulator
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String) As String
+		  #pragma unused message
+		  #pragma unused explanation
+		  #pragma unused defaultButtonCaption
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String, CancelButtonCaption As String) As String
+		  #pragma unused message
+		  #pragma unused explanation
+		  #pragma unused defaultButtonCaption
+		  #pragma unused CancelButtonCaption
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String, CancelButtonCaption As String, altButtonCaption As String) As String
+		  #pragma unused message
+		  #pragma unused explanation
+		  #pragma unused defaultButtonCaption
+		  #pragma unused CancelButtonCaption
+		  #pragma unused altButtonCaption
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String, CancelButtonCaption As String, altButtonCaption As String, icon As Integer) As String
 		  #pragma unused message
 		  #pragma unused explanation

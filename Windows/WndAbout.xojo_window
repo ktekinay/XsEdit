@@ -162,6 +162,40 @@ Begin Window WndAbout
       Visible         =   True
       Width           =   406
    End
+   Begin VersionFld VersionFld1
+      AutoDeactivate  =   True
+      Bold            =   False
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   21
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      Text            =   "Untitled"
+      TextAlign       =   0
+      TextColor       =   &c00000000
+      TextFont        =   "SmallSystem"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   161
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   100
+   End
 End
 #tag EndWindow
 
