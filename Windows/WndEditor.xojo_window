@@ -531,7 +531,10 @@ End
 		  Autocompleter = new PaTrie
 		  
 		  for each keyword as String in ReplaceLineEndings( kAutoCompleteKeywords, &uA ).Trim.Split( &uA )
-		    call Autocompleter.AddKey( keyword, nil )
+		    keyword = keyword.Trim
+		    if keyword <> "" then
+		      call Autocompleter.AddKey( keyword, nil )
+		    end if
 		  next
 		  
 		End Sub
