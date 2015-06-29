@@ -348,6 +348,14 @@ End
 
 	#tag MenuHandler
 		Function ScriptGoToLine() As Boolean Handles ScriptGoToLine.Action
+			dim l as integer = WndGoToLine.ShowModalWithin( self, fldCode.LineCount )
+			if l > -1 then
+			//
+			// l is one-based but lines are zro-based
+			//
+			fldCode.ScrollPosition = l - 2
+			fldCode.SelectLine l - 1
+			end if
 			
 			Return True
 			
