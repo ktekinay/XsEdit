@@ -1,6 +1,24 @@
 #tag Class
 Protected Class IDEEmulator
 	#tag Method, Flags = &h1
+		Protected Sub Beep()
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function BuildApp(buildType As Integer, reveal As Boolean = False) As String
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub ChangeDeclaration(name As String, parameters As String, returnType As String, scope As Integer, implement As String)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function ConstantValue(name As String) As String
 		  #pragma unused name
 		End Function
@@ -11,6 +29,96 @@ Protected Class IDEEmulator
 		  #pragma unused name
 		  #pragma unused value
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function CurrentBuildAppName() As String
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function CurrentBuildLocation() As String
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function CurrentBuildTarget() As String
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function DecryptItem(password As String) As Boolean
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub DoCommand(cmd As String)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function DoShellCommand(cmd As String) As String
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function DoShellCommand(cmd As String, timeOut As Integer, ByRef resultCode As Integer) As String
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function EncryptItem(password As String) As Boolean
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function EndOfLine() As String
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub NewConsoleProject()
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub NewGUIProject()
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub NewWebProject()
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub OpenFile(filePath As String)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function ProjectItem() As String
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function ProjectShellPath() As String
+		  
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
@@ -26,9 +134,125 @@ Protected Class IDEEmulator
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Sub QuitIDE(saveChanges As Boolean)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub RunScript(name As String)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function SelectProjectItem(itemPath As String) As Boolean
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub SelectWindow(index As Integer)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub SelectWindow(windowTitle As String)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String, CancelButtonCaption As String, altButtonCaption As String, icon As Integer) As String
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub ShowURL(url As String)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub Speak(s As String)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function SubLocation(baseLocation As String) As String
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function TypeOfCurrentLocation() As String
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function WindowCount() As Integer
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub WindowTitle(index As Integer)
+		  
+		End Sub
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h1
-		Protected Text As String
+		Protected BuildCurrentPlatform As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected BuildLanguage As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected BuildLinux As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected BuildMacCocoa As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected BuildMacMachOx86 As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected BuildRegion As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected BuildWebDebugPort As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected BuildWebPort As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected BuildWebProtocol As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected BuildWin32 As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected Clipboard As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected Location As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
@@ -36,7 +260,15 @@ Protected Class IDEEmulator
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
+		Protected SelStart As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
 		Protected SelText As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected Text As String
 	#tag EndProperty
 
 
@@ -66,12 +298,6 @@ Protected Class IDEEmulator
 			Visible=true
 			Group="ID"
 			Type="String"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Text"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
