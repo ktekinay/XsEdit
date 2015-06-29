@@ -81,6 +81,15 @@ Inherits Application
 		End Function
 	#tag EndMenuHandler
 
+	#tag MenuHandler
+		Function HelpAbout() As Boolean Handles HelpAbout.Action
+			WndAbout.Show
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
 
 	#tag Method, Flags = &h0
 		Sub CloseAllWindows()
