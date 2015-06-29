@@ -8,7 +8,7 @@ Begin Menu MainMenuBar
       Visible = True
       Begin MenuItem FileNew
          SpecialMenu = 0
-         Text = "New"
+         Text = "New Script"
          Index = -2147483648
          ShortcutKey = "N"
          Shortcut = "Cmd+N"
@@ -169,6 +169,44 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin MenuItem UntitledSeparator4
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem EditFind
+         SpecialMenu = 0
+         Text = "Find"
+         Index = -2147483648
+         ShortcutKey = "F"
+         Shortcut = "Cmd+F"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem EditFindNext
+         SpecialMenu = 0
+         Text = "Find Next"
+         Index = -2147483648
+         ShortcutKey = "G"
+         Shortcut = "Cmd+G"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem EditFindPrevious
+         SpecialMenu = 0
+         Text = "Find Previous"
+         Index = -2147483648
+         ShortcutKey = "G"
+         Shortcut = "Cmd+Shift+G"
+         MenuModifier = True
+         AltMenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
    End
    Begin MenuItem ScriptMenu
       SpecialMenu = 0
@@ -238,44 +276,6 @@ Begin Menu MainMenuBar
          ShortcutKey = "E"
          Shortcut = "Cmd+E"
          MenuModifier = True
-         AutoEnable = True
-         Visible = True
-      End
-      Begin MenuItem UntitledSeparator3
-         SpecialMenu = 0
-         Text = "-"
-         Index = -2147483648
-         AutoEnable = True
-         Visible = True
-      End
-      Begin MenuItem ScriptFind
-         SpecialMenu = 0
-         Text = "Find"
-         Index = -2147483648
-         ShortcutKey = "F"
-         Shortcut = "Cmd+F"
-         MenuModifier = True
-         AutoEnable = True
-         Visible = True
-      End
-      Begin MenuItem ScriptFindNext
-         SpecialMenu = 0
-         Text = "Find Next"
-         Index = -2147483648
-         ShortcutKey = "G"
-         Shortcut = "Cmd+G"
-         MenuModifier = True
-         AutoEnable = True
-         Visible = True
-      End
-      Begin MenuItem ScriptFindPrevious
-         SpecialMenu = 0
-         Text = "Find Previous"
-         Index = -2147483648
-         ShortcutKey = "G"
-         Shortcut = "Cmd+Shift+G"
-         MenuModifier = True
-         AltMenuModifier = True
          AutoEnable = True
          Visible = True
       End

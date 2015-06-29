@@ -24,7 +24,7 @@ Inherits Window
 
 
 	#tag MenuHandler
-		Function ScriptFind() As Boolean Handles ScriptFind.Action
+		Function EditFind() As Boolean Handles EditFind.Action
 			WndFindReplace.Show
 			
 			Return True

@@ -260,8 +260,8 @@ End
 		  
 		  ScriptGoToErrorLine.Enabled = LastCompilerErrorLine > 0
 		  
-		  ScriptFindNext.Enabled = FindTerm <> ""
-		  ScriptFindPrevious.Enabled = FindTerm <> ""
+		  EditFindNext.Enabled = FindTerm <> ""
+		  EditFindPrevious.Enabled = FindTerm <> ""
 		End Sub
 	#tag EndEvent
 
@@ -338,6 +338,24 @@ End
 
 
 	#tag MenuHandler
+		Function EditFindNext() As Boolean Handles EditFindNext.Action
+			DoFindNext
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditFindPrevious() As Boolean Handles EditFindPrevious.Action
+			DoFindPrevious
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function EditRedo() As Boolean Handles EditRedo.Action
 			fldCode.Redo
 			Return True
@@ -388,24 +406,6 @@ End
 	#tag MenuHandler
 		Function ScriptCompile() As Boolean Handles ScriptCompile.Action
 			self.ScriptCompile
-			
-			Return True
-			
-		End Function
-	#tag EndMenuHandler
-
-	#tag MenuHandler
-		Function ScriptFindNext() As Boolean Handles ScriptFindNext.Action
-			DoFindNext
-			
-			Return True
-			
-		End Function
-	#tag EndMenuHandler
-
-	#tag MenuHandler
-		Function ScriptFindPrevious() As Boolean Handles ScriptFindPrevious.Action
-			DoFindPrevious
 			
 			Return True
 			
