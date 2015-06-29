@@ -2,48 +2,42 @@
 Protected Class IDEEmulator
 	#tag Method, Flags = &h1
 		Protected Function ConstantValue(name As String) As String
-		  
-		  select case name
-		  case "kIsXsScript"
-		    return "True"
-		    
-		  case else
-		    
-		    #pragma warning "Finish this!"
-		    
-		  end select
-		  
+		  #pragma unused name
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub EmulateText()
-		  
+		Protected Sub ConstantValue(name As String, Assigns value As String)
+		  #pragma unused name
+		  #pragma unused value
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function PropertyValue(name As String) As String
+		  #pragma unused name
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub PropertyValue(name As String, Assigns value As String)
+		  #pragma unused name
+		  #pragma unused value
 		End Sub
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h21
-		Private mText As String
+	#tag Property, Flags = &h1
+		Protected Text As String
 	#tag EndProperty
 
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mText
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  mText = value
-			End Set
-		#tag EndSetter
-		Text As String
-	#tag EndComputedProperty
+	#tag Property, Flags = &h1
+		Protected SelLength As Integer
+	#tag EndProperty
 
-
-	#tag Constant, Name = kIsXsScript, Type = Boolean, Dynamic = False, Default = \"True", Scope = Protected
-	#tag EndConstant
+	#tag Property, Flags = &h1
+		Protected SelText As String
+	#tag EndProperty
 
 
 	#tag ViewBehavior
@@ -77,6 +71,7 @@ Protected Class IDEEmulator
 			Name="Text"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
