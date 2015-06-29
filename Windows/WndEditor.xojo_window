@@ -785,6 +785,9 @@ End
 		  #endif
 		  
 		  #pragma warning "Not handling compiler warnings at all right now"
+		  #pragma unused location
+		  #pragma unused warning
+		  #pragma unused warningInfo
 		End Sub
 	#tag EndEvent
 	#tag Event
