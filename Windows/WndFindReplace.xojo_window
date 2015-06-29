@@ -455,10 +455,45 @@ End
 
 #tag EndWindowCode
 
+#tag Events btnFindNext
+	#tag Event
+		Sub Action()
+		  FindReceiverBaseWindow.ActiveWindow.RaiseFindEvent(FindReceiverBaseWindow.FindTypes.FindNext, fldFind.Text )
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btnReplaceOne
+	#tag Event
+		Sub Action()
+		  FindReceiverBaseWindow.ActiveWindow.RaiseFindEvent(FindReceiverBaseWindow.FindTypes.Replace, fldFind.Text, fldReplace.Text )
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btnReplaceAll
+	#tag Event
+		Sub Action()
+		  FindReceiverBaseWindow.ActiveWindow.RaiseFindEvent(FindReceiverBaseWindow.FindTypes.ReplaceAll, fldFind.Text, fldReplace.Text )
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btnFindPrevious
+	#tag Event
+		Sub Action()
+		  FindReceiverBaseWindow.ActiveWindow.RaiseFindEvent(FindReceiverBaseWindow.FindTypes.FindPrevious, fldFind.Text )
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag Events btnFindAll
 	#tag Event
 		Sub Action()
 		  FindReceiverBaseWindow.ActiveWindow.RaiseFindEvent(FindReceiverBaseWindow.FindTypes.FindAll, fldFind.Text )
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btnReplaceAndFind
+	#tag Event
+		Sub Action()
+		  FindReceiverBaseWindow.ActiveWindow.RaiseFindEvent(FindReceiverBaseWindow.FindTypes.ReplaceAndFind, fldFind.Text, fldReplace.Text )
 		End Sub
 	#tag EndEvent
 #tag EndEvents
