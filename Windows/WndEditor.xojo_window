@@ -224,6 +224,8 @@ End
 
 	#tag Event
 		Function CancelClose(appQuitting as Boolean) As Boolean
+		  #pragma unused appQuitting
+		  
 		  if not ContentsChanged then
 		    return false
 		  end if
