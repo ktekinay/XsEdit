@@ -178,7 +178,7 @@ Begin Menu MainMenuBar
       Visible = True
       Begin MenuItem ScriptCompile
          SpecialMenu = 0
-         Text = "Compile"
+         Text = "#WndEditor.kToolbarCompile"
          Index = -2147483648
          ShortcutKey = "K"
          Shortcut = "Cmd+K"
@@ -186,9 +186,9 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
-      Begin MenuItem ScriptRun
+      Begin MenuItem ScriptRunInIDE
          SpecialMenu = 0
-         Text = "Run"
+         Text = "#WndEditor.kToolbarRunInIDE"
          Index = -2147483648
          ShortcutKey = "R"
          Shortcut = "Cmd+R"
@@ -196,9 +196,16 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
-      Begin MenuItem ScriptRunInIDE
+      Begin MenuItem UntitledSeparator1
          SpecialMenu = 0
-         Text = "Run In IDE"
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ScriptRun
+         SpecialMenu = 0
+         Text = "#WndEditor.kToolbarTestRun"
          Index = -2147483648
          ShortcutKey = "R"
          Shortcut = "Cmd+Shift+R"

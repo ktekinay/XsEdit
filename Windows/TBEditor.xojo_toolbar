@@ -11,14 +11,14 @@ Begin Toolbar TBEditor
 		HelpTag = ""
 		Style = 5
 	End
-	Begin ToolButton BtnRun
-		Caption = "#WndEditor.kToolbarRun"
+	Begin ToolButton BtnRunInIDE
+		Caption = "#WndEditor.kToolbarRunInIDE"
 		HelpTag = ""
 		Style = 0
 		Icon = 971927551
 	End
-	Begin ToolButton BtnRunInIDE
-		Caption = "#WndEditor.kToolbarRunInIDE"
+	Begin ToolButton BtnRun
+		Caption = "#WndEditor.kToolbarTestRun"
 		HelpTag = ""
 		Style = 0
 		Icon = 866236415

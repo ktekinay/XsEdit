@@ -224,6 +224,8 @@ End
 
 	#tag Event
 		Function CancelClose(appQuitting as Boolean) As Boolean
+		  #pragma unused appQuitting
+		  
 		  if not ContentsChanged then
 		    return false
 		  end if
@@ -336,7 +338,7 @@ End
 
 	#tag MenuHandler
 		Function ScriptRun() As Boolean Handles ScriptRun.Action
-			self.ScriptRun
+			self.ScriptTestRun
 			
 			Return True
 			
@@ -453,25 +455,20 @@ End
 		  //
 		  
 		  XS.Reset
-		  call XS.Precompile( XojoScript.OptimizationLevels.High )
+		  XS.Context = new IDEEmulator
 		  
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Sub ScriptRun()
-		  ScriptCompile
+		  call XS.Precompile( XojoScript.OptimizationLevels.None )
 		  
-		  if LastCompilerErrorCode = -1 then
-		    #pragma BreakOnExceptions false
-		    XS.Run
-		    #pragma BreakOnExceptions default
-		  end if
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Sub ScriptRunInIDE()
+		  ScriptCompile
+		  if LastCompilerErrorCode <> -1 then
+		    return
+		  end if
+		  
 		  try
 		    dim endTime as Integer = Ticks + 120
 		    IDESocket.Path = IDECommunicator.FindIPCPath
@@ -514,6 +511,15 @@ End
 		    
 		    IDESocket.Close
 		    
+		    //
+		    // If we get here, we assume it worked, so activate it
+		    //
+		    
+		    #if TargetMacOS then
+		      dim sh as new Shell
+		      sh.Execute "osascript -e 'tell app id ""com.xojo.xojo"" to activate'"
+		    #endif
+		    
 		  catch ex as RuntimeException
 		    if IDESocket.IsConnected then
 		      IDESocket.Close
@@ -525,13 +531,49 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub ScriptTestRun()
+		  ScriptCompile
+		  
+		  if LastCompilerErrorCode = -1 then
+		    #pragma BreakOnExceptions false
+		    XS.Run
+		    #pragma BreakOnExceptions default
+		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
 		  Autocompleter = new PaTrie
 		  
 		  for each keyword as String in ReplaceLineEndings( kAutoCompleteKeywords, &uA ).Trim.Split( &uA )
-		    call Autocompleter.AddKey( keyword, nil )
+		    keyword = keyword.Trim
+		    if keyword <> "" then
+		      call Autocompleter.AddKey( keyword, nil )
+		    end if
 		  next
 		  
+		  //
+		  // Add all methods and properties from IDEEmulator
+		  //
+		  
+		  dim ti as Introspection.TypeInfo = GetTypeInfo( IDEEmulator )
+		  
+		  //
+		  // Properties
+		  //
+		  dim props() as Introspection.PropertyInfo = ti.GetProperties
+		  for each prop as Introspection.PropertyInfo in props
+		    call Autocompleter.AddKey( prop.Name, nil )
+		  next
+		  
+		  //
+		  // Methods
+		  //
+		  dim methods() as Introspection.MethodInfo = ti.GetMethods
+		  for each method as Introspection.MethodInfo in methods
+		    call Autocompleter.AddKey( method.Name, nil )
+		  next
 		End Sub
 	#tag EndMethod
 
@@ -612,10 +654,10 @@ End
 	#tag Constant, Name = kToolbarCompile, Type = String, Dynamic = False, Default = \"Compile", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = kToolbarRun, Type = String, Dynamic = False, Default = \"Run", Scope = Public
+	#tag Constant, Name = kToolbarRunInIDE, Type = String, Dynamic = False, Default = \"Run in IDE", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = kToolbarRunInIDE, Type = String, Dynamic = False, Default = \"Run in IDE", Scope = Public
+	#tag Constant, Name = kToolbarTestRun, Type = String, Dynamic = False, Default = \"Test Run", Scope = Public
 	#tag EndConstant
 
 
@@ -716,8 +758,8 @@ End
 		  case kToolbarCompile
 		    ScriptCompile
 		    
-		  case kToolbarRun
-		    ScriptRun
+		  case kToolbarTestRun
+		    ScriptTestRun
 		    
 		  case kToolbarRunInIDE
 		    ScriptRunInIDE
@@ -757,6 +799,9 @@ End
 		  #endif
 		  
 		  #pragma warning "Not handling compiler warnings at all right now"
+		  #pragma unused location
+		  #pragma unused warning
+		  #pragma unused warningInfo
 		End Sub
 	#tag EndEvent
 	#tag Event
