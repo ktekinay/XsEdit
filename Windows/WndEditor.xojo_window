@@ -537,6 +537,27 @@ End
 		    end if
 		  next
 		  
+		  //
+		  // Add all methods and properties from IDEEmulator
+		  //
+		  
+		  dim ti as Introspection.TypeInfo = GetTypeInfo( IDEEmulator )
+		  
+		  //
+		  // Properties
+		  //
+		  dim props() as Introspection.PropertyInfo = ti.GetProperties
+		  for each prop as Introspection.PropertyInfo in props
+		    call Autocompleter.AddKey( prop.Name, nil )
+		  next
+		  
+		  //
+		  // Methods
+		  //
+		  dim methods() as Introspection.MethodInfo = ti.GetMethods
+		  for each method as Introspection.MethodInfo in methods
+		    call Autocompleter.AddKey( method.Name, nil )
+		  next
 		End Sub
 	#tag EndMethod
 
