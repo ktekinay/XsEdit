@@ -503,10 +503,6 @@ End
 
 	#tag Method, Flags = &h21
 		Private Function CharPosOfNext(options As SearchOptions) As Integer
-		  //
-		  // Wrap around
-		  //
-		  
 		  if options.FindTerm = "" then
 		    return -1
 		  end if
@@ -685,21 +681,69 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function InStrWithOptions(start As Integer = 0, src As String, options As SearchOptions) As Integer
+		Private Function InStrWithOptions(start As Integer = 1, src As String, options As SearchOptions) As Integer
 		  // Like InStr but will honor options and always return char position
 		  
-		  if options.IsCaseSensitive then
-		    
-		    dim startB as integer
-		    if start > 0  then
-		      startB = src.Left( start - 1 ).LenB + 1
+		  if src = "" or options.FindTerm = "" then
+		    return 0
+		  end if
+		  
+		  if start < 1 then
+		    start = 1
+		  end if
+		  
+		  //
+		  // See if we have to convert start into its byte-position equivalent
+		  //
+		  if ( options.IsCaseSensitive or options.IsWholeWord ) then
+		    if start > src.Len then
+		      start = src.LenB + 1
+		    elseif start > 1 then
+		      dim part as string = src.Left( start - 1 )
+		      start = part.LenB + 1
 		    end if
-		    dim posB as integer = src.InStrB( startB, options.FindTerm )
-		    return src.LeftB( posB ).Len
+		  end if
+		  
+		  
+		  if options.IsWholeWord then
+		    //
+		    // Use a regex
+		    //
+		    dim pattern as string = "\b" + StringToRegExCodes( options.FindTerm ) + "\b"
+		    dim rx as new RegEx
+		    rx.SearchPattern = pattern
+		    rx.Options.CaseSensitive = options.IsCaseSensitive
+		    
+		    dim match as RegExMatch
+		    if start = 1 then
+		      match = rx.Search( src )
+		    else
+		      match = rx.Search( src, start - 1 )
+		    end if
+		    
+		    if match is nil then
+		      return 0
+		    else
+		      dim posB as integer = match.SubExpressionStartB( 0 )
+		      return src.LeftB( posB ).Len + 1
+		    end if
 		    
 		  else
 		    
-		    return src.InStr( start, options.FindTerm )
+		    if options.IsCaseSensitive then
+		      
+		      dim posB as integer = src.InStrB( start, options.FindTerm )
+		      if posB < 2 then
+		        return posB
+		      else
+		        return src.LeftB( posB - 1 ).Len + 1
+		      end if
+		      
+		    else
+		      
+		      return src.InStr( start, options.FindTerm )
+		      
+		    end if
 		    
 		  end if
 		End Function
@@ -937,6 +981,21 @@ End
 		    self.Title = MyDocument.Name
 		  end if
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function StringToRegExCodes(s As String) As String
+		  // Converts a string to it's equivalent in regex codes
+		  
+		  dim chars() as string = s.Split( "" )
+		  for i as integer = 0 to chars.Ubound
+		    chars( i ) = hex( chars( i ).Asc )
+		  next
+		  
+		  dim r as string = join( chars, "}\x{" )
+		  r = "\x{" + r + "}"
+		  return r
+		End Function
 	#tag EndMethod
 
 
