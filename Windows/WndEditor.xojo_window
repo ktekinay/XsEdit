@@ -1,5 +1,5 @@
 #tag Window
-Begin SearchReceiverBaseWindow WndEditor
+Begin SearchReceiverWindowBase WndEditor
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
    CloseButton     =   True

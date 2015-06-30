@@ -252,6 +252,7 @@ Begin Window WndSearch
       Selectable      =   False
       TabIndex        =   7
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Find:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -286,6 +287,7 @@ Begin Window WndSearch
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Replace:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -489,7 +491,7 @@ End
 
 	#tag Method, Flags = &h0
 		Sub AdjustControls()
-		  dim windowOpen as boolean = SearchReceiverBaseWindow.ActiveWindow IsA Window and IsActive
+		  dim windowOpen as boolean = SearchReceiverWindowBase.ActiveWindow IsA Window and IsActive
 		  
 		  btnFindNext.Enabled = windowOpen
 		  btnFindPrevious.Enabled = windowOpen
@@ -545,42 +547,42 @@ End
 #tag Events btnFindNext
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.FindNext, Options )
+		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.FindNext, Options )
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events btnReplaceOne
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.Replace, Options )
+		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.Replace, Options )
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events btnReplaceAll
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.ReplaceAll, Options )
+		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.ReplaceAll, Options )
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events btnFindPrevious
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.FindPrevious, Options )
+		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.FindPrevious, Options )
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events btnFindAll
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.FindAll, Options )
+		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.FindAll, Options )
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events btnReplaceAndFind
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.ReplaceAndFind, Options )
+		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.ReplaceAndFind, Options )
 		End Sub
 	#tag EndEvent
 #tag EndEvents

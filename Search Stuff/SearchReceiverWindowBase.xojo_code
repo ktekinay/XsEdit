@@ -1,5 +1,5 @@
 #tag Class
-Protected Class SearchReceiverBaseWindow
+Protected Class SearchReceiverWindowBase
 Inherits Window
 	#tag Event
 		Sub Activate()
@@ -34,7 +34,7 @@ Inherits Window
 
 
 	#tag Method, Flags = &h0
-		 Shared Function ActiveWindow() As SearchReceiverBaseWindow
+		 Shared Function ActiveWindow() As SearchReceiverWindowBase
 		  return mActiveWindow
 		End Function
 	#tag EndMethod
@@ -99,7 +99,7 @@ Inherits Window
 
 
 	#tag Property, Flags = &h21
-		Private Shared mActiveWindow As SearchReceiverBaseWindow
+		Private Shared mActiveWindow As SearchReceiverWindowBase
 	#tag EndProperty
 
 
