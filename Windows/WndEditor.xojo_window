@@ -27,7 +27,8 @@ Begin SearchReceiverBaseWindow WndEditor
    Visible         =   True
    Width           =   600
    Begin Timer tmrReindent
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -37,7 +38,8 @@ Begin SearchReceiverBaseWindow WndEditor
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
    Begin CustomEditField fldCode
       AcceptFocus     =   False
@@ -189,7 +191,8 @@ Begin SearchReceiverBaseWindow WndEditor
       Width           =   100
    End
    Begin XojoScript XS
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -198,10 +201,12 @@ Begin SearchReceiverBaseWindow WndEditor
       Source          =   ""
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
    Begin IPCSocket IDESocket
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -210,7 +215,8 @@ Begin SearchReceiverBaseWindow WndEditor
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
 End
 #tag EndWindow
@@ -266,7 +272,7 @@ End
 	#tag EndEvent
 
 	#tag Event
-		Sub FindAll(find As String)
+		Sub FindAll(options As SearchOptions)
 		  FindTerm = find
 		  
 		  if find = "" then
@@ -298,14 +304,14 @@ End
 	#tag EndEvent
 
 	#tag Event
-		Sub FindNext(find As String)
+		Sub FindNext(options As SearchOptions)
 		  FindTerm = find
 		  DoFindNext
 		End Sub
 	#tag EndEvent
 
 	#tag Event
-		Sub FindPrevious(find As String)
+		Sub FindPrevious(options As SearchOptions)
 		  FindTerm = find
 		  DoFindPrevious
 		End Sub
@@ -329,7 +335,7 @@ End
 	#tag EndEvent
 
 	#tag Event
-		Sub ReplaceAll(find As String, replacement As String)
+		Sub ReplaceAll(options As SearchOptions)
 		  FindTerm = find
 		  ReplaceTerm = replacement
 		  
@@ -362,13 +368,13 @@ End
 	#tag EndEvent
 
 	#tag Event
-		Sub ReplaceAndFindNext(find As String, replacement As String)
+		Sub ReplaceAndFindNext(options As SearchOptions)
 		  
 		End Sub
 	#tag EndEvent
 
 	#tag Event
-		Sub ReplaceOne(find As String, replacement As String)
+		Sub ReplaceOne(options As SearchOptions)
 		  
 		End Sub
 	#tag EndEvent
