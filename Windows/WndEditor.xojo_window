@@ -316,6 +316,37 @@ End
 
 	#tag Event
 		Sub Open()
+		  //
+		  // See if the window needs to be staggered
+		  //
+		  
+		  const kMaxToConsider = 40
+		  
+		  dim lastIndex as integer = WindowCount - 1
+		  if lastIndex > kMaxToConsider then
+		    lastIndex = kMaxToConsider // After that, don't worry about it
+		  end if
+		  
+		  dim doItAgain as boolean
+		  do
+		    doItAgain = false
+		    
+		    for i as integer = 0 to lastIndex
+		      dim testWindow as Window = Window( i )
+		      if testWindow is self then
+		        continue for i
+		      end if
+		      if testWindow.Left = self.Left then
+		        self.Left = self.Left + 10
+		        doItAgain = true
+		      end if
+		      if testWindow.Top = self.Top then
+		        self.Top = self.Top + 10
+		        doItAgain = true
+		      end if
+		    next
+		  loop until not doItAgain
+		  
 		  dim hd as new HighlightDefinition
 		  if not hd.LoadFromXml( App.ResourcesFolder.Child( "Syntax Definitions" ).Child( "XojoScript.xml" ) ) then
 		    MsgBox "Could not load syntax definition"
