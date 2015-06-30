@@ -34,7 +34,7 @@ Inherits Window
 
 
 	#tag Method, Flags = &h0
-		 Shared Function ActiveWindow() As FindReceiverBaseWindow
+		 Shared Function ActiveWindow() As SearchReceiverBaseWindow
 		  return mActiveWindow
 		End Function
 	#tag EndMethod
@@ -99,7 +99,7 @@ Inherits Window
 
 
 	#tag Property, Flags = &h21
-		Private Shared mActiveWindow As FindReceiverBaseWindow
+		Private Shared mActiveWindow As SearchReceiverBaseWindow
 	#tag EndProperty
 
 
