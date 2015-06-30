@@ -574,6 +574,7 @@ End
 	#tag Event
 		Sub Action()
 		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.FindNext, Options )
+		  SearchReceiverWindowBase.ActiveWindow.Show
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -595,6 +596,7 @@ End
 	#tag Event
 		Sub Action()
 		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.FindPrevious, Options )
+		  SearchReceiverWindowBase.ActiveWindow.Show
 		End Sub
 	#tag EndEvent
 #tag EndEvents
