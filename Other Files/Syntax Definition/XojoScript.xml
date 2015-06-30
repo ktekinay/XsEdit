@@ -10,8 +10,8 @@
 	<blockEndMarker condition="inside_interface" newstate="">^\s*end\s+interface\b</blockEndMarker>
 
 	<!-- require end class for classes -->
-	<blockStartMarker indent="1" condition="class">^\s*(?:(public\b|protected\b|private\b)\s+)?class\b</blockStartMarker>
-	<blockEndMarker condition="class">^\s*end\s+class\b</blockEndMarker>
+	<blockStartMarker indent="1" newstate="class" condition="class">^\s*(?:(public\b|protected\b|private\b)\s+)?class\b</blockStartMarker>
+	<blockEndMarker condition="class" newstate="">^\s*end\s+class\b</blockEndMarker>
 	
 	<lineContinuationMarker indent="2">^(|.*\W)_\s*(|//.*|'.*)$</lineContinuationMarker>
 
