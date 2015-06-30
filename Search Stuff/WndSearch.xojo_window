@@ -545,42 +545,42 @@ End
 #tag Events btnFindNext
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseFindEvent(SearchReceiverBaseWindow.FindTypes.FindNext, fldFind.Text )
+		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.FindNext, fldFind.Text )
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events btnReplaceOne
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseFindEvent(SearchReceiverBaseWindow.FindTypes.Replace, fldFind.Text, fldReplace.Text )
+		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.Replace, fldFind.Text, fldReplace.Text )
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events btnReplaceAll
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseFindEvent(SearchReceiverBaseWindow.FindTypes.ReplaceAll, fldFind.Text, fldReplace.Text )
+		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.ReplaceAll, fldFind.Text, fldReplace.Text )
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events btnFindPrevious
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseFindEvent(SearchReceiverBaseWindow.FindTypes.FindPrevious, fldFind.Text )
+		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.FindPrevious, fldFind.Text )
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events btnFindAll
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseFindEvent(SearchReceiverBaseWindow.FindTypes.FindAll, fldFind.Text )
+		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.FindAll, fldFind.Text )
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events btnReplaceAndFind
 	#tag Event
 		Sub Action()
-		  SearchReceiverBaseWindow.ActiveWindow.RaiseFindEvent(SearchReceiverBaseWindow.FindTypes.ReplaceAndFind, fldFind.Text, fldReplace.Text )
+		  SearchReceiverBaseWindow.ActiveWindow.RaiseSearchEvent(SearchReceiverBaseWindow.FindTypes.ReplaceAndFind, fldFind.Text, fldReplace.Text )
 		End Sub
 	#tag EndEvent
 #tag EndEvents

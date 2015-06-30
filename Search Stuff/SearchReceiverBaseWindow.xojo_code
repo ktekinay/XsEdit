@@ -40,7 +40,7 @@ Inherits Window
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub RaiseFindEvent(type As FindTypes, find As String, replacement As String = "")
+		Sub RaiseSearchEvent(type As FindTypes, find As String, replacement As String = "")
 		  select case type
 		  case FindTypes.FindNext
 		    RaiseEvent FindNext( find )
