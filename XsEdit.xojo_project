@@ -99,6 +99,7 @@ Window=DlgInput;Dialogs/DlgInput.xojo_window;&h21CFB7FF;&h11A577FF;false
 Class=IDEEmulator;Classes/IDEEmulator.xojo_code;&h2FC4B7FF;&h8E0CFFF;false
 Window=WndAbout;Windows/WndAbout.xojo_window;&h7C1EAFFF;&h1B897FFF;false
 Window=WndGoToLine;Windows/WndGoToLine.xojo_window;&h60BCFFF;&h1B897FFF;false
+Class=SearchOptions;Search Stuff/SearchOptions.xojo_code;&h51513FFF;&h758907FF;false
 DefaultWindow=WndEditor
 AppMenuBar=MainMenuBar
 MajorVersion=0
