@@ -1,5 +1,5 @@
 #tag Window
-Begin Window WndFindReplace
+Begin Window WndSearch
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
    CloseButton     =   True

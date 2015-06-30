@@ -1,5 +1,5 @@
 #tag Window
-Begin FindReceiverBaseWindow WndEditor
+Begin SearchReceiverBaseWindow WndEditor
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
    CloseButton     =   True
@@ -286,7 +286,7 @@ End
 		    return
 		  end if
 		  
-		  dim firstPos as integer = pos 
+		  dim firstPos as integer = pos
 		  while pos <> 0
 		    fldCode.HighlightCharacterRange pos - 1, findLen, kColorFindAll
 		    pos = s.InStr( pos + findLen, find )

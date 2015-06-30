@@ -1,5 +1,5 @@
 #tag Class
-Protected Class FindReceiverBaseWindow
+Protected Class SearchReceiverBaseWindow
 Inherits Window
 	#tag Event
 		Sub Activate()
