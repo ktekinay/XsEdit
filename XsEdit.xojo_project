@@ -101,6 +101,7 @@ Window=WndAbout;Windows/WndAbout.xojo_window;&h7C1EAFFF;&h1B897FFF;false
 Window=WndGoToLine;Windows/WndGoToLine.xojo_window;&h60BCFFF;&h1B897FFF;false
 Class=SearchOptions;Search Stuff/SearchOptions.xojo_code;&h51513FFF;&h758907FF;false
 Class=Preferences;Helpers/Preferences.xojo_code;&h23C0F1ED;&h6F7957FF;false
+Class=XsEditWindowBase;Windows/XsEditWindowBase.xojo_code;&h30D0D7FF;&h1B897FFF;false
 DefaultWindow=WndEditor
 AppMenuBar=MainMenuBar
 MajorVersion=0
