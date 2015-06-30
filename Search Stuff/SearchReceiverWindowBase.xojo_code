@@ -41,6 +41,8 @@ Inherits Window
 
 	#tag Method, Flags = &h0
 		Sub RaiseSearchEvent(type As FindTypes, options As SearchOptions)
+		  self.Show
+		  
 		  select case type
 		  case FindTypes.FindNext
 		    RaiseEvent FindNext( options )
