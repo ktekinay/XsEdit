@@ -4,12 +4,12 @@ Begin Window WndAbout
    Backdrop        =   0
    CloseButton     =   True
    Compatibility   =   ""
-   Composite       =   False
+   Composite       =   True
    Frame           =   0
    FullScreen      =   False
    FullScreenButton=   False
    HasBackColor    =   False
-   Height          =   194
+   Height          =   262
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
@@ -18,197 +18,290 @@ Begin Window WndAbout
    MaxWidth        =   32000
    MenuBar         =   0
    MenuBarVisible  =   True
-   MinHeight       =   64
+   MinHeight       =   262
    MinimizeButton  =   True
-   MinWidth        =   64
+   MinWidth        =   446
    Placement       =   2
    Resizeable      =   True
    Title           =   "About"
    Visible         =   True
    Width           =   446
-   Begin Label Label1
+   Begin HTMLViewer HtmlViewerAbout
       AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
       Enabled         =   True
-      Height          =   20
+      Height          =   262
       HelpTag         =   ""
-      Index           =   0
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
+      Index           =   -2147483648
+      Left            =   0
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
-      Multiline       =   False
+      Renderer        =   0
       Scope           =   2
-      Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
-      Text            =   "XsEdit"
-      TextAlign       =   1
-      TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   20
-      Transparent     =   False
-      Underline       =   False
+      TabStop         =   True
+      Top             =   0
       Visible         =   True
-      Width           =   406
-   End
-   Begin Label Label1
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   20
-      HelpTag         =   ""
-      Index           =   1
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   True
-      LockTop         =   True
-      Multiline       =   False
-      Scope           =   2
-      Selectable      =   False
-      TabIndex        =   1
-      TabPanelIndex   =   0
-      Text            =   "An open-source XojoScript editor"
-      TextAlign       =   1
-      TextColor       =   &c00000000
-      TextFont        =   "SmallSystem"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   40
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   406
-   End
-   Begin Label Label1
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   54
-      HelpTag         =   ""
-      Index           =   2
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   True
-      LockTop         =   True
-      Multiline       =   True
-      Scope           =   2
-      Selectable      =   False
-      TabIndex        =   2
-      TabPanelIndex   =   0
-      Text            =   "Copyright ©2015 by Kem Tekinay and Jeremy Cowgar. All rights reserved.\n\nThis software is distributed AS-IS. See license information at"
-      TextAlign       =   1
-      TextColor       =   &c00000000
-      TextFont        =   "SmallSystem"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   72
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   406
-   End
-   Begin Label lblURL
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   41
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   True
-      LockTop         =   True
-      Multiline       =   False
-      Scope           =   2
-      Selectable      =   True
-      TabIndex        =   3
-      TabPanelIndex   =   0
-      Text            =   "http://www.github.com/ktekinay/XsEdit"
-      TextAlign       =   1
-      TextColor       =   &c0000FF00
-      TextFont        =   "SmallSystem"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   108
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   406
-   End
-   Begin VersionFld VersionFld1
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   21
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Multiline       =   False
-      Scope           =   0
-      Selectable      =   False
-      TabIndex        =   4
-      TabPanelIndex   =   0
-      Text            =   "Untitled"
-      TextAlign       =   0
-      TextColor       =   &c00000000
-      TextFont        =   "SmallSystem"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   161
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   100
+      Width           =   446
    End
 End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Constant, Name = kAbout, Type = String, Dynamic = False, Default = \"<html>\n<head>\n\t<title>About XsEdit</title>\n\t<style>\n\t\tbody {\n\t\t\tmargin: 0;\n\t\t\tpadding: 0;\n\t\t\toverflow-x: hidden;\n\t\t}\n\t\t\n\t\ta\x2C a:visited {\n\t\t\tcolor: #0000ff;\n\t\t}\n\t\t\n\t\t#appHeader {\n\t\t\tbackground-color: #efefef;\n\t\t\tmargin:0px;\n\t\t}\n\t\t\n\t\t#appTitle {\n\t\t\ttext-align: center;\n\t\t\tfont-size: 2.0em;\n\t\t\tfont-weight: bold;\n\t\t\tpadding: 12px 30px;\n\t\t}\n\t\t\n\t\t#appVer {\n\t\t\ttext-align: center;\n\t\t\tfont-size: 0.8em;\n\t\t\tmargin-bottom: 12px;\n\t\t\tpadding-bottom: 8px;\n\t\t\tborder-bottom: 1px solid #808080;\n\t\t}\n\t\t\n\t\t#about {\n\t\t\tpadding: 0px 30px;\n\t\t\theight: 120px;\n\t\t\toverflow-y: scroll;\n\t\t}\n\t\t\n\t\t#copyright {\n\t\t\ttext-align: center;\n\t\t\tbottom: 0px;\n\t\t\tposition: absolute;\n\t\t\twidth: 100%;\n\t\t\tpadding: 4px;\n\t\t\tborder-top: 1px solid #808080;\n\t\t\tbackground-color: #efefef;\n\t\t\tfont-size: 0.8em;\n\t\t}\n\t</style>\n</head>\n\n<body>\n<div id\x3D\"appHeader\">\n\t<div id\x3D\"appTitle\">XsEdit</div>\n\t<div id\x3D\"appVer\">$(Version)</div>\n</div>\n\n<div id\x3D\"about\">\n\t<p>\n\t\tAn advanced open-source XojoScript editor\n\t</p>\n\t<p>\n\t\tA <strong>special thanks</strong> goes out to Thomas Tempelmann for the open source\n\t\t<a href\x3D\"https://github.com/tempelmann/custom-editfield\">Custom Edit Field</a>.\n\t</p>\n\t<p>\n\t\tXsEdit is is distributed under the\n\t\t<a href\x3D\"https://raw.githubusercontent.com/ktekinay/XsEdit/develop/LICENSE.txt\">MIT license</a>.\n\t</p>\n</div>\n\n<div id\x3D\"copyright\">\n\tCopyright &copy;2015 by Kem Tekinay and Jeremy Cowgar. All rights reserved.\n</div>\n</html>", Scope = Private
+	#tag EndConstant
+
+
 #tag EndWindowCode
 
-#tag Events lblURL
+#tag Events HtmlViewerAbout
 	#tag Event
-		Function MouseDown(X As Integer, Y As Integer) As Boolean
-		  #pragma unused x
-		  #pragma unused y
+		Sub Open()
+		  dim msg as String = kAbout
+		  msg = msg.ReplaceAll( "$(Version)", App.ShortVersion )
 		  
-		  return true
+		  me.LoadPage msg, nil
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function CancelLoad(URL as String) As Boolean
+		  if URL = "about:blank" then
+		    return False
+		  end if
+		  
+		  ShowURL( URL )
+		  
+		  return True
 		End Function
 	#tag EndEvent
 #tag EndEvents
+#tag ViewBehavior
+	#tag ViewProperty
+		Name="BackColor"
+		Visible=true
+		Group="Appearance"
+		InitialValue="&hFFFFFF"
+		Type="Color"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Backdrop"
+		Visible=true
+		Group="Appearance"
+		Type="Picture"
+		EditorType="Picture"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="CloseButton"
+		Visible=true
+		Group="Appearance"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Composite"
+		Group="Appearance"
+		InitialValue="False"
+		Type="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Frame"
+		Visible=true
+		Group="Appearance"
+		InitialValue="0"
+		Type="Integer"
+		EditorType="Enum"
+		#tag EnumValues
+			"0 - Document"
+			"1 - Movable Modal"
+			"2 - Modal Dialog"
+			"3 - Floating Window"
+			"4 - Plain Box"
+			"5 - Shadowed Box"
+			"6 - Rounded Window"
+			"7 - Global Floating Window"
+			"8 - Sheet Window"
+			"9 - Metal Window"
+			"10 - Drawer Window"
+			"11 - Modeless Dialog"
+		#tag EndEnumValues
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="FullScreen"
+		Group="Appearance"
+		InitialValue="False"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="FullScreenButton"
+		Visible=true
+		Group="Appearance"
+		InitialValue="False"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="HasBackColor"
+		Visible=true
+		Group="Appearance"
+		InitialValue="False"
+		Type="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Height"
+		Visible=true
+		Group="Position"
+		InitialValue="400"
+		Type="Integer"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="ImplicitInstance"
+		Visible=true
+		Group="Appearance"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Interfaces"
+		Visible=true
+		Group="ID"
+		Type="String"
+		EditorType="String"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="LiveResize"
+		Visible=true
+		Group="Appearance"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MacProcID"
+		Group="Appearance"
+		InitialValue="0"
+		Type="Integer"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MaxHeight"
+		Visible=true
+		Group="Position"
+		InitialValue="32000"
+		Type="Integer"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MaximizeButton"
+		Visible=true
+		Group="Appearance"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MaxWidth"
+		Visible=true
+		Group="Position"
+		InitialValue="32000"
+		Type="Integer"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MenuBar"
+		Visible=true
+		Group="Appearance"
+		Type="MenuBar"
+		EditorType="MenuBar"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MenuBarVisible"
+		Group="Appearance"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MinHeight"
+		Visible=true
+		Group="Position"
+		InitialValue="64"
+		Type="Integer"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MinimizeButton"
+		Visible=true
+		Group="Appearance"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MinWidth"
+		Visible=true
+		Group="Position"
+		InitialValue="64"
+		Type="Integer"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Name"
+		Visible=true
+		Group="ID"
+		Type="String"
+		EditorType="String"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Placement"
+		Visible=true
+		Group="Position"
+		InitialValue="0"
+		Type="Integer"
+		EditorType="Enum"
+		#tag EnumValues
+			"0 - Default"
+			"1 - Parent Window"
+			"2 - Main Screen"
+			"3 - Parent Window Screen"
+			"4 - Stagger"
+		#tag EndEnumValues
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Resizeable"
+		Visible=true
+		Group="Appearance"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Super"
+		Visible=true
+		Group="ID"
+		Type="String"
+		EditorType="String"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Title"
+		Visible=true
+		Group="Appearance"
+		InitialValue="Untitled"
+		Type="String"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Visible"
+		Visible=true
+		Group="Appearance"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Width"
+		Visible=true
+		Group="Position"
+		InitialValue="600"
+		Type="Integer"
+	#tag EndViewProperty
+#tag EndViewBehavior

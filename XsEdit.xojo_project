@@ -13,7 +13,6 @@ Toolbar=TBEditor;Windows/TBEditor.xojo_toolbar;&h28F3D7FF;&h1B897FFF;false
 Folder=Classes;Classes;&h8E0CFFF;&h0;false
 Folder=Interfaces;Interfaces;&h6401CFFF;&h0;false
 Folder=Widgets;Widgets;&h65D33FFF;&h0;false
-Class=VersionFld;Widgets/VersionFld.xojo_code;&hB67BD3EE;&h65D33FFF;false
 Window=DialogButtonContainer;Widgets/DialogButtonContainer.xojo_window;&h250AC3B6;&h65D33FFF;false
 Class=PlatformPushButton;Widgets/PlatformPushButton.xojo_code;&h3578F1B0;&h65D33FFF;false
 Module=IDECommunicator;Classes/IDECommunicator.xojo_code;&h715E068E;&h8E0CFFF;false
