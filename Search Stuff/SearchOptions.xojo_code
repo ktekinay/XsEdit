@@ -9,6 +9,10 @@ Protected Class SearchOptions
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
+		IsWholeWord As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		IsWrapAround As Boolean = True
 	#tag EndProperty
 
@@ -19,11 +23,27 @@ Protected Class SearchOptions
 
 	#tag ViewBehavior
 		#tag ViewProperty
+			Name="FindTerm"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
 			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="IsCaseSensitive"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="IsWrapAround"
+			Group="Behavior"
+			InitialValue="True"
+			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -36,6 +56,11 @@ Protected Class SearchOptions
 			Name="Name"
 			Visible=true
 			Group="ID"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ReplaceTerm"
+			Group="Behavior"
 			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty

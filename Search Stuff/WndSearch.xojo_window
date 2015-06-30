@@ -252,7 +252,6 @@ Begin Window WndSearch
       Selectable      =   False
       TabIndex        =   7
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Find:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -287,7 +286,6 @@ Begin Window WndSearch
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Replace:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -414,7 +412,7 @@ Begin Window WndSearch
       Underline       =   False
       Value           =   False
       Visible         =   True
-      Width           =   138
+      Width           =   119
    End
    Begin CheckBox cbWrapAround
       AutoDeactivate  =   True
@@ -428,7 +426,7 @@ Begin Window WndSearch
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
-      Left            =   198
+      Left            =   151
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
@@ -446,7 +444,39 @@ Begin Window WndSearch
       Underline       =   False
       Value           =   False
       Visible         =   True
-      Width           =   138
+      Width           =   101
+   End
+   Begin CheckBox cbWholeWord
+      AutoDeactivate  =   True
+      Bold            =   False
+      Caption         =   "Whole Word"
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   292
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   2
+      State           =   0
+      TabIndex        =   13
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "SmallSystem"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   125
+      Underline       =   False
+      Value           =   False
+      Visible         =   True
+      Width           =   101
    End
 End
 #tag EndWindow
@@ -661,6 +691,18 @@ End
 	#tag Event
 		Sub Action()
 		  Options.IsWrapAround = me.Value
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events cbWholeWord
+	#tag Event
+		Sub Open()
+		  me.Value = WndSearch.Options.IsWholeWord
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Action()
+		  Options.IsWholeWord = me.Value
 		End Sub
 	#tag EndEvent
 #tag EndEvents
