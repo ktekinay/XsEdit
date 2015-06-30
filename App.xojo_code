@@ -101,6 +101,23 @@ Inherits Application
 	#tag EndMethod
 
 
+	#tag Property, Flags = &h21
+		Private mPrefs As Preferences
+	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  if mPrefs is nil then
+			    mPrefs = new Preferences( "com.mactechnologiesconsulting.xsedit" )
+			  end if
+			  
+			  return mPrefs
+			End Get
+		#tag EndGetter
+		Prefs As Preferences
+	#tag EndComputedProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get

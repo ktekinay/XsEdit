@@ -1,5 +1,5 @@
 #tag Window
-Begin Window WndSearch
+Begin XsEditWindowBase WndSearch
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
    CloseButton     =   True

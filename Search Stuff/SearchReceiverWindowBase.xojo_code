@@ -1,6 +1,6 @@
 #tag Class
 Protected Class SearchReceiverWindowBase
-Inherits Window
+Inherits XsEditWindowBase
 	#tag Event
 		Sub Activate()
 		  mActiveWindow = self
