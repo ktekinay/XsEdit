@@ -474,11 +474,35 @@ End
 	#tag EndEvent
 
 	#tag Event
+		Sub EnableMenuItems()
+		  EditFindNext.Enabled = Options.FindTerm <> ""
+		  EditFindPrevious.Enabled = Options.FindTerm <> ""
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub Open()
 		  mIsOpen = true
 		End Sub
 	#tag EndEvent
 
+
+	#tag MenuHandler
+		Function EditFindNext() As Boolean Handles EditFindNext.Action
+			btnFindNext.Push
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditFindPrevious() As Boolean Handles EditFindPrevious.Action
+			btnFindPrevious.Push
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
 
 	#tag MenuHandler
 		Function FileClose() As Boolean Handles FileClose.Action
@@ -491,14 +515,16 @@ End
 
 	#tag Method, Flags = &h0
 		Sub AdjustControls()
-		  dim windowOpen as boolean = SearchReceiverWindowBase.ActiveWindow IsA Window and IsActive
+		  dim isActive as boolean = SearchReceiverWindowBase.ActiveWindow IsA Window and IsActive
+		  dim hasSearchTerm as boolean = Options.FindTerm <> ""
 		  
-		  btnFindNext.Enabled = windowOpen
-		  btnFindPrevious.Enabled = windowOpen
-		  btnFindAll.Enabled = windowOpen
-		  btnReplaceOne.Enabled = windowOpen
-		  btnReplaceAndFind.Enabled = windowOpen
-		  btnReplaceAll.Enabled = windowOpen
+		  btnFindNext.Enabled = isActive and hasSearchTerm
+		  btnFindPrevious.Enabled = isActive and hasSearchTerm
+		  btnFindAll.Enabled = isActive and hasSearchTerm
+		  
+		  btnReplaceOne.Enabled = isActive and hasSearchTerm
+		  btnReplaceAndFind.Enabled = isActive and hasSearchTerm
+		  btnReplaceAll.Enabled = isActive and hasSearchTerm
 		  
 		End Sub
 	#tag EndMethod
@@ -590,6 +616,7 @@ End
 	#tag Event
 		Sub TextChange()
 		  Options.FindTerm = me.Text
+		  AdjustControls
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -602,6 +629,7 @@ End
 	#tag Event
 		Sub TextChange()
 		  Options.ReplaceTerm = me.Text
+		  AdjustControls
 		End Sub
 	#tag EndEvent
 	#tag Event

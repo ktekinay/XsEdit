@@ -27,8 +27,7 @@ Begin SearchReceiverWindowBase WndEditor
    Visible         =   True
    Width           =   600
    Begin Timer tmrReindent
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -38,8 +37,7 @@ Begin SearchReceiverWindowBase WndEditor
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin CustomEditField fldCode
       AcceptFocus     =   False
@@ -191,8 +189,7 @@ Begin SearchReceiverWindowBase WndEditor
       Width           =   100
    End
    Begin XojoScript XS
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -201,12 +198,10 @@ Begin SearchReceiverWindowBase WndEditor
       Source          =   ""
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin IPCSocket IDESocket
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -215,8 +210,7 @@ Begin SearchReceiverWindowBase WndEditor
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
 End
 #tag EndWindow
@@ -266,14 +260,15 @@ End
 		  
 		  ScriptGoToErrorLine.Enabled = LastCompilerErrorLine > 0
 		  
-		  EditFindNext.Enabled = FindTerm <> ""
-		  EditFindPrevious.Enabled = FindTerm <> ""
+		  dim find as string = WndSearch.Options.FindTerm
+		  EditFindNext.Enabled = find <> ""
+		  EditFindPrevious.Enabled = find <> ""
 		End Sub
 	#tag EndEvent
 
 	#tag Event
 		Sub FindAll(options As SearchOptions)
-		  FindTerm = find
+		  dim find as string = options.FindTerm
 		  
 		  if find = "" then
 		    beep
@@ -286,7 +281,7 @@ End
 		  dim s as string = fldCode.Text
 		  dim findLen as integer = find.Len
 		  
-		  dim pos as integer = s.InStr( find )
+		  dim pos as integer = InStrWithOptions( s, options )
 		  if pos = 0 then
 		    beep
 		    return
@@ -295,7 +290,7 @@ End
 		  dim firstPos as integer = pos
 		  while pos <> 0
 		    fldCode.HighlightCharacterRange pos - 1, findLen, kColorFindAll
-		    pos = s.InStr( pos + findLen, find )
+		    pos = InStrWithOptions( pos + findLen, s, options )
 		  wend
 		  
 		  fldCode.ScrollPosition = fldCode.LineNumAtCharPos( firstPos - 1 ) - 1
@@ -305,14 +300,16 @@ End
 
 	#tag Event
 		Sub FindNext(options As SearchOptions)
-		  FindTerm = find
+		  #pragma unused options
+		  
 		  DoFindNext
 		End Sub
 	#tag EndEvent
 
 	#tag Event
 		Sub FindPrevious(options As SearchOptions)
-		  FindTerm = find
+		  #pragma unused options
+		  
 		  DoFindPrevious
 		End Sub
 	#tag EndEvent
@@ -336,8 +333,8 @@ End
 
 	#tag Event
 		Sub ReplaceAll(options As SearchOptions)
-		  FindTerm = find
-		  ReplaceTerm = replacement
+		  dim find as string = options.FindTerm
+		  dim replacement as string = options.ReplaceTerm
 		  
 		  if find = "" then
 		    return
@@ -500,15 +497,20 @@ End
 
 
 	#tag Method, Flags = &h21
-		Private Function CharPosOfNext(find As String) As Integer
+		Private Function CharPosOfNext(options As SearchOptions) As Integer
 		  //
 		  // Wrap around
 		  //
 		  
+		  if options.FindTerm = "" then
+		    return -1
+		  end if
+		  
 		  dim s as string = fldCode.Text
-		  dim pos as integer = s.InStr( fldCode.SelStart + 1 + fldCode.SelLength, find )
-		  if pos = 0 then
-		    pos = s.InStr( find )
+		  
+		  dim pos as integer = InStrWithOptions( fldCode.SelStart + 1 + fldCode.SelLength, s, options )
+		  if pos = 0 and options.IsWrapAround then
+		    pos = InStrWithOptions( s, options )
 		  end if
 		  
 		  return pos - 1 // Zero based
@@ -516,10 +518,9 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function CharPosOfPrevious(find As String) As Integer
-		  //
-		  // Wrap around
-		  //
+		Private Function CharPosOfPrevious(options As SearchOptions) As Integer
+		  dim find as string = options.FindTerm
+		  
 		  if find = "" then
 		    return -1
 		  end if
@@ -534,7 +535,7 @@ End
 		  dim s as string = fldCode.Text
 		  
 		  dim pos as integer = -1 // This is zero-based
-		  dim nextPos as integer = s.InStr( find )
+		  dim nextPos as integer = InStrWithOptions( s, options )
 		  if nextPos = 0 then
 		    return -1
 		  end if
@@ -543,12 +544,16 @@ End
 		  // See if we have to wrap around
 		  //
 		  if nextPos >= curPos then
-		    curPos = s.Len + 1
+		    if options.IsWrapAround then
+		      curPos = s.Len + 1
+		    else
+		      return -1
+		    end if
 		  end if
 		  
 		  while nextPos > 0 and nextPos < curPos
 		    pos = nextPos - 1
-		    nextPos = s.InStr( nextPos + findLen, find )
+		    nextPos = InStrWithOptions( nextPos + findLen, s, options )
 		  wend
 		  
 		  return pos
@@ -560,10 +565,10 @@ End
 		  fldCode.ClearHighlightedCharacterRanges
 		  fldCode.ClearLineIcons
 		  
-		  dim pos as integer = CharPosOfNext( FindTerm )
+		  dim pos as integer = CharPosOfNext( WndSearch.Options )
 		  if pos > -1 then
 		    fldCode.SelStart = pos
-		    fldCode.SelLength = FindTerm.Len
+		    fldCode.SelLength = WndSearch.Options.FindTerm.Len
 		  else
 		    beep
 		  end if
@@ -575,10 +580,10 @@ End
 		  fldCode.ClearHighlightedCharacterRanges
 		  fldCode.ClearLineIcons
 		  
-		  dim pos as integer = CharPosOfPrevious( FindTerm )
+		  dim pos as integer = CharPosOfPrevious( WndSearch.Options )
 		  if pos > -1 then
 		    fldCode.SelStart = pos
-		    fldCode.SelLength = FindTerm.Len
+		    fldCode.SelLength = WndSearch.Options.FindTerm.Len
 		  else
 		    beep
 		  end if
@@ -621,6 +626,27 @@ End
 		  
 		  HighlightCode( location, errorString, c, errordata )
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function InStrWithOptions(start As Integer = 0, src As String, options As SearchOptions) As Integer
+		  // Like InStr but will honor options and always return char position
+		  
+		  if options.IsCaseSensitive then
+		    
+		    dim startB as integer
+		    if start > 0  then
+		      startB = src.Left( start - 1 ).LenB + 1
+		    end if
+		    dim posB as integer = src.InStrB( startB, options.FindTerm )
+		    return src.LeftB( posB ).Len
+		    
+		  else
+		    
+		    return src.InStr( start, options.FindTerm )
+		    
+		  end if
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -867,10 +893,6 @@ End
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private FindTerm As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
 		Private LastCompilerErrorCode As Integer = -1
 	#tag EndProperty
 
@@ -894,10 +916,6 @@ End
 
 	#tag Property, Flags = &h21
 		Private MyDocumentAlias As FolderItemAlias
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private ReplaceTerm As String
 	#tag EndProperty
 
 
