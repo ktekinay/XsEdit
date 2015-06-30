@@ -252,7 +252,6 @@ Begin Window WndSearch
       Selectable      =   False
       TabIndex        =   7
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Find:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -287,7 +286,6 @@ Begin Window WndSearch
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Replace:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -605,8 +603,9 @@ End
 #tag Events btnFindNext
 	#tag Event
 		Sub Action()
-		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.FindNext, Options )
 		  SearchReceiverWindowBase.ActiveWindow.Show
+		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.FindNext, Options )
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -620,6 +619,7 @@ End
 #tag Events btnReplaceAll
 	#tag Event
 		Sub Action()
+		  SearchReceiverWindowBase.ActiveWindow.Show
 		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.ReplaceAll, Options )
 		End Sub
 	#tag EndEvent
@@ -627,14 +627,16 @@ End
 #tag Events btnFindPrevious
 	#tag Event
 		Sub Action()
-		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.FindPrevious, Options )
 		  SearchReceiverWindowBase.ActiveWindow.Show
+		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.FindPrevious, Options )
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events btnFindAll
 	#tag Event
 		Sub Action()
+		  SearchReceiverWindowBase.ActiveWindow.Show
 		  SearchReceiverWindowBase.ActiveWindow.RaiseSearchEvent(SearchReceiverWindowBase.FindTypes.FindAll, Options )
 		End Sub
 	#tag EndEvent

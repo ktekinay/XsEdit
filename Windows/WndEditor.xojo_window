@@ -348,19 +348,29 @@ End
 		  dim findLen as integer = find.Len
 		  dim replaceLen as integer = replacement.Len
 		  
-		  dim pos as integer = fldCode.Text.InStr( find )
+		  dim pos as integer = InStrWithOptions( fldCode.Text, options )
 		  if pos = 0 then
 		    beep
 		    return
 		  end if
 		  
+		  dim count as integer
+		  
 		  fldCode.IgnoreRepaint = true
 		  while pos <> 0
-		    fldCode.Private_Replace( pos - 1, findLen, replacement, true, eventID )
-		    pos = fldCode.Text.InStr( pos + replaceLen, find )
+		    count = count + 1
+		    
+		    fldCode.SelStart = pos - 1
+		    fldCode.SelLength = replaceLen
+		    fldCode.SelText = ""
+		    fldCode.Insert pos - 1, replacement
+		    
+		    pos = InStrWithOptions( pos + replaceLen, fldCode.Text, options )
 		  wend
 		  fldCode.IgnoreRepaint = false
 		  fldCode.Invalidate
+		  
+		  MsgBox "Replaced " + format( count, "#," ) + " occurrences."
 		End Sub
 	#tag EndEvent
 
@@ -636,9 +646,14 @@ End
 		    return
 		  end if
 		  
-		  fldCode.Replace( pos - 1, find.Len, replacement, true )
+		  fldCode.SelStart = pos - 1
+		  fldCode.SelLength = find.Len
+		  fldCode.SelText = ""
+		  fldCode.Insert pos - 1, replacement
+		  
 		  fldCode.SelStart = pos - 1 + replacement.Len
 		  fldCode.SelLength = 0
+		  
 		End Sub
 	#tag EndMethod
 
