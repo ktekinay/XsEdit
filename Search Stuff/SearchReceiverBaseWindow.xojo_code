@@ -40,25 +40,25 @@ Inherits Window
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub RaiseSearchEvent(type As FindTypes, find As String, replacement As String = "")
+		Sub RaiseSearchEvent(type As FindTypes, options As SearchOptions)
 		  select case type
 		  case FindTypes.FindNext
-		    RaiseEvent FindNext( find )
+		    RaiseEvent FindNext( options )
 		    
 		  case FindTypes.FindPrevious
-		    RaiseEvent FindPrevious( find )
+		    RaiseEvent FindPrevious( options )
 		    
 		  case FindTypes.FindAll
-		    RaiseEvent FindAll( find )
+		    RaiseEvent FindAll( options )
 		    
 		  case FindTypes.Replace
-		    RaiseEvent ReplaceOne( find, replacement )
+		    RaiseEvent ReplaceOne( options )
 		    
 		  case FindTypes.ReplaceAndFind
-		    RaiseEvent ReplaceAndFindNext( find, replacement )
+		    RaiseEvent ReplaceAndFindNext( options )
 		    
 		  case FindTypes.ReplaceAll
-		    RaiseEvent ReplaceAll( find, replacement )
+		    RaiseEvent ReplaceAll( options )
 		    
 		  end
 		End Sub
@@ -74,27 +74,27 @@ Inherits Window
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
-		Event FindAll(find As String)
+		Event FindAll(options As SearchOptions)
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
-		Event FindNext(find As String)
+		Event FindNext(options As SearchOptions)
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
-		Event FindPrevious(find As String)
+		Event FindPrevious(options As SearchOptions)
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
-		Event ReplaceAll(find As String, replacement As String)
+		Event ReplaceAll(options As SearchOptions)
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
-		Event ReplaceAndFindNext(find As String, replacement As String)
+		Event ReplaceAndFindNext(options As SearchOptions)
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
-		Event ReplaceOne(find As String, replacement As String)
+		Event ReplaceOne(options As SearchOptions)
 	#tag EndHook
 
 
