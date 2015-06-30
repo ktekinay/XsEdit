@@ -16,8 +16,8 @@ Inherits Window
 		    mActiveWindow = nil
 		  end if
 		  
-		  if WndFindReplace.IsOpen then
-		    WndFindReplace.AdjustControls
+		  if WndSearch.IsOpen then
+		    WndSearch.AdjustControls
 		  end if
 		End Sub
 	#tag EndEvent
@@ -25,7 +25,7 @@ Inherits Window
 
 	#tag MenuHandler
 		Function EditFind() As Boolean Handles EditFind.Action
-			WndFindReplace.Show
+			WndSearch.Show
 			
 			Return True
 			
