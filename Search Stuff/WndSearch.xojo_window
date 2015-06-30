@@ -382,6 +382,70 @@ Begin Window WndSearch
       Visible         =   True
       Width           =   414
    End
+   Begin CheckBox cbCaseSensitive
+      AutoDeactivate  =   True
+      Bold            =   False
+      Caption         =   "Case Sensitive"
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   2
+      State           =   0
+      TabIndex        =   11
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "SmallSystem"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   125
+      Underline       =   False
+      Value           =   False
+      Visible         =   True
+      Width           =   138
+   End
+   Begin CheckBox cbWrapAround
+      AutoDeactivate  =   True
+      Bold            =   False
+      Caption         =   "Wrap Around"
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   198
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   2
+      State           =   0
+      TabIndex        =   12
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "SmallSystem"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   125
+      Underline       =   False
+      Value           =   False
+      Visible         =   True
+      Width           =   138
+   End
 End
 #tag EndWindow
 
