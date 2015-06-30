@@ -366,13 +366,18 @@ End
 
 	#tag Event
 		Sub ReplaceAndFindNext(options As SearchOptions)
+		  #pragma unused options
 		  
+		  DoReplaceOne()
+		  DoFindNext()
 		End Sub
 	#tag EndEvent
 
 	#tag Event
 		Sub ReplaceOne(options As SearchOptions)
+		  #pragma unused options
 		  
+		  DoReplaceOne()
 		End Sub
 	#tag EndEvent
 
@@ -587,6 +592,57 @@ End
 		  else
 		    beep
 		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub DoReplaceOne()
+		  dim options as SearchOptions = WndSearch.Options
+		  
+		  if options.FindTerm = "" then
+		    return
+		  end if
+		  
+		  dim find as string = options.FindTerm
+		  dim replacement as string = options.ReplaceTerm
+		  dim s as string = fldCode.Text
+		  
+		  if find = "" then
+		    return
+		  end if
+		  
+		  if StrComp( find, replacement, 0 ) = 0 then
+		    beep
+		    return
+		  end if
+		  
+		  //
+		  // See where we have to start
+		  //
+		  dim currentSelection as string = fldCode.SelText
+		  dim start as integer = fldCode.SelStart + 1
+		  if StrComp( currentSelection, replacement, 0 ) = 0 then
+		    start = start + replacement.Len
+		  end if
+		  
+		  dim pos as integer = InStrWithOptions( start, s, options )
+		  if pos = 0 then
+		    if options.IsWrapAround then
+		      pos = InStrWithOptions( s, options )
+		    else
+		      beep
+		      return
+		    end if
+		  end if
+		  
+		  if pos = 0 then
+		    beep
+		    return
+		  end if
+		  
+		  fldCode.Replace( pos - 1, find.Len, replacement, true )
+		  fldCode.SelStart = pos - 1 + replacement.Len
+		  fldCode.SelLength = 0
 		End Sub
 	#tag EndMethod
 
