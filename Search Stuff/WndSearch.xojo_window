@@ -584,6 +584,54 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
+#tag Events fldFind
+	#tag Event
+		Sub TextChange()
+		  Options.FindTerm = me.Text
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  me.Text = WndSearch.Options.FindTerm
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events fldReplace
+	#tag Event
+		Sub TextChange()
+		  Options.ReplaceTerm = me.Text
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  me.Text = Options.ReplaceTerm
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events cbCaseSensitive
+	#tag Event
+		Sub Open()
+		  me.Value = Options.IsCaseSensitive
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Action()
+		  Options.IsCaseSensitive = me.value
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events cbWrapAround
+	#tag Event
+		Sub Open()
+		  me.Value = WndSearch.Options.IsWrapAround
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Action()
+		  Options.IsWrapAround = me.Value
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="BackColor"
