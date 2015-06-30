@@ -1,5 +1,5 @@
 #tag Window
-Begin Window WndEditor
+Begin SearchReceiverWindowBase WndEditor
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
    CloseButton     =   True
@@ -259,6 +259,58 @@ End
 		  EditRedo.Enabled = fldCode.CanRedo
 		  
 		  ScriptGoToErrorLine.Enabled = LastCompilerErrorLine > 0
+		  
+		  dim find as string = WndSearch.Options.FindTerm
+		  EditFindNext.Enabled = find <> ""
+		  EditFindPrevious.Enabled = find <> ""
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub FindAll(options As SearchOptions)
+		  dim find as string = options.FindTerm
+		  
+		  if find = "" then
+		    beep
+		    return
+		  end if
+		  
+		  fldCode.ClearHighlightedCharacterRanges
+		  fldCode.ClearLineIcons
+		  
+		  dim s as string = fldCode.Text
+		  dim findLen as integer = find.Len
+		  
+		  dim pos as integer = InStrWithOptions( s, options )
+		  if pos = 0 then
+		    beep
+		    return
+		  end if
+		  
+		  dim firstPos as integer = pos
+		  while pos <> 0
+		    fldCode.HighlightCharacterRange pos - 1, findLen, kColorFindAll
+		    pos = InStrWithOptions( pos + findLen, s, options )
+		  wend
+		  
+		  fldCode.ScrollPosition = fldCode.LineNumAtCharPos( firstPos - 1 ) - 1
+		  
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub FindNext(options As SearchOptions)
+		  #pragma unused options
+		  
+		  DoFindNext
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub FindPrevious(options As SearchOptions)
+		  #pragma unused options
+		  
+		  DoFindPrevious
 		End Sub
 	#tag EndEvent
 
@@ -279,6 +331,74 @@ End
 		End Sub
 	#tag EndEvent
 
+	#tag Event
+		Sub ReplaceAll(options As SearchOptions)
+		  dim find as string = options.FindTerm
+		  dim replacement as string = options.ReplaceTerm
+		  
+		  if find = "" then
+		    return
+		  end if
+		  
+		  fldCode.ClearHighlightedCharacterRanges
+		  fldCode.ClearLineIcons
+		  
+		  dim eventID as integer = Ticks
+		  
+		  dim findLen as integer = find.Len
+		  dim replaceLen as integer = replacement.Len
+		  
+		  dim pos as integer = fldCode.Text.InStr( find )
+		  if pos = 0 then
+		    beep
+		    return
+		  end if
+		  
+		  fldCode.IgnoreRepaint = true
+		  while pos <> 0
+		    fldCode.Private_Replace( pos - 1, findLen, replacement, true, eventID )
+		    pos = fldCode.Text.InStr( pos + replaceLen, find )
+		  wend
+		  fldCode.IgnoreRepaint = false
+		  fldCode.Invalidate
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub ReplaceAndFindNext(options As SearchOptions)
+		  #pragma unused options
+		  
+		  DoReplaceOne()
+		  DoFindNext()
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub ReplaceOne(options As SearchOptions)
+		  #pragma unused options
+		  
+		  DoReplaceOne()
+		End Sub
+	#tag EndEvent
+
+
+	#tag MenuHandler
+		Function EditFindNext() As Boolean Handles EditFindNext.Action
+			DoFindNext
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditFindPrevious() As Boolean Handles EditFindPrevious.Action
+			DoFindPrevious
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
 
 	#tag MenuHandler
 		Function EditRedo() As Boolean Handles EditRedo.Action
@@ -382,6 +502,147 @@ End
 
 
 	#tag Method, Flags = &h21
+		Private Function CharPosOfNext(options As SearchOptions) As Integer
+		  if options.FindTerm = "" then
+		    return -1
+		  end if
+		  
+		  dim s as string = fldCode.Text
+		  
+		  dim pos as integer = InStrWithOptions( fldCode.SelStart + 1 + fldCode.SelLength, s, options )
+		  if pos = 0 and options.IsWrapAround then
+		    pos = InStrWithOptions( s, options )
+		  end if
+		  
+		  return pos - 1 // Zero based
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function CharPosOfPrevious(options As SearchOptions) As Integer
+		  dim find as string = options.FindTerm
+		  
+		  if find = "" then
+		    return -1
+		  end if
+		  
+		  dim findLen as integer = find.Len
+		  
+		  dim curPos as integer = fldCode.SelStart + 1
+		  if curPos = 0 then
+		    return -1
+		  end if
+		  
+		  dim s as string = fldCode.Text
+		  
+		  dim pos as integer = -1 // This is zero-based
+		  dim nextPos as integer = InStrWithOptions( s, options )
+		  if nextPos = 0 then
+		    return -1
+		  end if
+		  
+		  //
+		  // See if we have to wrap around
+		  //
+		  if nextPos >= curPos then
+		    if options.IsWrapAround then
+		      curPos = s.Len + 1
+		    else
+		      return -1
+		    end if
+		  end if
+		  
+		  while nextPos > 0 and nextPos < curPos
+		    pos = nextPos - 1
+		    nextPos = InStrWithOptions( nextPos + findLen, s, options )
+		  wend
+		  
+		  return pos
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub DoFindNext()
+		  fldCode.ClearHighlightedCharacterRanges
+		  fldCode.ClearLineIcons
+		  
+		  dim pos as integer = CharPosOfNext( WndSearch.Options )
+		  if pos > -1 then
+		    fldCode.SelStart = pos
+		    fldCode.SelLength = WndSearch.Options.FindTerm.Len
+		  else
+		    beep
+		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub DoFindPrevious()
+		  fldCode.ClearHighlightedCharacterRanges
+		  fldCode.ClearLineIcons
+		  
+		  dim pos as integer = CharPosOfPrevious( WndSearch.Options )
+		  if pos > -1 then
+		    fldCode.SelStart = pos
+		    fldCode.SelLength = WndSearch.Options.FindTerm.Len
+		  else
+		    beep
+		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub DoReplaceOne()
+		  dim options as SearchOptions = WndSearch.Options
+		  
+		  if options.FindTerm = "" then
+		    return
+		  end if
+		  
+		  dim find as string = options.FindTerm
+		  dim replacement as string = options.ReplaceTerm
+		  dim s as string = fldCode.Text
+		  
+		  if find = "" then
+		    return
+		  end if
+		  
+		  if StrComp( find, replacement, 0 ) = 0 then
+		    beep
+		    return
+		  end if
+		  
+		  //
+		  // See where we have to start
+		  //
+		  dim currentSelection as string = fldCode.SelText
+		  dim start as integer = fldCode.SelStart + 1
+		  if StrComp( currentSelection, replacement, 0 ) = 0 then
+		    start = start + replacement.Len
+		  end if
+		  
+		  dim pos as integer = InStrWithOptions( start, s, options )
+		  if pos = 0 then
+		    if options.IsWrapAround then
+		      pos = InStrWithOptions( s, options )
+		    else
+		      beep
+		      return
+		    end if
+		  end if
+		  
+		  if pos = 0 then
+		    beep
+		    return
+		  end if
+		  
+		  fldCode.Replace( pos - 1, find.Len, replacement, true )
+		  fldCode.SelStart = pos - 1 + replacement.Len
+		  fldCode.SelLength = 0
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub HighlightCode(location As XojoScriptLocation, msg As String, c As Color, lineIcon As Picture)
 		  dim startPosition as integer = location.Character
 		  dim endPosition as integer = location.EndCharacter
@@ -417,6 +678,75 @@ End
 		  
 		  HighlightCode( location, errorString, c, errordata )
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function InStrWithOptions(start As Integer = 1, src As String, options As SearchOptions) As Integer
+		  // Like InStr but will honor options and always return char position
+		  
+		  if src = "" or options.FindTerm = "" then
+		    return 0
+		  end if
+		  
+		  if start < 1 then
+		    start = 1
+		  end if
+		  
+		  //
+		  // See if we have to convert start into its byte-position equivalent
+		  //
+		  if ( options.IsCaseSensitive or options.IsWholeWord ) then
+		    if start > src.Len then
+		      start = src.LenB + 1
+		    elseif start > 1 then
+		      dim part as string = src.Left( start - 1 )
+		      start = part.LenB + 1
+		    end if
+		  end if
+		  
+		  
+		  if options.IsWholeWord then
+		    //
+		    // Use a regex
+		    //
+		    dim pattern as string = "\b" + StringToRegExCodes( options.FindTerm ) + "\b"
+		    dim rx as new RegEx
+		    rx.SearchPattern = pattern
+		    rx.Options.CaseSensitive = options.IsCaseSensitive
+		    
+		    dim match as RegExMatch
+		    if start = 1 then
+		      match = rx.Search( src )
+		    else
+		      match = rx.Search( src, start - 1 )
+		    end if
+		    
+		    if match is nil then
+		      return 0
+		    else
+		      dim posB as integer = match.SubExpressionStartB( 0 )
+		      return src.LeftB( posB ).Len + 1
+		    end if
+		    
+		  else
+		    
+		    if options.IsCaseSensitive then
+		      
+		      dim posB as integer = src.InStrB( start, options.FindTerm )
+		      if posB < 2 then
+		        return posB
+		      else
+		        return src.LeftB( posB - 1 ).Len + 1
+		      end if
+		      
+		    else
+		      
+		      return src.InStr( start, options.FindTerm )
+		      
+		    end if
+		    
+		  end if
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -653,6 +983,21 @@ End
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function StringToRegExCodes(s As String) As String
+		  // Converts a string to it's equivalent in regex codes
+		  
+		  dim chars() as string = s.Split( "" )
+		  for i as integer = 0 to chars.Ubound
+		    chars( i ) = hex( chars( i ).Asc )
+		  next
+		  
+		  dim r as string = join( chars, "}\x{" )
+		  r = "\x{" + r + "}"
+		  return r
+		End Function
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h21
 		Private Autocompleter As PaTrie
@@ -696,6 +1041,9 @@ End
 	#tag EndConstant
 
 	#tag Constant, Name = kColorError, Type = Color, Dynamic = False, Default = \"&cFF00007F", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kColorFindAll, Type = Color, Dynamic = False, Default = \"&c00FF00", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kColorWarning, Type = Color, Dynamic = False, Default = \"&cDCE83D7F", Scope = Private
