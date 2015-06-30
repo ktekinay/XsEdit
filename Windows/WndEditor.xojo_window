@@ -903,7 +903,12 @@ End
 		      IDESocket.Close
 		    end if
 		    
-		    MsgBox ex.Message + ": " + Str(ex.ErrorNumber)
+		    dim dlg as new MessageDialog
+		    dlg.CancelButton.Visible = false
+		    dlg.Message = "Could not connect to the IDE. Restarting it might help."
+		    dlg.Explanation = ex.Message + ": " + Str(ex.ErrorNumber)
+		    call dlg.ShowModal
+		    
 		  end try
 		End Sub
 	#tag EndMethod
