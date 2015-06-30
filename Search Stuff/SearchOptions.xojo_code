@@ -9,7 +9,7 @@ Protected Class SearchOptions
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		IsWrapAround As Boolean
+		IsWrapAround As Boolean = True
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
