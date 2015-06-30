@@ -23,7 +23,7 @@ Begin Window WndSearch
    MinWidth        =   64
    Placement       =   2
    Resizeable      =   False
-   Title           =   "Find"
+   Title           =   "Search"
    Visible         =   True
    Width           =   600
    Begin PlatformPushButton btnFindNext
