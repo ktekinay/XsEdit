@@ -452,6 +452,29 @@ End
 		Private Shared mIsOpen As Boolean
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private Shared mOptions As SearchOptions
+	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  if mOptions is nil then
+			    mOptions = new SearchOptions
+			  end if
+			  
+			  return mOptions
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  mOptions = value
+			  
+			End Set
+		#tag EndSetter
+		Shared Options As SearchOptions
+	#tag EndComputedProperty
+
 
 #tag EndWindowCode
 
