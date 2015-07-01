@@ -58,7 +58,7 @@ Begin Window SuggestionWindow
       LockRight       =   True
       LockTop         =   True
       RequiresSelection=   False
-      Scope           =   0
+      Scope           =   "0"
       ScrollbarHorizontal=   False
       ScrollBarVertical=   True
       SelectionType   =   0
@@ -77,7 +77,7 @@ Begin Window SuggestionWindow
       _ScrollWidth    =   -1
    End
    Begin Timer Timer1
-      Enabled         =   True
+      Enabled         =   "True"
       Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
@@ -85,12 +85,12 @@ Begin Window SuggestionWindow
       LockedInPosition=   False
       Mode            =   0
       Period          =   10
-      Scope           =   0
+      Scope           =   "0"
       TabIndex        =   "1"
-      TabPanelIndex   =   0
+      TabPanelIndex   =   "0"
       TabStop         =   True
       Top             =   305
-      Visible         =   True
+      Visible         =   "True"
       Width           =   "32"
    End
 End
@@ -350,6 +350,7 @@ End
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Composite"
+		Visible=true
 		Group="Appearance"
 		InitialValue="False"
 		Type="Boolean"
@@ -378,6 +379,7 @@ End
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="FullScreen"
+		Visible=true
 		Group="Appearance"
 		InitialValue="False"
 		Type="Boolean"
@@ -430,6 +432,7 @@ End
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="MacProcID"
+		Visible=true
 		Group="Appearance"
 		InitialValue="0"
 		Type="Integer"
@@ -445,7 +448,7 @@ End
 		Name="MaximizeButton"
 		Visible=true
 		Group="Appearance"
-		InitialValue="True"
+		InitialValue="False"
 		Type="Boolean"
 		EditorType="Boolean"
 	#tag EndViewProperty
@@ -465,6 +468,7 @@ End
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="MenuBarVisible"
+		Visible=true
 		Group="Appearance"
 		InitialValue="True"
 		Type="Boolean"

@@ -44,7 +44,7 @@ Begin Window FindWindow
       LockRight       =   False
       LockTop         =   True
       Multiline       =   False
-      Scope           =   0
+      Scope           =   "0"
       Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
@@ -79,7 +79,7 @@ Begin Window FindWindow
       LockRight       =   False
       LockTop         =   True
       Multiline       =   False
-      Scope           =   0
+      Scope           =   "0"
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
@@ -115,7 +115,7 @@ Begin Window FindWindow
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Scope           =   0
+      Scope           =   "0"
       TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True
@@ -147,7 +147,7 @@ Begin Window FindWindow
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Scope           =   0
+      Scope           =   "0"
       TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
@@ -178,7 +178,7 @@ Begin Window FindWindow
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Scope           =   0
+      Scope           =   "0"
       State           =   1
       TabIndex        =   4
       TabPanelIndex   =   0
@@ -210,7 +210,7 @@ Begin Window FindWindow
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Scope           =   0
+      Scope           =   "0"
       State           =   1
       TabIndex        =   5
       TabPanelIndex   =   0
@@ -243,7 +243,7 @@ Begin Window FindWindow
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Scope           =   0
+      Scope           =   "0"
       TabIndex        =   6
       TabPanelIndex   =   0
       TabStop         =   True
@@ -274,7 +274,7 @@ Begin Window FindWindow
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Scope           =   0
+      Scope           =   "0"
       TabIndex        =   7
       TabPanelIndex   =   0
       TabStop         =   True
@@ -305,7 +305,7 @@ Begin Window FindWindow
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Scope           =   0
+      Scope           =   "0"
       TabIndex        =   8
       TabPanelIndex   =   0
       TabStop         =   True
@@ -336,7 +336,7 @@ Begin Window FindWindow
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Scope           =   0
+      Scope           =   "0"
       TabIndex        =   9
       TabPanelIndex   =   0
       TabStop         =   True
@@ -366,7 +366,7 @@ Begin Window FindWindow
       LockRight       =   False
       LockTop         =   True
       Multiline       =   False
-      Scope           =   0
+      Scope           =   "0"
       Selectable      =   False
       TabIndex        =   10
       TabPanelIndex   =   0
@@ -694,6 +694,7 @@ End
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Composite"
+		Visible=true
 		Group="Appearance"
 		InitialValue="False"
 		Type="Boolean"
@@ -722,6 +723,7 @@ End
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="FullScreen"
+		Visible=true
 		Group="Appearance"
 		InitialValue="False"
 		Type="Boolean"
@@ -774,6 +776,7 @@ End
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="MacProcID"
+		Visible=true
 		Group="Appearance"
 		InitialValue="0"
 		Type="Integer"
@@ -789,7 +792,7 @@ End
 		Name="MaximizeButton"
 		Visible=true
 		Group="Appearance"
-		InitialValue="True"
+		InitialValue="False"
 		Type="Boolean"
 		EditorType="Boolean"
 	#tag EndViewProperty
@@ -809,6 +812,7 @@ End
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="MenuBarVisible"
+		Visible=true
 		Group="Appearance"
 		InitialValue="True"
 		Type="Boolean"

@@ -701,7 +701,7 @@ Implements MessageReceiver
 		      dim v2 as Integer = max(min(vertical, lines.Count - lines.invisibleLines - MaxVisibleLines), 0)
 		      if vertical <> v2 then
 		        if lines.invisibleLines > 0 then
-		          break // bug! The scrollposition jumps too far when moving down with the cursor if there's a folding above the scrollposition
+		          'break // bug! The scrollposition jumps too far when moving down with the cursor if there's a folding above the scrollposition
 		        end
 		        vertical = v2
 		      end if
@@ -3545,6 +3545,11 @@ Implements MessageReceiver
 		    // use indentation of previous block start
 		    
 		    dim blockStartIdx as Integer = lines.previousBlockStartLine(lineIndex)
+		    if blockStartIdx < 0 then
+		      // no previous block opening found - use previous line's indent
+		      blockStartIdx = max (0, lineIndex-1)
+		    else
+		    end if
 		    previousLine = lines.getLine(blockStartIdx)
 		    
 		    // reset the indentation
