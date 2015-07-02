@@ -81,7 +81,7 @@ Begin ContainerControl CustomScrollableEditField
       ReadOnly        =   False
       RightMarginAtPixel=   0
       RightScrollMargin=   150
-      Scope           =   "0"
+      Scope           =   0
       ScrollPosition  =   0
       ScrollPositionX =   0
       selLength       =   0
@@ -124,7 +124,7 @@ Begin ContainerControl CustomScrollableEditField
       Maximum         =   100
       Minimum         =   0
       PageStep        =   20
-      Scope           =   "2"
+      Scope           =   2
       TabIndex        =   5
       TabPanelIndex   =   0
       TabStop         =   True
@@ -152,7 +152,7 @@ Begin ContainerControl CustomScrollableEditField
       Maximum         =   100
       Minimum         =   0
       PageStep        =   20
-      Scope           =   "2"
+      Scope           =   2
       TabIndex        =   6
       TabPanelIndex   =   0
       TabStop         =   True
@@ -162,7 +162,7 @@ Begin ContainerControl CustomScrollableEditField
       Width           =   192
    End
    Begin Timer SelChangeDeferrer
-      Enabled         =   "True"
+      Enabled         =   True
       Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
@@ -170,12 +170,10 @@ Begin ContainerControl CustomScrollableEditField
       LockedInPosition=   False
       Mode            =   0
       Period          =   0
-      Scope           =   "0"
-      TabIndex        =   "3"
-      TabPanelIndex   =   "0"
-      TabStop         =   True
+      Scope           =   0
+      TabPanelIndex   =   0
       Top             =   0
-      Visible         =   "True"
+      Visible         =   True
       Width           =   "32"
    End
 End
@@ -1832,6 +1830,7 @@ End
 		Name="AcceptFocus"
 		Visible=true
 		Group="Behavior"
+		InitialValue="False"
 		Type="Boolean"
 		EditorType="Boolean"
 	#tag EndViewProperty
@@ -2205,6 +2204,7 @@ End
 		Name="UseFocusRing"
 		Visible=true
 		Group="Appearance"
+		InitialValue="False"
 		Type="Boolean"
 		EditorType="Boolean"
 	#tag EndViewProperty
