@@ -429,7 +429,7 @@ Protected Module M_FolderItem
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetRelativeFolderItem_MTC(path As String, relativeTo As FolderItem = Nil) As FolderItem
+		Function GetRelativeFolderItem_MTC(nativePath As String, relativeTo As FolderItem = Nil) As FolderItem
 		  // Stolen from Jeremy Cowgar, which is why the paren spacing is wrong
 		  
 		  dim prefix as String = ""
@@ -438,14 +438,14 @@ Protected Module M_FolderItem
 		    const pathSep = "\"
 		    
 		    //
-		    // Maybe what is passed isn't actually a relative path
+		    // Maybe what is passed isn't actually a relative nativePath
 		    //
 		    
-		    if path.Mid( 2, 1 ) = ":" then
-		      return GetFolderItem( path, FolderItem.PathTypeShell )
+		    if nativePath.Mid( 2, 1 ) = ":" then
+		      return GetFolderItem( nativePath, FolderItem.PathTypeNative )
 		    end if
 		    
-		    if path.Left( 1 ) = pathSep then
+		    if nativePath.Left( 1 ) = pathSep then
 		      relativeTo = GetFolderItem( SpecialFolder.CurrentWorkingDirectory.NativePath.Left( 3 ) )
 		    end if
 		    
@@ -453,28 +453,68 @@ Protected Module M_FolderItem
 		    const pathSep = "/"
 		    
 		    //
-		    // Maybe what is passed isn't actually a relative path
+		    // Maybe what is passed isn't actually a relative nativePath
 		    //
 		    
-		    if path.Left( 1 ) = pathSep then
-		      return GetFolderItem( path, FolderItem.PathTypeShell )
+		    if nativePath.Left( 1 ) = pathSep then
+		      return GetFolderItem( nativePath, FolderItem.PathTypeNative )
+		    end if
+		    
+		    //
+		    // See if it's a home path
+		    //
+		    if nativePath.Left( 2 ) = ( "~" + pathSep ) or nativePath = "~" then
+		      dim homePath as string = SpecialFolder.UserHome.NativePath
+		      if homePath.Right( 1 ) = pathSep then
+		        homePath = homePath.Left( nativePath.Len - pathSep.Len )
+		      end if
+		      nativePath = homePath + nativePath.Mid( 2 )
+		      return GetFolderItem( nativePath, FolderItem.PathTypeNative )
+		    end if
+		    
+		    //
+		    // See if it's another user's home folder
+		    //
+		    if nativePath.Left( 1 ) = "~" then
+		      dim homePath as string = nativePath.NthField( pathSep, 1 )
+		      dim homePathShell as string = ShellPathFromPOSIXPath_MTC( homePath )
+		      
+		      dim sh as new Shell
+		      sh.Execute "cd " + homePathShell + " && pwd"
+		      dim thisPath as string = sh.Result.DefineEncoding( Encodings.UTF8 ).Trim
+		      if thisPath.Right( 1 ) = pathSep then
+		        thisPath = thisPath.Left( thisPath.Len - pathSep.Len )
+		      end if
+		      
+		      dim pos as integer = homePath.Len + 1
+		      nativePath = thisPath + nativePath.Mid( pos )
+		      
+		      return GetFolderItem( nativePath, FolderItem.PathTypeNative )
+		      
 		    end if
 		    
 		    prefix = pathSep
 		  #endif
 		  
 		  //
-		  // OK, seems to be a relative path
+		  // OK, seems to be a relative nativePath
 		  //
 		  
 		  if relativeTo = nil then
 		    relativeTo = SpecialFolder.CurrentWorkingDirectory
 		  end if
 		  
-		  path = relativeTo.NativePath + pathSep + path
+		  nativePath = relativeTo.NativePath + pathSep + nativePath
+		  
+		  #pragma warning "Will this work on Windows too?"
+		  
+		  #if not TargetWin32
+		    return GetFolderItem( nativePath, FolderItem.PathTypeNative )
+		  #endif
+		  
 		  dim newParts() as String
 		  
-		  dim pathParts() as String = path.Split( pathSep )
+		  dim pathParts() as String = nativePath.Split( pathSep )
 		  for i as Integer = 0 to pathParts.Ubound
 		    dim p as String = pathParts( i )
 		    if p = "" then
@@ -482,23 +522,23 @@ Protected Module M_FolderItem
 		      // if relativeTo is a folder.
 		      
 		    elseif p = "." then
-		      // Skip this path component
+		      // Skip this nativePath component
 		      
 		    elseif p = ".." then
-		      // Remove the last path component from newParts
+		      // Remove the last nativePath component from newParts
 		      if newParts.Ubound > -1 then
 		        newParts.Remove newParts.Ubound
 		      end if
 		      
 		    else
-		      // Nothing special about this path component
+		      // Nothing special about this nativePath component
 		      newParts.Append p
 		    end if
 		  next
 		  
-		  path = prefix + Join( newParts, pathSep )
+		  nativePath = prefix + Join( newParts, pathSep )
 		  
-		  return GetFolderItem( path, FolderItem.PathTypeShell )
+		  return GetFolderItem( nativePath, FolderItem.PathTypeNative )
 		End Function
 	#tag EndMethod
 
