@@ -763,6 +763,14 @@ End
 		    dim insert as string = "'" + kIncludeDirective + " " + path + &uA
 		    fldCode.SelText = insert
 		  next
+		  
+		  //
+		  // Make sure this line is marked dirty
+		  //
+		  fldCode.SelText = " "
+		  fldCode.SelStart = fldCode.SelStart - 1
+		  fldCode.SelLength = 1
+		  fldCode.SelText = ""
 		End Sub
 	#tag EndMethod
 
