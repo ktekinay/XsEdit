@@ -374,9 +374,6 @@ End
 		  fldCode.ClearHighlightedCharacterRanges
 		  fldCode.ClearLineIcons
 		  
-		  dim eventID as integer = Ticks
-		  
-		  dim findLen as integer = find.Len
 		  dim replaceLen as integer = replacement.Len
 		  
 		  dim pos as integer = InStrWithOptions( fldCode.Text, options )
