@@ -1632,10 +1632,10 @@ End
 		  //
 		  // Set up the regexes
 		  //
-		  static rrxDimFinder as RegEx
-		  if rrxDimFinder is nil then
-		    rrxDimFinder = new RegEx
-		    rrxDimFinder.SearchPattern = "(?mi-Us)^\s*(?:dim|private|public|protected)\s+(?!sub\s+|function\s+|class\s+|module\s+|interface\s+)([^\s].*)"
+		  static rxDimFinder as RegEx
+		  if rxDimFinder is nil then
+		    rxDimFinder = new RegEx
+		    rxDimFinder.SearchPattern = "(?mi-Us)^\s*(?:dim|private|public|protected)\s+(?!sub\s+|function\s+|class\s+|module\s+|interface\s+)([^\s].*)"
 		  end if
 		  
 		  static rxAssignmentRemover as RegEx
@@ -1680,7 +1680,7 @@ End
 		    dim thisLine as string = LineAtLineIndex( lineIndex )
 		    dim match as RegExMatch
 		    
-		    match = rrxDimFinder.Search( thisLine )
+		    match = rxDimFinder.Search( thisLine )
 		    if match IsA RegExMatch then
 		      dim part as string = match.SubExpressionString( 1 )
 		      part = rxAssignmentRemover.Replace( part )
