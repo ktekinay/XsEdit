@@ -437,14 +437,7 @@ End
 			//
 			// Select after the last line
 			//
-			dim lastLine as integer = lineIndexes( lineIndexes.Ubound ) + 1
-			dim charPos as integer
-			if lastLine >= fldCode.LineCount then
-			charPos = fldCode.Text.Len
-			else
-			charPos = fldCode.CharPosAtLineNum( lastLine )
-			end if
-			fldCode.SelStart = charPos
+			SelectAfterLineIndex( lineIndexes( lineIndexes.Ubound ) )
 			
 			Return True
 			
