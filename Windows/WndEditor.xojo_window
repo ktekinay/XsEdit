@@ -1635,7 +1635,7 @@ End
 		  static rrxDimFinder as RegEx
 		  if rrxDimFinder is nil then
 		    rrxDimFinder = new RegEx
-		    rrxDimFinder.SearchPattern = "^\s*(?:dim|private|public|protected)\s+(?!sub\b|function\b|class\b|module\b|interface\b)(.*)"
+		    rrxDimFinder.SearchPattern = "(?mi-Us)^\s*(?:dim|private|public|protected)\s+(?!sub\s+|function\s+|class\s+|module\s+|interface\s+)([^\s].*)"
 		  end if
 		  
 		  static rxAssignmentRemover as RegEx
