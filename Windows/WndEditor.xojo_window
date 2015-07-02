@@ -732,6 +732,63 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function InsertIncludedFiles(src As String) As String
+		  // Locates the include directive and inserts the contents of the located files.
+		  // Raise an exception if the file can't be located
+		  
+		  dim pattern as string = "^[\x20\t]*(?://|')"+ kIncludeDirective + "[\x20\t]+(.*)"
+		  
+		  dim rx as new RegEx
+		  rx.SearchPattern = pattern
+		  
+		  dim match as RegExMatch = rx.Search( src )
+		  while match IsA RegExMatch
+		    dim path as string = match.SubExpressionString( 1 ).Trim
+		    
+		    dim f as FolderItem
+		    
+		    #pragma BreakOnExceptions false
+		    try
+		      if MyDocument is nil then
+		        f = new FolderItem( path, FolderItem.PathTypeNative )
+		      else
+		        f = GetRelativeFolderItem_MTC( path, MyDocument.Parent )
+		      end if
+		    catch err as UnsupportedFormatException
+		      f = nil
+		    end try
+		    #pragma BreakOnExceptions default
+		    
+		    if f is nil then
+		      RaiseBadIncludeException( "An error occurred while accessing the file at " + path, match.SubExpressionString( 0 ) )
+		    elseif f.Directory then
+		      RaiseBadIncludeException( "The path " + path + " points to a folder", match.SubExpressionString( 0 ) )
+		    elseif not f.Exists then
+		      RaiseBadIncludeException( "The file at path " + path + " does not exist", match.SubExpressionString( 0 ) )
+		    elseif not f.IsReadable then
+		      RaiseBadIncludeException( "Can't read the file at path " + path, match.SubExpressionString( 0 ) )
+		    end if
+		    
+		    dim contents as string = f.TextContents_MTC( Encodings.UTF8 )
+		    
+		    //
+		    // Replace the Includes line
+		    //
+		    dim startB as integer = match.SubExpressionStartB( 0 ) + 1
+		    dim prefix as string = src.LeftB( startB - 1 )
+		    dim suffix as string = src.MidB( startB + match.SubExpressionString( 0 ).LenB )
+		    src = prefix + contents + suffix
+		    
+		    match = rx.Search( src )
+		  wend
+		  
+		  src = ReplaceLineEndings( src, &uA )
+		  return src
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub InsertIncludeDirective()
 		  // Asks for a file and inserts it at the front of the currently selected line
 		  
@@ -860,6 +917,26 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub RaiseBadIncludeException(msg As String, faultyLine As String)
+		  dim charStart as integer = fldCode.Text.InStr( faultyLine ) - 1
+		  dim lineNum as integer = fldCode.LineNumAtCharPos( charStart )
+		  fldCode.HighlightCharacterRange( charStart, faultyLine.Len, kColorError )
+		  fldCode.LineIcon( lineNum ) = errordata
+		  fldCode.HelpTag = msg
+		  
+		  LastCompilerErrorCode = kErrorIncludeError
+		  LastCompilerErrorLine = lineNum
+		  
+		  #pragma BreakOnExceptions false
+		  dim err as new XojoScriptException
+		  err.Message = msg
+		  raise err
+		  #pragma BreakOnExceptions default
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function Save() As Boolean
 		  if MyDocument is nil then
 		    return SaveAs()
@@ -870,6 +947,7 @@ End
 		  fldCode.ClearDirtyLines
 		  
 		  CodeBeforeChanges = fldCode.Text
+		  SetTitle()
 		  
 		  return true
 		End Function
