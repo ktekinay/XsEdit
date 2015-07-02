@@ -1097,6 +1097,22 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function SelectedLineIndexes() As Integer()
+		  // Returns an array of the line indexes that cover the current selection
+		  
+		  dim startLine as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
+		  dim endLine as integer = fldCode.LineNumAtCharPos( fldCode.SelStart + fldCode.SelLength - 1 )
+		  
+		  dim r() as integer
+		  for i as integer = startLine to endLine
+		    r.Append i
+		  next
+		  
+		  return r
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
 		  Autocompleter = new PaTrie
 		  
