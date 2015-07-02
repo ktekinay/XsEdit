@@ -1688,6 +1688,7 @@ End
 		      while varMatch IsA RegExMatch
 		        dim vars() as string = varMatch.SubExpressionString( 1 ).Split( "," )
 		        for each var as string in vars
+		          var = var.NthField( "(", 1 )
 		          call AutocompleterScript.AddKey( var.Trim )
 		        next
 		        
