@@ -18,6 +18,13 @@ Inherits Application
 	#tag EndEvent
 
 	#tag Event
+		Sub NewDocument()
+		  dim w as new WndEditor
+		  w.Show
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub OpenDocument(item As FolderItem)
 		  dim editor as WndEditor
 		  
@@ -57,8 +64,7 @@ Inherits Application
 
 	#tag MenuHandler
 		Function FileNew() As Boolean Handles FileNew.Action
-			dim w as new WndEditor
-			w.Show
+			NewDocument
 			
 			Return True
 			
