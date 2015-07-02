@@ -1261,7 +1261,7 @@ End
 		  static rxDim as RegEx
 		  if rxDim is nil then
 		    rxDim = new RegEx
-		    rxDim.SearchPattern = "^\s*dim\s+(.*)"
+		    rxDim.SearchPattern = "^\s*(?:dim|private|public|protected)\s+(?!sub\b|function\b|class\b|module\b)(.*)"
 		  end if
 		  
 		  static rxAssignmentRemover as RegEx
