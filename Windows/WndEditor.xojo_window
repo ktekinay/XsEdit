@@ -374,9 +374,6 @@ End
 		  fldCode.ClearHighlightedCharacterRanges
 		  fldCode.ClearLineIcons
 		  
-		  dim eventID as integer = Ticks
-		  
-		  dim findLen as integer = find.Len
 		  dim replaceLen as integer = replacement.Len
 		  
 		  dim pos as integer = InStrWithOptions( fldCode.Text, options )
@@ -518,6 +515,14 @@ End
 			fldCode.SelectLine l - 1
 			end if
 			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function ScriptInsertInclude() As Boolean Handles ScriptInsertInclude.Action
+			InsertIncludeDirective
 			Return True
 			
 		End Function
@@ -727,6 +732,103 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function InsertIncludedFiles(src As String) As String
+		  // Locates the include directive and inserts the contents of the located files.
+		  // Raise an exception if the file can't be located
+		  
+		  dim pattern as string = "^[\x20\t]*(?://|')"+ kIncludeDirective + "[\x20\t]+(.*)"
+		  
+		  dim rx as new RegEx
+		  rx.SearchPattern = pattern
+		  
+		  dim match as RegExMatch = rx.Search( src )
+		  while match IsA RegExMatch
+		    dim path as string = match.SubExpressionString( 1 ).Trim
+		    
+		    dim f as FolderItem
+		    
+		    #pragma BreakOnExceptions false
+		    try
+		      if MyDocument is nil then
+		        f = new FolderItem( path, FolderItem.PathTypeNative )
+		      else
+		        f = GetRelativeFolderItem_MTC( path, MyDocument.Parent )
+		      end if
+		    catch err as UnsupportedFormatException
+		      f = nil
+		    end try
+		    #pragma BreakOnExceptions default
+		    
+		    if f is nil then
+		      RaiseBadIncludeException( "An error occurred while accessing the file at " + path, match.SubExpressionString( 0 ) )
+		    elseif f.Directory then
+		      RaiseBadIncludeException( "The path " + path + " points to a folder", match.SubExpressionString( 0 ) )
+		    elseif not f.Exists then
+		      RaiseBadIncludeException( "The file at path " + path + " does not exist", match.SubExpressionString( 0 ) )
+		    elseif not f.IsReadable then
+		      RaiseBadIncludeException( "Can't read the file at path " + path, match.SubExpressionString( 0 ) )
+		    end if
+		    
+		    dim contents as string = f.TextContents_MTC( Encodings.UTF8 )
+		    
+		    //
+		    // Replace the Includes line
+		    //
+		    dim startB as integer = match.SubExpressionStartB( 0 ) + 1
+		    dim prefix as string = src.LeftB( startB - 1 )
+		    dim suffix as string = src.MidB( startB + match.SubExpressionString( 0 ).LenB )
+		    src = prefix + contents + suffix
+		    
+		    match = rx.Search( src )
+		  wend
+		  
+		  src = ReplaceLineEndings( src, &uA )
+		  return src
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub InsertIncludeDirective()
+		  // Asks for a file and inserts it at the front of the currently selected line
+		  
+		  dim dlg as new OpenDialog
+		  dlg.PromptText = "Select a script that will be included for compilation purposes:"
+		  dlg.Filter = DocumentTypes.XojoScript
+		  dlg.MultiSelect = true
+		  
+		  dim include as FolderItem = dlg.ShowModalWithin( self )
+		  if include is nil then
+		    return
+		  end if
+		  
+		  //
+		  // Get the insertion point
+		  //
+		  dim curPos as integer = fldCode.SelStart
+		  dim curLine as integer = fldCode.LineNumAtCharPos( curPos )
+		  fldCode.SelStart = fldCode.CharPosAtLineNum( curLine ) // Front of the line
+		  fldCode.SelLength = 0
+		  
+		  dim lastFileIndex as integer = dlg.Count - 1
+		  for i as integer = 0 to lastFileIndex
+		    include = dlg.Item( i )
+		    dim path as string = include.NativePath
+		    dim insert as string = "'" + kIncludeDirective + " " + path + &uA
+		    fldCode.SelText = insert
+		  next
+		  
+		  //
+		  // Make sure this line is marked dirty
+		  //
+		  fldCode.SelText = " "
+		  fldCode.SelStart = fldCode.SelStart - 1
+		  fldCode.SelLength = 1
+		  fldCode.SelText = ""
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function InStrWithOptions(start As Integer = 1, src As String, options As SearchOptions) As Integer
 		  // Like InStr but will honor options and always return char position
 		  
@@ -815,6 +917,26 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub RaiseBadIncludeException(msg As String, faultyLine As String)
+		  dim charStart as integer = fldCode.Text.InStr( faultyLine ) - 1
+		  dim lineNum as integer = fldCode.LineNumAtCharPos( charStart )
+		  fldCode.HighlightCharacterRange( charStart, faultyLine.Len, kColorError )
+		  fldCode.LineIcon( lineNum ) = errordata
+		  fldCode.HelpTag = msg
+		  
+		  LastCompilerErrorCode = kErrorIncludeError
+		  LastCompilerErrorLine = lineNum
+		  
+		  #pragma BreakOnExceptions false
+		  dim err as new XojoScriptException
+		  err.Message = msg
+		  raise err
+		  #pragma BreakOnExceptions default
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function Save() As Boolean
 		  if MyDocument is nil then
 		    return SaveAs()
@@ -825,6 +947,7 @@ End
 		  fldCode.ClearDirtyLines
 		  
 		  CodeBeforeChanges = fldCode.Text
+		  SetTitle()
 		  
 		  return true
 		End Function
@@ -853,7 +976,13 @@ End
 		  LastCompilerErrorCode = -1
 		  LastCompilerErrorLine = -1
 		  
-		  XS.Source = fldCode.Text
+		  dim src as string = fldCode.Text
+		  
+		  try
+		    src = InsertIncludedFiles( src )
+		  catch err as XojoScriptException
+		    return
+		  end try
 		  
 		  fldCode.ClearLineIcons
 		  fldCode.ClearHighlightedCharacterRanges
@@ -864,6 +993,7 @@ End
 		  //
 		  
 		  XS.Reset
+		  XS.Source = src
 		  XS.Context = new IDEEmulator
 		  
 		  call XS.Precompile( XojoScript.OptimizationLevels.None )
@@ -907,8 +1037,8 @@ End
 		      raise ex
 		    end if
 		    
-		    IDESocket.Write fldCode.Text
-		    while IDESocket.BytesLeftToSend > 0
+		    IDESocket.Write XS.Source
+		    while IDESocket.BytesLeftToSend <> 0
 		      IDESocket.Poll
 		      if IDESocket.LastErrorCode <> 0 then
 		        dim ex as new RuntimeException
@@ -1098,6 +1228,12 @@ End
 	#tag EndConstant
 
 	#tag Constant, Name = kColorWarning, Type = Color, Dynamic = False, Default = \"&cDCE83D7F", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kErrorIncludeError, Type = Double, Dynamic = False, Default = \"-99", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kIncludeDirective, Type = String, Dynamic = False, Default = \"#include", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kToolbarCompile, Type = String, Dynamic = False, Default = \"Compile", Scope = Public
