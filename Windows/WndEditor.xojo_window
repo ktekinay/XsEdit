@@ -524,6 +524,14 @@ End
 	#tag EndMenuHandler
 
 	#tag MenuHandler
+		Function ScriptInsertInclude() As Boolean Handles ScriptInsertInclude.Action
+			InsertIncludeDirective
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function ScriptRun() As Boolean Handles ScriptRun.Action
 			self.ScriptTestRun
 			
