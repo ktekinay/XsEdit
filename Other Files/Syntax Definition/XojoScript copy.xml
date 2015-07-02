@@ -10,11 +10,39 @@
 	<blockStartMarker indent="1">^\s*(protected\b|private\b)?\s*class\b</blockStartMarker>
 	<blockEndMarker>^\s*end\s+class\b</blockEndMarker>
 
-<!-- everything else -->
-	<blockStartMarker indent="1">^\s*(?:(if|elseif)\b.*\sthen\b\s*(('|//)|(?!.+?))|if\s(?!.*\sthen\b)|^\s*(public\b|protected\b|private\b)?\s*(shared\b)?\s*(?&lt;!end\b)\s*(sub|function|property)\b|(do|for|while|select|case|try|catch|else|Get|Set|#if|#elseif|#else)\b)</blockStartMarker>
-	<blockEndMarker>^\s*(?:end|wend|next|loop|else|case|catch|elseif|#else|#elseif|#endif)\b</blockEndMarker>
+<!-- WHILE block -->
+	<blockStartMarker indent="1">^\s*while\b</blockStartMarker>
+	<blockEndMarker>^\s*wend</blockEndMarker>
 
-<!-- INTERFACE block - prevents anything inside an interface from being indented: -->
+<!-- DO block -->
+	<blockStartMarker indent="1">^\s*do\b</blockStartMarker>
+	<blockEndMarker>^\s*loop\b</blockEndMarker>
+
+<!-- FOR block -->
+	<blockStartMarker indent="1">^\s*for\b</blockStartMarker>
+	<blockEndMarker>^\s*next\b</blockEndMarker>
+
+<!-- SUB block -->
+	<blockStartMarker indent="1">^\s*((public|protected|private)\s+)?(shared\s+)?sub\b</blockStartMarker>
+	<blockEndMarker>^\s*end\s+sub\b</blockEndMarker>
+
+<!-- FUNCTION block -->
+	<blockStartMarker indent="1">^\s*((public|protected|private)\s+)?(shared\s+)?function\b</blockStartMarker>
+	<blockEndMarker>^\s*end\s+function\b</blockEndMarker>
+
+<!-- IF block -->
+	<blockStartMarker indent="1">^\s*(?:(if|elseif)\b.*\sthen\b\s*(('|//)|(?!.+?))|if\s(?!.*\sthen\b))</blockStartMarker>
+<blockEndMarker>^\s*end\b(?:\s*(?://.*|'.*|REM\b.*)?$|\s+if\b)</blockEndMarker>
+
+<!-- SELECT block -->
+	<blockStartMarker indent="1">^\s*select</blockStartMarker>
+	<blockEndMarker>^\s*(?:case|end\b(?:\s*(?://.*|'.*|REM\b.*)?$|\s+select\b))</blockEndMarker>
+
+<!-- everything else -->
+	<blockStartMarker indent="1">^\s*(?:case|try|catch|else|Get|Set|#if|#elseif|#else)\b</blockStartMarker>
+	<blockEndMarker>^\s*(?:case|catch|#else|#elseif|#endif)\b</blockEndMarker>
+
+	<!-- these prevent subs and functions inside an interface from being indented: -->
 	<blockStartMarker indent="1" newstate="inside_interface">^\s*(protected\b|private\b)?\s*interface\b</blockStartMarker>
 	<blockEndMarker condition="inside_interface" newstate="">^\s*end\s+interface\b</blockEndMarker>
 
