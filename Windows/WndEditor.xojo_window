@@ -976,7 +976,13 @@ End
 		  LastCompilerErrorCode = -1
 		  LastCompilerErrorLine = -1
 		  
-		  XS.Source = fldCode.Text
+		  dim src as string = fldCode.Text
+		  
+		  try
+		    src = InsertIncludedFiles( src )
+		  catch err as XojoScriptException
+		    return
+		  end try
 		  
 		  fldCode.ClearLineIcons
 		  fldCode.ClearHighlightedCharacterRanges
@@ -987,6 +993,7 @@ End
 		  //
 		  
 		  XS.Reset
+		  XS.Source = src
 		  XS.Context = new IDEEmulator
 		  
 		  call XS.Precompile( XojoScript.OptimizationLevels.None )
@@ -1030,8 +1037,8 @@ End
 		      raise ex
 		    end if
 		    
-		    IDESocket.Write fldCode.Text
-		    while IDESocket.BytesLeftToSend > 0
+		    IDESocket.Write XS.Source
+		    while IDESocket.BytesLeftToSend <> 0
 		      IDESocket.Poll
 		      if IDESocket.LastErrorCode <> 0 then
 		        dim ex as new RuntimeException
