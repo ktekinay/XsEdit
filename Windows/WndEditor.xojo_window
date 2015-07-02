@@ -1278,7 +1278,7 @@ End
 		    rxVariableFinder.SearchPattern = "(?Umi-s)((?:[^,]+,?)+)\s+as\s+(new\s+\w+|\w+)(?:,|\s|$)"
 		  end if
 		  
-		   dim curLineIndex as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
+		  dim curLineIndex as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
 		  dim lastLineIndex as integer =  curLineIndex - 1
 		  for lineIndex as integer = 0 to lastLineIndex
 		    dim thisLine as string = LineAtLineIndex( lineIndex )
