@@ -456,26 +456,21 @@ Protected Module M_FolderItem
 		    // Maybe what is passed isn't actually a relative nativePath
 		    //
 		    
-		    if nativePath.Left( 1 ) = pathSep then
-		      return GetFolderItem( nativePath, FolderItem.PathTypeNative )
-		    end if
-		    
-		    //
-		    // See if it's a home path
-		    //
-		    if nativePath.Left( 2 ) = ( "~" + pathSep ) or nativePath = "~" then
-		      dim homePath as string = SpecialFolder.UserHome.NativePath
-		      if homePath.Right( 1 ) = pathSep then
-		        homePath = homePath.Left( nativePath.Len - pathSep.Len )
-		      end if
-		      nativePath = homePath + nativePath.Mid( 2 )
-		      return GetFolderItem( nativePath, FolderItem.PathTypeNative )
-		    end if
-		    
-		    //
-		    // See if it's another user's home folder
-		    //
-		    if nativePath.Left( 1 ) = "~" then
+		    if nativePath.Left( pathSep.Len ) = pathSep then
+		      relativeTo = Volume( 0 )
+		      nativePath = nativePath.Mid( pathSep.Len + 1 )
+		      
+		      //
+		      // See if it's a home path
+		      //
+		    elseif nativePath.Left( pathSep.Len + 1 ) = ( "~" + pathSep ) or nativePath = "~" then
+		      relativeTo = SpecialFolder.UserHome
+		      nativePath = nativePath.Mid( pathSep.Len + 1 )
+		      
+		      //
+		      // See if it's another user's home folder
+		      //
+		    elseif nativePath.Left( 1 ) = "~" then
 		      dim homePath as string = nativePath.NthField( pathSep, 1 )
 		      dim homePathShell as string = ShellPathFromPOSIXPath_MTC( homePath )
 		      
@@ -486,10 +481,8 @@ Protected Module M_FolderItem
 		        thisPath = thisPath.Left( thisPath.Len - pathSep.Len )
 		      end if
 		      
-		      dim pos as integer = homePath.Len + 1
-		      nativePath = thisPath + nativePath.Mid( pos )
-		      
-		      return GetFolderItem( nativePath, FolderItem.PathTypeNative )
+		      relativeTo = GetFolderItem( thisPath, FolderItem.PathTypeNative )
+		      nativePath = nativePath.Mid( homePath.Len + pathSep.Len + 1 )
 		      
 		    end if
 		    
@@ -506,11 +499,10 @@ Protected Module M_FolderItem
 		  
 		  nativePath = relativeTo.NativePath + pathSep + nativePath
 		  
-		  #pragma warning "Will this work on Windows too?"
-		  
-		  #if not TargetWin32
-		    return GetFolderItem( nativePath, FolderItem.PathTypeNative )
-		  #endif
+		  //
+		  // We have to parse all the parts individually because the path may
+		  // not exist
+		  //
 		  
 		  dim newParts() as String
 		  
@@ -526,7 +518,7 @@ Protected Module M_FolderItem
 		      
 		    elseif p = ".." then
 		      // Remove the last nativePath component from newParts
-		      if newParts.Ubound > -1 then
+		      if newParts.Ubound <> -1 then
 		        newParts.Remove newParts.Ubound
 		      end if
 		      
