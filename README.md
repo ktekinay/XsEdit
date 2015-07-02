@@ -1,7 +1,7 @@
 # README
 
 __XsEdit__
-An advanced XojoScript editor for [Xojo¨](http://www.xojo.com/).
+An advanced XojoScript editor for [XojoÂ®](http://www.xojo.com/).
 
 ## General Information
 
