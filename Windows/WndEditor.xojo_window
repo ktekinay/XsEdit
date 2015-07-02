@@ -421,6 +421,37 @@ End
 
 
 	#tag MenuHandler
+		Function EditComment() As Boolean Handles EditComment.Action
+			dim lineIndexes() as integer = SelectedLineIndexes
+			if lineIndexes.Ubound = -1 then
+			return true
+			end if
+			
+			for each index as integer in lineIndexes
+			dim charPos as integer = fldCode.CharPosAtLineNum( index )
+			fldCode.SelStart = charPos
+			fldCode.SelLength = 0
+			fldCode.SelText = kCommentToken
+			next
+			
+			//
+			// Select after the last line
+			//
+			dim lastLine as integer = lineIndexes( lineIndexes.Ubound ) + 1
+			dim charPos as integer
+			if lastLine >= fldCode.LineCount then
+			charPos = fldCode.Text.Len
+			else
+			charPos = fldCode.CharPosAtLineNum( lastLine )
+			end if
+			fldCode.SelStart = charPos
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function EditFindNext() As Boolean Handles EditFindNext.Action
 			DoFindNext
 			
@@ -1244,6 +1275,9 @@ End
 	#tag EndConstant
 
 	#tag Constant, Name = kColorWarning, Type = Color, Dynamic = False, Default = \"&cDCE83D7F", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kCommentToken, Type = String, Dynamic = False, Default = \"\'", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kErrorIncludeError, Type = Double, Dynamic = False, Default = \"-99", Scope = Private
