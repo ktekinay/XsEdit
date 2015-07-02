@@ -1318,6 +1318,10 @@ End
 		Private LastCompilerErrorLine As Integer = -1
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private LineNumberAtLastSetAutocomplete As Integer
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
@@ -1402,6 +1406,11 @@ End
 	#tag EndEvent
 	#tag Event
 		Function AutocompleteOptionsForPrefix(prefix as string) As AutocompleteOptions
+		  dim curLine as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
+		  if curLine <> LineNumberAtLastSetAutocomplete then
+		    SetAutocompleteWords
+		  end if
+		  
 		  dim options as new AutocompleteOptions
 		  options.Prefix = prefix
 		  dim commonPrefix as string
