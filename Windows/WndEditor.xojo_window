@@ -27,8 +27,7 @@ Begin SearchReceiverWindowBase WndEditor
    Visible         =   True
    Width           =   600
    Begin Timer tmrReindent
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -38,8 +37,7 @@ Begin SearchReceiverWindowBase WndEditor
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin CustomEditField fldCode
       AcceptFocus     =   False
@@ -191,8 +189,7 @@ Begin SearchReceiverWindowBase WndEditor
       Width           =   100
    End
    Begin XojoScript XS
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -201,12 +198,10 @@ Begin SearchReceiverWindowBase WndEditor
       Source          =   ""
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin IPCSocket IDESocket
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -215,8 +210,7 @@ Begin SearchReceiverWindowBase WndEditor
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin Timer tmrSetAutocompleteScript
       Height          =   32
@@ -1446,6 +1440,14 @@ End
 	#tag EndEvent
 	#tag Event
 		Function AutocompleteOptionsForPrefix(prefix as string) As AutocompleteOptions
+		  //
+		  // If there is a dot in the prefix, strip the text before it
+		  //
+		  if prefix <> "" then
+		    dim prefixParts() as string = prefix.Split( "." )
+		    prefix = prefixParts( prefixParts.Ubound )
+		  end if
+		  
 		  dim options as new AutocompleteOptions
 		  options.Prefix = prefix
 		  dim commonPrefixKeywords as string
@@ -1456,15 +1458,16 @@ End
 		  //
 		  // Combine them
 		  //
-		  dim words() as string = keywords
-		  for i as integer = 0 to scriptwords.Ubound
-		    words.Append scriptwords( i )
+		  dim commonPraTrie as new PaTrie
+		  for each word as string in keywords
+		    call commonPraTrie.AddKey( word )
+		  next
+		  for each word as string in scriptwords
+		    call commonPraTrie.AddKey( word )
 		  next
 		  
-		  dim commonPrefix as string = commonPrefixKeywords
-		  if commonPrefixScript.LenB < commonPrefixKeywords.LenB then
-		    commonPrefix = commonPrefixScript
-		  end if
+		  dim commonPrefix as string
+		  dim words() as string = commonPraTrie.WordsForPrefix( prefix, commonPrefix )
 		  
 		  options.Options = words
 		  options.LongestCommonPrefix = commonPrefix
