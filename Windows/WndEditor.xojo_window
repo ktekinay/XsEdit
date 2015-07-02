@@ -218,6 +218,19 @@ Begin SearchReceiverWindowBase WndEditor
       Visible         =   True
       Width           =   "32"
    End
+   Begin Timer tmrSetAutocompleteScript
+      Height          =   32
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   0
+      LockedInPosition=   False
+      Mode            =   0
+      Period          =   10
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   0
+      Width           =   32
+   End
 End
 #tag EndWindow
 
@@ -380,9 +393,6 @@ End
 		  fldCode.ClearHighlightedCharacterRanges
 		  fldCode.ClearLineIcons
 		  
-		  dim eventID as integer = Ticks
-		  
-		  dim findLen as integer = find.Len
 		  dim replaceLen as integer = replacement.Len
 		  
 		  dim pos as integer = InStrWithOptions( fldCode.Text, options )
@@ -430,6 +440,35 @@ End
 
 
 	#tag MenuHandler
+		Function EditComment() As Boolean Handles EditComment.Action
+			dim lineIndexes() as integer = SelectedLineIndexes
+			if lineIndexes.Ubound = -1 then
+			return true
+			end if
+			
+			fldCode.IgnoreRepaint = true
+			
+			for each index as integer in lineIndexes
+			dim charPos as integer = fldCode.CharPosAtLineNum( index )
+			fldCode.SelStart = charPos
+			fldCode.SelLength = 0
+			fldCode.SelText = kCommentToken
+			next
+			
+			//
+			// Select after the last line
+			//
+			SelectAfterLineIndex( lineIndexes( lineIndexes.Ubound ) )
+			
+			fldCode.IgnoreRepaint = false
+			fldCode.Invalidate
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function EditFindNext() As Boolean Handles EditFindNext.Action
 			DoFindNext
 			
@@ -450,6 +489,48 @@ End
 	#tag MenuHandler
 		Function EditRedo() As Boolean Handles EditRedo.Action
 			fldCode.Redo
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditUncomment() As Boolean Handles EditUncomment.Action
+			dim lineIndexes() as integer = SelectedLineIndexes
+			if lineIndexes.Ubound = -1 then
+			return true
+			end if
+			
+			dim rx as new RegEx
+			rx.SearchPattern = "^([\x20\t]*)(" + kCommentToken + ")"
+			rx.ReplacementPattern = "$1"
+			
+			fldCode.IgnoreRepaint = true
+			
+			for each lineIndex as integer in lineIndexes
+			dim startPos as integer = fldCode.CharPosAtLineNum( lineIndex )
+			dim endPos as integer
+			if lineIndex >= fldCode.LineCount then
+			endPos = fldCode.Text.Len
+			else
+			endPos = fldCode.CharPosAtLineNum( lineIndex + 1 )
+			end if
+			fldCode.SelStart = startPos
+			fldCode.SelLength = endPos - startPos
+			dim thisLine as string = fldCode.SelText
+			dim origLine as string = thisLine
+			
+			thisLine = rx.Replace( thisLine )
+			if thisLine <> origLine then
+			fldCode.SelText = thisLine
+			end if
+			next
+			
+			SelectAfterLineIndex( lineIndexes( lineIndexes.Ubound ) )
+			
+			fldCode.IgnoreRepaint = false
+			fldCode.Invalidate
+			
 			Return True
 			
 		End Function
@@ -524,6 +605,14 @@ End
 			fldCode.SelectLine l - 1
 			end if
 			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function ScriptInsertInclude() As Boolean Handles ScriptInsertInclude.Action
+			InsertIncludeDirective
 			Return True
 			
 		End Function
@@ -733,6 +822,103 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function InsertIncludedFiles(src As String) As String
+		  // Locates the include directive and inserts the contents of the located files.
+		  // Raise an exception if the file can't be located
+		  
+		  dim pattern as string = "^[\x20\t]*(?://|')"+ kIncludeDirective + "[\x20\t]+(.*)"
+		  
+		  dim rx as new RegEx
+		  rx.SearchPattern = pattern
+		  
+		  dim match as RegExMatch = rx.Search( src )
+		  while match IsA RegExMatch
+		    dim path as string = match.SubExpressionString( 1 ).Trim
+		    
+		    dim f as FolderItem
+		    
+		    #pragma BreakOnExceptions false
+		    try
+		      if MyDocument is nil then
+		        f = new FolderItem( path, FolderItem.PathTypeNative )
+		      else
+		        f = GetRelativeFolderItem_MTC( path, MyDocument.Parent )
+		      end if
+		    catch err as UnsupportedFormatException
+		      f = nil
+		    end try
+		    #pragma BreakOnExceptions default
+		    
+		    if f is nil then
+		      RaiseBadIncludeException( "An error occurred while accessing the file at " + path, match.SubExpressionString( 0 ) )
+		    elseif f.Directory then
+		      RaiseBadIncludeException( "The path " + path + " points to a folder", match.SubExpressionString( 0 ) )
+		    elseif not f.Exists then
+		      RaiseBadIncludeException( "The file at path " + path + " does not exist", match.SubExpressionString( 0 ) )
+		    elseif not f.IsReadable then
+		      RaiseBadIncludeException( "Can't read the file at path " + path, match.SubExpressionString( 0 ) )
+		    end if
+		    
+		    dim contents as string = f.TextContents_MTC( Encodings.UTF8 )
+		    
+		    //
+		    // Replace the Includes line
+		    //
+		    dim startB as integer = match.SubExpressionStartB( 0 ) + 1
+		    dim prefix as string = src.LeftB( startB - 1 )
+		    dim suffix as string = src.MidB( startB + match.SubExpressionString( 0 ).LenB )
+		    src = prefix + contents + suffix
+		    
+		    match = rx.Search( src )
+		  wend
+		  
+		  src = ReplaceLineEndings( src, &uA )
+		  return src
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub InsertIncludeDirective()
+		  // Asks for a file and inserts it at the front of the currently selected line
+		  
+		  dim dlg as new OpenDialog
+		  dlg.PromptText = "Select a script that will be included for compilation purposes:"
+		  dlg.Filter = DocumentTypes.XojoScript
+		  dlg.MultiSelect = true
+		  
+		  dim include as FolderItem = dlg.ShowModalWithin( self )
+		  if include is nil then
+		    return
+		  end if
+		  
+		  //
+		  // Get the insertion point
+		  //
+		  dim curPos as integer = fldCode.SelStart
+		  dim curLine as integer = fldCode.LineNumAtCharPos( curPos )
+		  fldCode.SelStart = fldCode.CharPosAtLineNum( curLine ) // Front of the line
+		  fldCode.SelLength = 0
+		  
+		  dim lastFileIndex as integer = dlg.Count - 1
+		  for i as integer = 0 to lastFileIndex
+		    include = dlg.Item( i )
+		    dim path as string = include.NativePath
+		    dim insert as string = "'" + kIncludeDirective + " " + path + &uA
+		    fldCode.SelText = insert
+		  next
+		  
+		  //
+		  // Make sure this line is marked dirty
+		  //
+		  fldCode.SelText = " "
+		  fldCode.SelStart = fldCode.SelStart - 1
+		  fldCode.SelLength = 1
+		  fldCode.SelText = ""
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function InStrWithOptions(start As Integer = 1, src As String, options As SearchOptions) As Integer
 		  // Like InStr but will honor options and always return char position
 		  
@@ -801,6 +987,26 @@ End
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function LineAtLineIndex(lineIndex As Integer) As String
+		  // Returns the text of the line at lineIndex
+		  
+		  if lineIndex >= fldCode.LineCount then
+		    return ""
+		  end if
+		  
+		  dim startCharPos as integer = fldCode.CharPosAtLineNum( lineIndex ) + 1
+		  dim endCharPos as integer
+		  if lineIndex = ( fldCode.LineCount - 1 ) then
+		    endCharPos = fldCode.Text.Len
+		  else
+		    endCharPos = fldCode.CharPosAtLineNum( lineIndex + 1 ) + 1
+		  end if
+		  
+		  return fldCode.Text.Mid( startCharPos, endCharPos - startCharPos ).Trim
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub OpenDocument(f As FolderItem)
 		  if f is nil or not f.Exists then
@@ -821,6 +1027,26 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub RaiseBadIncludeException(msg As String, faultyLine As String)
+		  dim charStart as integer = fldCode.Text.InStr( faultyLine ) - 1
+		  dim lineNum as integer = fldCode.LineNumAtCharPos( charStart )
+		  fldCode.HighlightCharacterRange( charStart, faultyLine.Len, kColorError )
+		  fldCode.LineIcon( lineNum ) = errordata
+		  fldCode.HelpTag = msg
+		  
+		  LastCompilerErrorCode = kErrorIncludeError
+		  LastCompilerErrorLine = lineNum
+		  
+		  #pragma BreakOnExceptions false
+		  dim err as new XojoScriptException
+		  err.Message = msg
+		  raise err
+		  #pragma BreakOnExceptions default
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function Save() As Boolean
 		  if MyDocument is nil then
 		    return SaveAs()
@@ -831,6 +1057,7 @@ End
 		  fldCode.ClearDirtyLines
 		  
 		  CodeBeforeChanges = fldCode.Text
+		  SetTitle()
 		  
 		  return true
 		End Function
@@ -859,7 +1086,13 @@ End
 		  LastCompilerErrorCode = -1
 		  LastCompilerErrorLine = -1
 		  
-		  XS.Source = fldCode.Text
+		  dim src as string = fldCode.Text
+		  
+		  try
+		    src = InsertIncludedFiles( src )
+		  catch err as XojoScriptException
+		    return
+		  end try
 		  
 		  fldCode.ClearLineIcons
 		  fldCode.ClearHighlightedCharacterRanges
@@ -870,6 +1103,7 @@ End
 		  //
 		  
 		  XS.Reset
+		  XS.Source = src
 		  XS.Context = new IDEEmulator
 		  
 		  call XS.Precompile( XojoScript.OptimizationLevels.None )
@@ -913,8 +1147,8 @@ End
 		      raise ex
 		    end if
 		    
-		    IDESocket.Write fldCode.Text
-		    while IDESocket.BytesLeftToSend > 0
+		    IDESocket.Write XS.Source
+		    while IDESocket.BytesLeftToSend <> 0
 		      IDESocket.Poll
 		      if IDESocket.LastErrorCode <> 0 then
 		        dim ex as new RuntimeException
@@ -973,37 +1207,81 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub SelectAfterLineIndex(lineIndex As Integer)
+		  lineIndex = lineIndex + 1
+		  
+		  dim charPos as integer
+		  if lineIndex >= fldCode.LineCount then
+		    charPos = fldCode.Text.Len
+		  else
+		    charPos = fldCode.CharPosAtLineNum( lineIndex )
+		  end if
+		  fldCode.SelStart = charPos
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function SelectedLineIndexes() As Integer()
+		  // Returns an array of the line indexes that cover the current selection
+		  
+		  dim startLine as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
+		  dim endLine as integer = fldCode.LineNumAtCharPos( fldCode.SelStart + fldCode.SelLength )
+		  
+		  dim r() as integer
+		  for i as integer = startLine to endLine
+		    r.Append i
+		  next
+		  
+		  return r
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
-		  Autocompleter = new PaTrie
+		  if AutocompleterKeywords is nil then
+		    
+		    AutocompleterKeywords = new PaTrie
+		    
+		    for each keyword as String in ReplaceLineEndings( kAutoCompleteKeywords, &uA ).Trim.Split( &uA )
+		      keyword = keyword.Trim
+		      if keyword <> "" then
+		        call AutocompleterKeywords.AddKey( keyword, nil )
+		      end if
+		    next
+		    
+		    //
+		    // Add all methods and properties from IDEEmulator
+		    //
+		    
+		    dim ti as Introspection.TypeInfo = GetTypeInfo( IDEEmulator )
+		    
+		    //
+		    // Properties
+		    //
+		    dim props() as Introspection.PropertyInfo = ti.GetProperties
+		    for each prop as Introspection.PropertyInfo in props
+		      call AutocompleterKeywords.AddKey( prop.Name, nil )
+		    next
+		    
+		    //
+		    // Methods
+		    //
+		    dim methods() as Introspection.MethodInfo = ti.GetMethods
+		    for each method as Introspection.MethodInfo in methods
+		      call AutocompleterKeywords.AddKey( method.Name, nil )
+		    next
+		    
+		  end if
 		  
-		  for each keyword as String in ReplaceLineEndings( kAutoCompleteKeywords, &uA ).Trim.Split( &uA )
-		    keyword = keyword.Trim
-		    if keyword <> "" then
-		      call Autocompleter.AddKey( keyword, nil )
-		    end if
-		  next
-		  
 		  //
-		  // Add all methods and properties from IDEEmulator
+		  // Get all the keywords it can from the script up to that point
 		  //
 		  
-		  dim ti as Introspection.TypeInfo = GetTypeInfo( IDEEmulator )
-		  
-		  //
-		  // Properties
-		  //
-		  dim props() as Introspection.PropertyInfo = ti.GetProperties
-		  for each prop as Introspection.PropertyInfo in props
-		    call Autocompleter.AddKey( prop.Name, nil )
-		  next
-		  
-		  //
-		  // Methods
-		  //
-		  dim methods() as Introspection.MethodInfo = ti.GetMethods
-		  for each method as Introspection.MethodInfo in methods
-		    call Autocompleter.AddKey( method.Name, nil )
-		  next
+		  AutocompleterScript = new PaTrie
+		  ResumeSetAutocompleteAtLine = 0
+		  tmrSetAutocompleteScript.Mode = Timer.ModeSingle
+		  tmrSetAutocompleteScript.Reset
 		End Sub
 	#tag EndMethod
 
@@ -1057,7 +1335,11 @@ End
 
 
 	#tag Property, Flags = &h21
-		Private Autocompleter As PaTrie
+		Private AutocompleterKeywords As PaTrie
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private AutocompleterScript As PaTrie
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -1070,6 +1352,10 @@ End
 
 	#tag Property, Flags = &h21
 		Private LastCompilerErrorLine As Integer = -1
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private LineNumberAtLastSetAutocomplete As Integer
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -1090,6 +1376,10 @@ End
 		Private MyDocumentAlias As FolderItemAlias
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private ResumeSetAutocompleteAtLine As Integer = 0
+	#tag EndProperty
+
 
 	#tag Constant, Name = kAutoCompleteKeywords, Type = String, Dynamic = False, Default = \"AddHandler\nAddressOf\nArray\nAs\nAssigns\nBreak\nByRef\nByte\nByVal\nCall\nCase\nCatch\nClass\nConst\nContinue\nCType\nDeclare\nDim\nDo\nDouble\nDownTo\nEach\nElse\nElseIf\nEnd\nEnum\nEvent\nException\nExit\nExtends\nFalse\nFinally\nFor\nFunction\nGetTypeInfo\nGOTO\nHandles\nIf\nImplements\nInput\nInterface\nIn\nInherits\nInt8\nInt16\nInt32\nInt64\nInteger\nLib\nLoop\nModule\nNext\nNil\nOptional\nParamArray\nPrint\nPrivate\nProtected\nRaise\nRaiseEvent\nRedim\nRemoveHandler\nReturn\nSelect\nSoft\nStatic\nStep\nString\nStructure\nSub\nSuper\nText\nThen\nTo\nTrue\nTry\nUint8\nUInt16\nUInt32\nUInt64\nUInteger\nUntil\nUsing\nWend\nWhile", Scope = Private
 	#tag EndConstant
@@ -1104,6 +1394,15 @@ End
 	#tag EndConstant
 
 	#tag Constant, Name = kColorWarning, Type = Color, Dynamic = False, Default = \"&cDCE83D7F", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kCommentToken, Type = String, Dynamic = False, Default = \"\'", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kErrorIncludeError, Type = Double, Dynamic = False, Default = \"-99", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kIncludeDirective, Type = String, Dynamic = False, Default = \"#include", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kToolbarCompile, Type = String, Dynamic = False, Default = \"Compile", Scope = Public
@@ -1149,8 +1448,25 @@ End
 		Function AutocompleteOptionsForPrefix(prefix as string) As AutocompleteOptions
 		  dim options as new AutocompleteOptions
 		  options.Prefix = prefix
-		  dim commonPrefix as string
-		  options.Options = Autocompleter.WordsForPrefix( prefix, commonPrefix )
+		  dim commonPrefixKeywords as string
+		  dim keywords() as string = AutocompleterKeywords.WordsForPrefix( prefix, commonPrefixKeywords )
+		  dim commonPrefixScript as string
+		  dim scriptwords() as string = AutocompleterScript.WordsForPrefix( prefix, commonPrefixScript )
+		  
+		  //
+		  // Combine them
+		  //
+		  dim words() as string = keywords
+		  for i as integer = 0 to scriptwords.Ubound
+		    words.Append scriptwords( i )
+		  next
+		  
+		  dim commonPrefix as string = commonPrefixKeywords
+		  if commonPrefixScript.LenB < commonPrefixKeywords.LenB then
+		    commonPrefix = commonPrefixScript
+		  end if
+		  
+		  options.Options = words
 		  options.LongestCommonPrefix = commonPrefix
 		  
 		  return options
@@ -1191,6 +1507,21 @@ End
 		    return true
 		  end if
 		End Function
+	#tag EndEvent
+	#tag Event
+		Sub SelChanged(line as integer, column as integer, length as integer)
+		  #pragma unused column
+		  #pragma unused length
+		  
+		  //
+		  // This "line" is one-based
+		  //
+		  line = line - 1
+		  if line <> LineNumberAtLastSetAutocomplete then
+		    SetAutocompleteWords
+		  end if
+		  
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events sbVertical
@@ -1299,6 +1630,97 @@ End
 		  dim dlg as new DlgInput
 		  return dlg.ShowModalWithin( self, prompt )
 		End Function
+	#tag EndEvent
+#tag EndEvents
+#tag Events tmrSetAutocompleteScript
+	#tag Event
+		Sub Action()
+		  //
+		  // Set up the regexes
+		  //
+		  static rxDimFinder as RegEx
+		  if rxDimFinder is nil then
+		    rxDimFinder = new RegEx
+		    rxDimFinder.SearchPattern = "(?mi-Us)^\s*(?:dim|private|public|protected)\s+(?!sub\s+|function\s+|class\s+|module\s+|interface\s+)([^\s].*)"
+		  end if
+		  
+		  static rxAssignmentRemover as RegEx
+		  if rxAssignmentRemover is nil then
+		    rxAssignmentRemover = new RegEx
+		    rxAssignmentRemover.SearchPattern = "(?mi-Us)=\s*(?:""(?:""""|[^""])*""|[^\s,]+)?"
+		    rxAssignmentRemover.ReplacementPattern = ""
+		    rxAssignmentRemover.Options.ReplaceAllMatches = true
+		  end if
+		  
+		  static rxVariableFinder as RegEx
+		  if rxVariableFinder is nil then
+		    rxVariableFinder = new RegEx
+		    rxVariableFinder.SearchPattern = "(?Umi-s)((?:[^,]+,?)+)\s+as\s+(new\s+\w+|\w+)(?:,|\s|$)"
+		  end if
+		  
+		  static rxConstantFinder as RegEx
+		  if rxConstantFinder is nil then
+		    rxConstantFinder = new RegEx
+		    rxConstantFinder.SearchPattern = "^\s*const\s+([^\s]+)"
+		  end if
+		  
+		  static rxSubFinder as RegEx
+		  if rxSubFinder is nil then
+		    rxSubFinder = new RegEx
+		    rxSubFinder.SearchPattern = "^\s*(?:private\s+|public\s+|protected\s+)?(?:sub\s+|function\s+|module\s+|class\s+|interface\s+)([^\s()]+)"
+		  end if
+		  
+		  dim startTicks as integer = Ticks()
+		  const kThresholdTicks = 2
+		  dim targetTicks as integer = startTicks + kThresholdTicks
+		  
+		  dim curLineIndex as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
+		  dim lastLineIndex as integer =  curLineIndex - 1
+		  for lineIndex as integer = ResumeSetAutocompleteAtLine to lastLineIndex
+		    if Ticks > targetTicks then
+		      ResumeSetAutocompleteAtLine = lineIndex
+		      me.Mode = Timer.ModeSingle
+		      return
+		    end if
+		    
+		    dim thisLine as string = LineAtLineIndex( lineIndex )
+		    dim match as RegExMatch
+		    
+		    match = rxDimFinder.Search( thisLine )
+		    if match IsA RegExMatch then
+		      dim part as string = match.SubExpressionString( 1 )
+		      part = rxAssignmentRemover.Replace( part )
+		      dim varMatch as RegExMatch = rxVariableFinder.Search( part )
+		      while varMatch IsA RegExMatch
+		        dim vars() as string = varMatch.SubExpressionString( 1 ).Split( "," )
+		        for each var as string in vars
+		          var = var.NthField( "(", 1 )
+		          call AutocompleterScript.AddKey( var.Trim )
+		        next
+		        
+		        varMatch = rxVariableFinder.Search
+		      wend
+		      
+		      continue for lineIndex
+		    end if
+		    
+		    match = rxConstantFinder.Search( thisLine )
+		    if match IsA RegExMatch then
+		      call AutocompleterScript.AddKey( match.SubExpressionString( 1 ) )
+		      continue for lineIndex
+		    end if
+		    
+		    match = rxSubFinder.Search( thisLine )
+		    if match IsA RegExMatch then
+		      call AutocompleterScript.AddKey( match.SubExpressionString( 1 ) )
+		      continue for lineIndex
+		    end if
+		    
+		  next
+		  
+		  LineNumberAtLastSetAutocomplete = curLineIndex
+		  
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag ViewBehavior

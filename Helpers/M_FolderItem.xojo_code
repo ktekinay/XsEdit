@@ -300,7 +300,7 @@ Protected Module M_FolderItem
 
 	#tag Method, Flags = &h0
 		Function ExpandShellPath_MTC(path As String) As String
-		  #if TargetMacOS or TargetLinux
+		  #if TargetLinux
 		    
 		    dim sh as new Shell
 		    sh.Execute "readlink -f " + path
@@ -309,6 +309,17 @@ Protected Module M_FolderItem
 		    path = ReplaceLineEndings( path, "" )
 		    
 		    path = ShellPathFromPOSIXPath_MTC( path ) // Get it back to a shell path
+		    
+		  #elseif TargetMacOS
+		    
+		    dim sh as new Shell
+		    sh.Execute "echo " + path
+		    path = sh.Result
+		    path = path.ConvertEncoding( Encodings.UTF8 )
+		    path = ReplaceLineEndings( path, "" )
+		    
+		    path = ShellPathFromPOSIXPath_MTC( path ) // Get it back to a shell path
+		    
 		  #endif
 		  
 		  return path
@@ -414,6 +425,112 @@ Protected Module M_FolderItem
 		  
 		  return f
 		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetRelativeFolderItem_MTC(nativePath As String, relativeTo As FolderItem = Nil) As FolderItem
+		  // Stolen from Jeremy Cowgar, which is why the paren spacing is wrong
+		  
+		  dim prefix as String = ""
+		  
+		  #if targetwin32 then
+		    const pathSep = "\"
+		    
+		    //
+		    // Maybe what is passed isn't actually a relative nativePath
+		    //
+		    
+		    if nativePath.Mid( 2, 1 ) = ":" then
+		      return GetFolderItem( nativePath, FolderItem.PathTypeNative )
+		    end if
+		    
+		    if nativePath.Left( 1 ) = pathSep then
+		      relativeTo = GetFolderItem( SpecialFolder.CurrentWorkingDirectory.NativePath.Left( 3 ) )
+		    end if
+		    
+		  #else
+		    const pathSep = "/"
+		    
+		    //
+		    // Maybe what is passed isn't actually a relative nativePath
+		    //
+		    
+		    if nativePath.Left( pathSep.Len ) = pathSep then
+		      relativeTo = Volume( 0 )
+		      nativePath = nativePath.Mid( pathSep.Len + 1 )
+		      
+		      //
+		      // See if it's a home path
+		      //
+		    elseif nativePath.Left( pathSep.Len + 1 ) = ( "~" + pathSep ) or nativePath = "~" then
+		      relativeTo = SpecialFolder.UserHome
+		      nativePath = nativePath.Mid( pathSep.Len + 1 )
+		      
+		      //
+		      // See if it's another user's home folder
+		      //
+		    elseif nativePath.Left( 1 ) = "~" then
+		      dim homePath as string = nativePath.NthField( pathSep, 1 )
+		      dim homePathShell as string = ShellPathFromPOSIXPath_MTC( homePath )
+		      
+		      dim sh as new Shell
+		      sh.Execute "cd " + homePathShell + " && pwd"
+		      dim thisPath as string = sh.Result.DefineEncoding( Encodings.UTF8 ).Trim
+		      if thisPath.Right( 1 ) = pathSep then
+		        thisPath = thisPath.Left( thisPath.Len - pathSep.Len )
+		      end if
+		      
+		      relativeTo = GetFolderItem( thisPath, FolderItem.PathTypeNative )
+		      nativePath = nativePath.Mid( homePath.Len + pathSep.Len + 1 )
+		      
+		    end if
+		    
+		    prefix = pathSep
+		  #endif
+		  
+		  //
+		  // OK, seems to be a relative nativePath
+		  //
+		  
+		  if relativeTo = nil then
+		    relativeTo = SpecialFolder.CurrentWorkingDirectory
+		  end if
+		  
+		  nativePath = relativeTo.NativePath + pathSep + nativePath
+		  
+		  //
+		  // We have to parse all the parts individually because the path may
+		  // not exist
+		  //
+		  
+		  dim newParts() as String
+		  
+		  dim pathParts() as String = nativePath.Split( pathSep )
+		  for i as Integer = 0 to pathParts.Ubound
+		    dim p as String = pathParts( i )
+		    if p = "" then
+		      // Can happen on Windows since it appends a pathSep onto the end of NativePath
+		      // if relativeTo is a folder.
+		      
+		    elseif p = "." then
+		      // Skip this nativePath component
+		      
+		    elseif p = ".." then
+		      // Remove the last nativePath component from newParts
+		      if newParts.Ubound <> -1 then
+		        newParts.Remove newParts.Ubound
+		      end if
+		      
+		    else
+		      // Nothing special about this nativePath component
+		      newParts.Append p
+		    end if
+		  next
+		  
+		  nativePath = prefix + Join( newParts, pathSep )
+		  
+		  return GetFolderItem( nativePath, FolderItem.PathTypeNative )
 		End Function
 	#tag EndMethod
 

@@ -176,6 +176,34 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin MenuItem EditComment
+         SpecialMenu = 0
+         Text = "Comment"
+         Index = -2147483648
+         ShortcutKey = "'"
+         Shortcut = "Cmd+'"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem EditUncomment
+         SpecialMenu = 0
+         Text = "Uncomment"
+         Index = -2147483648
+         ShortcutKey = "'"
+         Shortcut = "Cmd+Shift+'"
+         MenuModifier = True
+         AltMenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem UntitledSeparator5
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
       Begin MenuItem EditFind
          SpecialMenu = 0
          Text = "Find"
@@ -279,6 +307,20 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin MenuItem UntitledSeparator3
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ScriptInsertInclude
+         SpecialMenu = 0
+         Text = "Insert Include File..."
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
    End
    Begin MenuItem HelpMenu
       SpecialMenu = 0
@@ -286,6 +328,20 @@ Begin Menu MainMenuBar
       Index = -2147483648
       AutoEnable = True
       Visible = True
+      Begin MenuItem HelpXojoScriptingLanguageDocs
+         SpecialMenu = 0
+         Text = "Xojo Scripting Language Documentation"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem UntitledSeparator6
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
       Begin ApplicationMenuItem HelpAbout
          SpecialMenu = 0
          Text = "About"
