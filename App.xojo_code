@@ -90,6 +90,14 @@ Inherits Application
 		End Function
 	#tag EndMenuHandler
 
+	#tag MenuHandler
+		Function HelpXojoScriptingLanguageDocs() As Boolean Handles HelpXojoScriptingLanguageDocs.Action
+			ShowURL "http://docs.xojo.com/index.php/Scripting_Language"
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
 
 	#tag Method, Flags = &h0
 		Sub CloseAllWindows()

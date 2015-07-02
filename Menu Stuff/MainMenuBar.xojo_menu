@@ -328,6 +328,20 @@ Begin Menu MainMenuBar
       Index = -2147483648
       AutoEnable = True
       Visible = True
+      Begin MenuItem HelpXojoScriptingLanguageDocs
+         SpecialMenu = 0
+         Text = "Xojo Scripting Language Documentation"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem UntitledSeparator6
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
       Begin ApplicationMenuItem HelpAbout
          SpecialMenu = 0
          Text = "About"
