@@ -427,6 +427,8 @@ End
 			return true
 			end if
 			
+			fldCode.IgnoreRepaint = true
+			
 			for each index as integer in lineIndexes
 			dim charPos as integer = fldCode.CharPosAtLineNum( index )
 			fldCode.SelStart = charPos
@@ -438,6 +440,9 @@ End
 			// Select after the last line
 			//
 			SelectAfterLineIndex( lineIndexes( lineIndexes.Ubound ) )
+			
+			fldCode.IgnoreRepaint = false
+			fldCode.Invalidate
 			
 			Return True
 			
