@@ -22,7 +22,7 @@ Some of the benefits of XsEdit over the native XojoScript editor:
 
 Download and build the project. Start up the XsEdit app and either create a new script or open an existing one. Use the Compile and Run In IDE buttons to compile or run.
 
-### Test Run
+### About Test Run
 
 The Test Run button will force your script to run directly in XsEdit. This is good for testing small scripts but any IDE scripting methods or functions like `Location` will not actually do anything.
 
