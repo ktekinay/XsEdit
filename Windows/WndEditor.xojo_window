@@ -984,7 +984,7 @@ End
 		    endCharPos = fldCode.CharPosAtLineNum( lineIndex + 1 ) + 1
 		  end if
 		  
-		  return fldCode.Text.Mid( startCharPos, endCharPos - startCharPos - 1 )
+		  return fldCode.Text.Mid( startCharPos, endCharPos - startCharPos ).Trim
 		End Function
 	#tag EndMethod
 
