@@ -1250,6 +1250,59 @@ End
 		  for each method as Introspection.MethodInfo in methods
 		    call Autocompleter.AddKey( method.Name, nil )
 		  next
+		  
+		  //
+		  // Get all the keywords it can from the script up to that point
+		  //
+		  
+		  //
+		  // Set up the regexes
+		  //
+		  static rxDim as RegEx
+		  if rxDim is nil then
+		    rxDim = new RegEx
+		    rxDim.SearchPattern = "^\s*dim\s+(.*)"
+		  end if
+		  
+		  static rxAssignmentRemover as RegEx
+		  if rxAssignmentRemover is nil then
+		    rxAssignmentRemover = new RegEx
+		    rxAssignmentRemover.SearchPattern = "(?mi-Us)=\s*(?:""(?:""""|[^""])*""|[^\s,]+)?"
+		    rxAssignmentRemover.ReplacementPattern = ""
+		    rxAssignmentRemover.Options.ReplaceAllMatches = true
+		  end if
+		  
+		  static rxVariableFinder as RegEx
+		  if rxVariableFinder is nil then
+		    rxVariableFinder = new RegEx
+		    rxVariableFinder.SearchPattern = "(?Umi-s)((?:[^,]+,?)+)\s+as\s+\w+(?:,|\s|$)"
+		  end if
+		  
+		   dim curLineIndex as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
+		  dim lastLineIndex as integer =  curLineIndex - 1
+		  for lineIndex as integer = 0 to lastLineIndex
+		    dim thisLine as string = LineAtLineIndex( lineIndex )
+		    dim match as RegExMatch
+		    
+		    match = rxDim.Search( thisLine )
+		    if match IsA RegExMatch then
+		      dim part as string = match.SubExpressionString( 1 )
+		      part = rxAssignmentRemover.Replace( part )
+		      dim varMatch as RegExMatch = rxVariableFinder.Search( part )
+		      while varMatch IsA RegExMatch
+		        dim vars() as string = varMatch.SubExpressionString( 1 ).Split( "," )
+		        for each var as string in vars
+		          call Autocompleter.AddKey( var.Trim )
+		        next
+		        
+		        varMatch = rxVariableFinder.Search
+		      wend
+		      
+		      continue for lineIndex
+		    end if
+		  next
+		  
+		  LineNumberAtLastSetAutocomplete = curLineIndex
 		End Sub
 	#tag EndMethod
 
