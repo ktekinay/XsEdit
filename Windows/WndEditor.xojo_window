@@ -215,6 +215,7 @@ Begin SearchReceiverWindowBase WndEditor
    Begin Timer tmrSetAutocompleteScript
       Height          =   32
       Index           =   -2147483648
+      InitialParent   =   ""
       Left            =   0
       LockedInPosition=   False
       Mode            =   0
@@ -1441,10 +1442,22 @@ End
 		Function AutocompleteOptionsForPrefix(prefix as string) As AutocompleteOptions
 		  dim options as new AutocompleteOptions
 		  options.Prefix = prefix
-		  dim commonPrefix as string
-		  dim words() as string = AutocompleterKeywords.WordsForPrefix( prefix, commonPrefix )
-		  if words.Ubound = -1 then
-		    words = AutocompleterScript.WordsForPrefix( prefix, commonPrefix )
+		  dim commonPrefixKeywords as string
+		  dim keywords() as string = AutocompleterKeywords.WordsForPrefix( prefix, commonPrefixKeywords )
+		  dim commonPrefixScript as string
+		  dim scriptwords() as string = AutocompleterScript.WordsForPrefix( prefix, commonPrefixScript )
+		  
+		  //
+		  // Combine them
+		  //
+		  dim words() as string = keywords
+		  for i as integer = 0 to scriptwords.Ubound
+		    words.Append scriptwords( i )
+		  next
+		  
+		  dim commonPrefix as string = commonPrefixKeywords
+		  if commonPrefixScript.LenB < commonPrefixKeywords.LenB then
+		    commonPrefix = commonPrefixScript
 		  end if
 		  
 		  options.Options = words
