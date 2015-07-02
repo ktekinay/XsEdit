@@ -212,6 +212,19 @@ Begin SearchReceiverWindowBase WndEditor
       Top             =   0
       Width           =   32
    End
+   Begin Timer tmrSetAutocompleteScript
+      Height          =   32
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   0
+      LockedInPosition=   False
+      Mode            =   0
+      Period          =   10
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   0
+      Width           =   32
+   End
 End
 #tag EndWindow
 
@@ -968,6 +981,26 @@ End
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function LineAtLineIndex(lineIndex As Integer) As String
+		  // Returns the text of the line at lineIndex
+		  
+		  if lineIndex >= fldCode.LineCount then
+		    return ""
+		  end if
+		  
+		  dim startCharPos as integer = fldCode.CharPosAtLineNum( lineIndex ) + 1
+		  dim endCharPos as integer
+		  if lineIndex = ( fldCode.LineCount - 1 ) then
+		    endCharPos = fldCode.Text.Len
+		  else
+		    endCharPos = fldCode.CharPosAtLineNum( lineIndex + 1 ) + 1
+		  end if
+		  
+		  return fldCode.Text.Mid( startCharPos, endCharPos - startCharPos ).Trim
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub OpenDocument(f As FolderItem)
 		  if f is nil or not f.Exists then
@@ -1200,36 +1233,49 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
-		  Autocompleter = new PaTrie
+		  if AutocompleterKeywords is nil then
+		    
+		    AutocompleterKeywords = new PaTrie
+		    
+		    for each keyword as String in ReplaceLineEndings( kAutoCompleteKeywords, &uA ).Trim.Split( &uA )
+		      keyword = keyword.Trim
+		      if keyword <> "" then
+		        call AutocompleterKeywords.AddKey( keyword, nil )
+		      end if
+		    next
+		    
+		    //
+		    // Add all methods and properties from IDEEmulator
+		    //
+		    
+		    dim ti as Introspection.TypeInfo = GetTypeInfo( IDEEmulator )
+		    
+		    //
+		    // Properties
+		    //
+		    dim props() as Introspection.PropertyInfo = ti.GetProperties
+		    for each prop as Introspection.PropertyInfo in props
+		      call AutocompleterKeywords.AddKey( prop.Name, nil )
+		    next
+		    
+		    //
+		    // Methods
+		    //
+		    dim methods() as Introspection.MethodInfo = ti.GetMethods
+		    for each method as Introspection.MethodInfo in methods
+		      call AutocompleterKeywords.AddKey( method.Name, nil )
+		    next
+		    
+		  end if
 		  
-		  for each keyword as String in ReplaceLineEndings( kAutoCompleteKeywords, &uA ).Trim.Split( &uA )
-		    keyword = keyword.Trim
-		    if keyword <> "" then
-		      call Autocompleter.AddKey( keyword, nil )
-		    end if
-		  next
-		  
 		  //
-		  // Add all methods and properties from IDEEmulator
+		  // Get all the keywords it can from the script up to that point
 		  //
 		  
-		  dim ti as Introspection.TypeInfo = GetTypeInfo( IDEEmulator )
-		  
-		  //
-		  // Properties
-		  //
-		  dim props() as Introspection.PropertyInfo = ti.GetProperties
-		  for each prop as Introspection.PropertyInfo in props
-		    call Autocompleter.AddKey( prop.Name, nil )
-		  next
-		  
-		  //
-		  // Methods
-		  //
-		  dim methods() as Introspection.MethodInfo = ti.GetMethods
-		  for each method as Introspection.MethodInfo in methods
-		    call Autocompleter.AddKey( method.Name, nil )
-		  next
+		  AutocompleterScript = new PaTrie
+		  ResumeSetAutocompleteAtLine = 0
+		  tmrSetAutocompleteScript.Mode = Timer.ModeSingle
+		  tmrSetAutocompleteScript.Reset
 		End Sub
 	#tag EndMethod
 
@@ -1283,7 +1329,11 @@ End
 
 
 	#tag Property, Flags = &h21
-		Private Autocompleter As PaTrie
+		Private AutocompleterKeywords As PaTrie
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private AutocompleterScript As PaTrie
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -1296,6 +1346,10 @@ End
 
 	#tag Property, Flags = &h21
 		Private LastCompilerErrorLine As Integer = -1
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private LineNumberAtLastSetAutocomplete As Integer
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -1314,6 +1368,10 @@ End
 
 	#tag Property, Flags = &h21
 		Private MyDocumentAlias As FolderItemAlias
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private ResumeSetAutocompleteAtLine As Integer = 0
 	#tag EndProperty
 
 
@@ -1384,8 +1442,25 @@ End
 		Function AutocompleteOptionsForPrefix(prefix as string) As AutocompleteOptions
 		  dim options as new AutocompleteOptions
 		  options.Prefix = prefix
-		  dim commonPrefix as string
-		  options.Options = Autocompleter.WordsForPrefix( prefix, commonPrefix )
+		  dim commonPrefixKeywords as string
+		  dim keywords() as string = AutocompleterKeywords.WordsForPrefix( prefix, commonPrefixKeywords )
+		  dim commonPrefixScript as string
+		  dim scriptwords() as string = AutocompleterScript.WordsForPrefix( prefix, commonPrefixScript )
+		  
+		  //
+		  // Combine them
+		  //
+		  dim words() as string = keywords
+		  for i as integer = 0 to scriptwords.Ubound
+		    words.Append scriptwords( i )
+		  next
+		  
+		  dim commonPrefix as string = commonPrefixKeywords
+		  if commonPrefixScript.LenB < commonPrefixKeywords.LenB then
+		    commonPrefix = commonPrefixScript
+		  end if
+		  
+		  options.Options = words
 		  options.LongestCommonPrefix = commonPrefix
 		  
 		  return options
@@ -1426,6 +1501,21 @@ End
 		    return true
 		  end if
 		End Function
+	#tag EndEvent
+	#tag Event
+		Sub SelChanged(line as integer, column as integer, length as integer)
+		  #pragma unused column
+		  #pragma unused length
+		  
+		  //
+		  // This "line" is one-based
+		  //
+		  line = line - 1
+		  if line <> LineNumberAtLastSetAutocomplete then
+		    SetAutocompleteWords
+		  end if
+		  
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events sbVertical
@@ -1534,6 +1624,97 @@ End
 		  dim dlg as new DlgInput
 		  return dlg.ShowModalWithin( self, prompt )
 		End Function
+	#tag EndEvent
+#tag EndEvents
+#tag Events tmrSetAutocompleteScript
+	#tag Event
+		Sub Action()
+		  //
+		  // Set up the regexes
+		  //
+		  static rxDimFinder as RegEx
+		  if rxDimFinder is nil then
+		    rxDimFinder = new RegEx
+		    rxDimFinder.SearchPattern = "(?mi-Us)^\s*(?:dim|private|public|protected)\s+(?!sub\s+|function\s+|class\s+|module\s+|interface\s+)([^\s].*)"
+		  end if
+		  
+		  static rxAssignmentRemover as RegEx
+		  if rxAssignmentRemover is nil then
+		    rxAssignmentRemover = new RegEx
+		    rxAssignmentRemover.SearchPattern = "(?mi-Us)=\s*(?:""(?:""""|[^""])*""|[^\s,]+)?"
+		    rxAssignmentRemover.ReplacementPattern = ""
+		    rxAssignmentRemover.Options.ReplaceAllMatches = true
+		  end if
+		  
+		  static rxVariableFinder as RegEx
+		  if rxVariableFinder is nil then
+		    rxVariableFinder = new RegEx
+		    rxVariableFinder.SearchPattern = "(?Umi-s)((?:[^,]+,?)+)\s+as\s+(new\s+\w+|\w+)(?:,|\s|$)"
+		  end if
+		  
+		  static rxConstantFinder as RegEx
+		  if rxConstantFinder is nil then
+		    rxConstantFinder = new RegEx
+		    rxConstantFinder.SearchPattern = "^\s*const\s+([^\s]+)"
+		  end if
+		  
+		  static rxSubFinder as RegEx
+		  if rxSubFinder is nil then
+		    rxSubFinder = new RegEx
+		    rxSubFinder.SearchPattern = "^\s*(?:private\s+|public\s+|protected\s+)?(?:sub\s+|function\s+|module\s+|class\s+|interface\s+)([^\s()]+)"
+		  end if
+		  
+		  dim startTicks as integer = Ticks()
+		  const kThresholdTicks = 2
+		  dim targetTicks as integer = startTicks + kThresholdTicks
+		  
+		  dim curLineIndex as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
+		  dim lastLineIndex as integer =  curLineIndex - 1
+		  for lineIndex as integer = ResumeSetAutocompleteAtLine to lastLineIndex
+		    if Ticks > targetTicks then
+		      ResumeSetAutocompleteAtLine = lineIndex
+		      me.Mode = Timer.ModeSingle
+		      return
+		    end if
+		    
+		    dim thisLine as string = LineAtLineIndex( lineIndex )
+		    dim match as RegExMatch
+		    
+		    match = rxDimFinder.Search( thisLine )
+		    if match IsA RegExMatch then
+		      dim part as string = match.SubExpressionString( 1 )
+		      part = rxAssignmentRemover.Replace( part )
+		      dim varMatch as RegExMatch = rxVariableFinder.Search( part )
+		      while varMatch IsA RegExMatch
+		        dim vars() as string = varMatch.SubExpressionString( 1 ).Split( "," )
+		        for each var as string in vars
+		          var = var.NthField( "(", 1 )
+		          call AutocompleterScript.AddKey( var.Trim )
+		        next
+		        
+		        varMatch = rxVariableFinder.Search
+		      wend
+		      
+		      continue for lineIndex
+		    end if
+		    
+		    match = rxConstantFinder.Search( thisLine )
+		    if match IsA RegExMatch then
+		      call AutocompleterScript.AddKey( match.SubExpressionString( 1 ) )
+		      continue for lineIndex
+		    end if
+		    
+		    match = rxSubFinder.Search( thisLine )
+		    if match IsA RegExMatch then
+		      call AutocompleterScript.AddKey( match.SubExpressionString( 1 ) )
+		      continue for lineIndex
+		    end if
+		    
+		  next
+		  
+		  LineNumberAtLastSetAutocomplete = curLineIndex
+		  
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag ViewBehavior
