@@ -727,6 +727,38 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub InsertIncludeDirective()
+		  // Asks for a file and inserts it at the front of the currently selected line
+		  
+		  dim dlg as new OpenDialog
+		  dlg.PromptText = "Select a script that will be included for compilation purposes:"
+		  dlg.Filter = DocumentTypes.XojoScript
+		  dlg.MultiSelect = true
+		  
+		  dim include as FolderItem = dlg.ShowModalWithin( self )
+		  if include is nil then
+		    return
+		  end if
+		  
+		  //
+		  // Get the insertion point
+		  //
+		  dim curPos as integer = fldCode.SelStart
+		  dim curLine as integer = fldCode.LineNumAtCharPos( curPos )
+		  fldCode.SelStart = fldCode.CharPosAtLineNum( curLine ) // Front of the line
+		  fldCode.SelLength = 0
+		  
+		  dim lastFileIndex as integer = dlg.Count - 1
+		  for i as integer = 0 to lastFileIndex
+		    include = dlg.Item( i )
+		    dim path as string = include.NativePath
+		    dim insert as string = "'" + kIncludeDirective + " " + path + &uA
+		    fldCode.SelText = insert
+		  next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function InStrWithOptions(start As Integer = 1, src As String, options As SearchOptions) As Integer
 		  // Like InStr but will honor options and always return char position
 		  
@@ -1098,6 +1130,9 @@ End
 	#tag EndConstant
 
 	#tag Constant, Name = kColorWarning, Type = Color, Dynamic = False, Default = \"&cDCE83D7F", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kIncludeDirective, Type = String, Dynamic = False, Default = \"#include", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kToolbarCompile, Type = String, Dynamic = False, Default = \"Compile", Scope = Public
