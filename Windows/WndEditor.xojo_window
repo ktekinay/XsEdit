@@ -476,6 +476,48 @@ End
 	#tag EndMenuHandler
 
 	#tag MenuHandler
+		Function EditUncomment() As Boolean Handles EditUncomment.Action
+			dim lineIndexes() as integer = SelectedLineIndexes
+			if lineIndexes.Ubound = -1 then
+			return true
+			end if
+			
+			dim rx as new RegEx
+			rx.SearchPattern = "^([\x20\t]*)(" + kCommentToken + ")"
+			rx.ReplacementPattern = "$1"
+			
+			fldCode.IgnoreRepaint = true
+			
+			for each lineIndex as integer in lineIndexes
+			dim startPos as integer = fldCode.CharPosAtLineNum( lineIndex )
+			dim endPos as integer
+			if lineIndex >= fldCode.LineCount then
+			endPos = fldCode.Text.Len
+			else
+			endPos = fldCode.CharPosAtLineNum( lineIndex + 1 )
+			end if
+			fldCode.SelStart = startPos
+			fldCode.SelLength = endPos - startPos
+			dim thisLine as string = fldCode.SelText
+			dim origLine as string = thisLine
+			
+			thisLine = rx.Replace( thisLine )
+			if thisLine <> origLine then
+			fldCode.SelText = thisLine
+			end if
+			next
+			
+			SelectAfterLineIndex( lineIndexes( lineIndexes.Ubound ) )
+			
+			fldCode.IgnoreRepaint = false
+			fldCode.Invalidate
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function EditUndo() As Boolean Handles EditUndo.Action
 			fldCode.Undo
 			Return True
