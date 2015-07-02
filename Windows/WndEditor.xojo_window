@@ -1275,7 +1275,7 @@ End
 		  static rxVariableFinder as RegEx
 		  if rxVariableFinder is nil then
 		    rxVariableFinder = new RegEx
-		    rxVariableFinder.SearchPattern = "(?Umi-s)((?:[^,]+,?)+)\s+as\s+\w+(?:,|\s|$)"
+		    rxVariableFinder.SearchPattern = "(?Umi-s)((?:[^,]+,?)+)\s+as\s+(new\s+\w+|\w+)(?:,|\s|$)"
 		  end if
 		  
 		   dim curLineIndex as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
