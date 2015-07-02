@@ -279,6 +279,20 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin MenuItem UntitledSeparator3
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ScriptInsertInclude
+         SpecialMenu = 0
+         Text = "Insert Include File..."
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
    End
    Begin MenuItem HelpMenu
       SpecialMenu = 0
