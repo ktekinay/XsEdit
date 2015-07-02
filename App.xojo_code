@@ -18,6 +18,37 @@ Inherits Application
 	#tag EndEvent
 
 	#tag Event
+		Function HandleAppleEvent(theEvent As AppleEvent, eventClass As String, eventID As String) As Boolean
+		  #pragma unused theEvent
+		  
+		  #if not TargetMacOS
+		    #pragma unused eventClass
+		    #pragma unused eventID
+		    
+		  #else
+		    
+		    if StrComp( eventClass, "aevt", 0 ) = 0 and StrComp( eventID, "rapp", 0 ) = 0 then
+		      dim isVisibleWindow as boolean
+		      dim lastWindowIndex as integer = WindowCount - 1
+		      for i as integer = 0 to lastWindowIndex
+		        if Window( i ).Visible then
+		          isVisibleWindow = true
+		          exit
+		        end if
+		      next
+		      
+		      if not isVisibleWindow then
+		        NewDocument
+		      end if
+		      
+		      return true
+		    end if
+		    
+		  #endif
+		End Function
+	#tag EndEvent
+
+	#tag Event
 		Sub NewDocument()
 		  dim w as new WndEditor
 		  w.Show
