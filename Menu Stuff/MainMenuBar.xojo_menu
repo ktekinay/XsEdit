@@ -176,6 +176,34 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin MenuItem EditComment
+         SpecialMenu = 0
+         Text = "Comment"
+         Index = -2147483648
+         ShortcutKey = "'"
+         Shortcut = "Cmd+'"
+         MenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem EditUncomment
+         SpecialMenu = 0
+         Text = "Uncomment"
+         Index = -2147483648
+         ShortcutKey = "'"
+         Shortcut = "Cmd+Shift+'"
+         MenuModifier = True
+         AltMenuModifier = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem UntitledSeparator5
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
       Begin MenuItem EditFind
          SpecialMenu = 0
          Text = "Find"

@@ -421,6 +421,35 @@ End
 
 
 	#tag MenuHandler
+		Function EditComment() As Boolean Handles EditComment.Action
+			dim lineIndexes() as integer = SelectedLineIndexes
+			if lineIndexes.Ubound = -1 then
+			return true
+			end if
+			
+			fldCode.IgnoreRepaint = true
+			
+			for each index as integer in lineIndexes
+			dim charPos as integer = fldCode.CharPosAtLineNum( index )
+			fldCode.SelStart = charPos
+			fldCode.SelLength = 0
+			fldCode.SelText = kCommentToken
+			next
+			
+			//
+			// Select after the last line
+			//
+			SelectAfterLineIndex( lineIndexes( lineIndexes.Ubound ) )
+			
+			fldCode.IgnoreRepaint = false
+			fldCode.Invalidate
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function EditFindNext() As Boolean Handles EditFindNext.Action
 			DoFindNext
 			
@@ -441,6 +470,48 @@ End
 	#tag MenuHandler
 		Function EditRedo() As Boolean Handles EditRedo.Action
 			fldCode.Redo
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditUncomment() As Boolean Handles EditUncomment.Action
+			dim lineIndexes() as integer = SelectedLineIndexes
+			if lineIndexes.Ubound = -1 then
+			return true
+			end if
+			
+			dim rx as new RegEx
+			rx.SearchPattern = "^([\x20\t]*)(" + kCommentToken + ")"
+			rx.ReplacementPattern = "$1"
+			
+			fldCode.IgnoreRepaint = true
+			
+			for each lineIndex as integer in lineIndexes
+			dim startPos as integer = fldCode.CharPosAtLineNum( lineIndex )
+			dim endPos as integer
+			if lineIndex >= fldCode.LineCount then
+			endPos = fldCode.Text.Len
+			else
+			endPos = fldCode.CharPosAtLineNum( lineIndex + 1 )
+			end if
+			fldCode.SelStart = startPos
+			fldCode.SelLength = endPos - startPos
+			dim thisLine as string = fldCode.SelText
+			dim origLine as string = thisLine
+			
+			thisLine = rx.Replace( thisLine )
+			if thisLine <> origLine then
+			fldCode.SelText = thisLine
+			end if
+			next
+			
+			SelectAfterLineIndex( lineIndexes( lineIndexes.Ubound ) )
+			
+			fldCode.IgnoreRepaint = false
+			fldCode.Invalidate
+			
 			Return True
 			
 		End Function
@@ -1097,6 +1168,37 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub SelectAfterLineIndex(lineIndex As Integer)
+		  lineIndex = lineIndex + 1
+		  
+		  dim charPos as integer
+		  if lineIndex >= fldCode.LineCount then
+		    charPos = fldCode.Text.Len
+		  else
+		    charPos = fldCode.CharPosAtLineNum( lineIndex )
+		  end if
+		  fldCode.SelStart = charPos
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function SelectedLineIndexes() As Integer()
+		  // Returns an array of the line indexes that cover the current selection
+		  
+		  dim startLine as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
+		  dim endLine as integer = fldCode.LineNumAtCharPos( fldCode.SelStart + fldCode.SelLength )
+		  
+		  dim r() as integer
+		  for i as integer = startLine to endLine
+		    r.Append i
+		  next
+		  
+		  return r
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
 		  Autocompleter = new PaTrie
 		  
@@ -1228,6 +1330,9 @@ End
 	#tag EndConstant
 
 	#tag Constant, Name = kColorWarning, Type = Color, Dynamic = False, Default = \"&cDCE83D7F", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kCommentToken, Type = String, Dynamic = False, Default = \"\'", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kErrorIncludeError, Type = Double, Dynamic = False, Default = \"-99", Scope = Private
