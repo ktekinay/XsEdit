@@ -1456,15 +1456,16 @@ End
 		  //
 		  // Combine them
 		  //
-		  dim words() as string = keywords
-		  for i as integer = 0 to scriptwords.Ubound
-		    words.Append scriptwords( i )
+		  dim commonPraTrie as new PaTrie
+		  for each word as string in keywords
+		    call commonPraTrie.AddKey( word )
+		  next
+		  for each word as string in scriptwords
+		    call commonPraTrie.AddKey( word )
 		  next
 		  
-		  dim commonPrefix as string = commonPrefixKeywords
-		  if commonPrefixScript.LenB < commonPrefixKeywords.LenB then
-		    commonPrefix = commonPrefixScript
-		  end if
+		  dim commonPrefix as string
+		  dim words() as string = commonPraTrie.WordsForPrefix( prefix, commonPrefix )
 		  
 		  options.Options = words
 		  options.LongestCommonPrefix = commonPrefix
