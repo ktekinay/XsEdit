@@ -1440,6 +1440,14 @@ End
 	#tag EndEvent
 	#tag Event
 		Function AutocompleteOptionsForPrefix(prefix as string) As AutocompleteOptions
+		  //
+		  // If there is a dot in the prefix, strip the text before it
+		  //
+		  if prefix <> "" then
+		    dim prefixParts() as string = prefix.Split( "." )
+		    prefix = prefixParts( prefixParts.Ubound )
+		  end if
+		  
 		  dim options as new AutocompleteOptions
 		  options.Prefix = prefix
 		  dim commonPrefixKeywords as string
