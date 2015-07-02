@@ -300,7 +300,7 @@ Protected Module M_FolderItem
 
 	#tag Method, Flags = &h0
 		Function ExpandShellPath_MTC(path As String) As String
-		  #if TargetMacOS or TargetLinux
+		  #if TargetLinux
 		    
 		    dim sh as new Shell
 		    sh.Execute "readlink -f " + path
@@ -309,6 +309,17 @@ Protected Module M_FolderItem
 		    path = ReplaceLineEndings( path, "" )
 		    
 		    path = ShellPathFromPOSIXPath_MTC( path ) // Get it back to a shell path
+		    
+		  #elseif TargetMacOS
+		    
+		    dim sh as new Shell
+		    sh.Execute "echo " + path
+		    path = sh.Result
+		    path = path.ConvertEncoding( Encodings.UTF8 )
+		    path = ReplaceLineEndings( path, "" )
+		    
+		    path = ShellPathFromPOSIXPath_MTC( path ) // Get it back to a shell path
+		    
 		  #endif
 		  
 		  return path
