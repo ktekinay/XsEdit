@@ -27,8 +27,7 @@ Begin SearchReceiverWindowBase WndEditor
    Visible         =   True
    Width           =   600
    Begin Timer tmrReindent
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -38,8 +37,7 @@ Begin SearchReceiverWindowBase WndEditor
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin CustomEditField fldCode
       AcceptFocus     =   False
@@ -191,8 +189,7 @@ Begin SearchReceiverWindowBase WndEditor
       Width           =   100
    End
    Begin XojoScript XS
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -201,12 +198,10 @@ Begin SearchReceiverWindowBase WndEditor
       Source          =   ""
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin IPCSocket IDESocket
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -215,8 +210,7 @@ Begin SearchReceiverWindowBase WndEditor
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin Timer tmrSetAutocompleteScript
       Height          =   32
