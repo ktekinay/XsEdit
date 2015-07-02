@@ -417,6 +417,80 @@ Protected Module M_FolderItem
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function GetRelativeFolderItem_MTC(path As String, relativeTo As FolderItem = Nil) As FolderItem
+		  // Stolen from Jeremy Cowgar, which is why the paren spacing is wrong
+		  
+		  dim prefix as String = ""
+		  
+		  #if targetwin32 then
+		    const pathSep = "\"
+		    
+		    //
+		    // Maybe what is passed isn't actually a relative path
+		    //
+		    
+		    if path.Mid( 2, 1 ) = ":" then
+		      return GetFolderItem( path, FolderItem.PathTypeShell )
+		    end if
+		    
+		    if path.Left( 1 ) = pathSep then
+		      relativeTo = GetFolderItem( SpecialFolder.CurrentWorkingDirectory.NativePath.Left( 3 ) )
+		    end if
+		    
+		  #else
+		    const pathSep = "/"
+		    
+		    //
+		    // Maybe what is passed isn't actually a relative path
+		    //
+		    
+		    if path.Left( 1 ) = pathSep then
+		      return GetFolderItem( path, FolderItem.PathTypeShell )
+		    end if
+		    
+		    prefix = pathSep
+		  #endif
+		  
+		  //
+		  // OK, seems to be a relative path
+		  //
+		  
+		  if relativeTo = nil then
+		    relativeTo = SpecialFolder.CurrentWorkingDirectory
+		  end if
+		  
+		  path = relativeTo.NativePath + pathSep + path
+		  dim newParts() as String
+		  
+		  dim pathParts() as String = path.Split( pathSep )
+		  for i as Integer = 0 to pathParts.Ubound
+		    dim p as String = pathParts( i )
+		    if p = "" then
+		      // Can happen on Windows since it appends a pathSep onto the end of NativePath
+		      // if relativeTo is a folder.
+		      
+		    elseif p = "." then
+		      // Skip this path component
+		      
+		    elseif p = ".." then
+		      // Remove the last path component from newParts
+		      if newParts.Ubound > -1 then
+		        newParts.Remove newParts.Ubound
+		      end if
+		      
+		    else
+		      // Nothing special about this path component
+		      newParts.Append p
+		    end if
+		  next
+		  
+		  path = prefix + Join( newParts, pathSep )
+		  
+		  return GetFolderItem( path, FolderItem.PathTypeShell )
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Function Head(f As FolderItem, numOfParagraphs As Integer, eol As String = "", enc As TextEncoding = nil) As String
 		  return f.Head_MTC( numOfParagraphs, eol, enc )
