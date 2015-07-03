@@ -17,8 +17,25 @@ Inherits Preferences
 		CodeFont As String
 	#tag EndComputedProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return IntegerValue( kPrefCodeFontSize, 0 )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  IntegerValue( kPrefCodeFontSize ) = value
+			End Set
+		#tag EndSetter
+		CodeFontSize As Integer
+	#tag EndComputedProperty
+
 
 	#tag Constant, Name = kPrefCodeFont, Type = String, Dynamic = False, Default = \"CodeFont", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefCodeFontSize, Type = String, Dynamic = False, Default = \"CodeFontSize", Scope = Public
 	#tag EndConstant
 
 
