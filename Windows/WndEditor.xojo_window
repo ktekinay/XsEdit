@@ -1,5 +1,5 @@
 #tag Window
-Begin SearchReceiverWindowBase WndEditor
+Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
    CloseButton     =   True
@@ -267,6 +267,12 @@ End
 	#tag EndEvent
 
 	#tag Event
+		Sub Close()
+		  App.Prefs.UnregisterWatcher( self )
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub EnableMenuItems()
 		  EditUndo.Enabled = fldCode.CanUndo
 		  EditRedo.Enabled = fldCode.CanRedo
@@ -372,6 +378,8 @@ End
 		  SetCEDPrefs()
 		  
 		  fldCode.SetScrollbars( sbHorizontal, sbVertical )
+		  
+		  App.Prefs.RegisterWatcher( self )
 		End Sub
 	#tag EndEvent
 
