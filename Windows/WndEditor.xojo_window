@@ -1028,6 +1028,14 @@ End
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub PreferencesHaveChanged(prefs As Preferences)
+		  dim xsePrefs as XsEditPreferences = XsEditPreferences( prefs )
+		  
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Sub RaiseBadIncludeException(msg As String, faultyLine As String)
 		  dim charStart as integer = fldCode.Text.InStr( faultyLine ) - 1
@@ -1289,6 +1297,10 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub SetCEDPrefs()
+		  //
+		  // Set the static prefs here
+		  //
+		  
 		  fldCode.TextFont = "Monaco"
 		  
 		  fldCode.AutoIndentNewLines = true
@@ -1307,6 +1319,11 @@ End
 		  
 		  fldCode.ClearHighlightedRangesOnTextChange = true
 		  
+		  //
+		  // Load the dynamic prefs
+		  //
+		  
+		  PreferencesHaveChanged( App.Prefs )
 		End Sub
 	#tag EndMethod
 
