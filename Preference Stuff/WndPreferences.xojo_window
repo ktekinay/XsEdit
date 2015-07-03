@@ -9,7 +9,7 @@ Begin XsEditWindowBase WndPreferences
    FullScreen      =   False
    FullScreenButton=   False
    HasBackColor    =   False
-   Height          =   400
+   Height          =   154
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
@@ -40,10 +40,10 @@ Begin XsEditWindowBase WndPreferences
       Height          =   54
       HelpTag         =   ""
       InitialParent   =   ""
-      Left            =   164
+      Left            =   0
       LockBottom      =   True
       LockedInPosition=   False
-      LockLeft        =   False
+      LockLeft        =   True
       LockRight       =   True
       LockTop         =   False
       OkCaption       =   "Save"
@@ -51,11 +51,11 @@ Begin XsEditWindowBase WndPreferences
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
-      Top             =   326
+      Top             =   100
       Transparent     =   True
       UseFocusRing    =   False
       Visible         =   True
-      Width           =   416
+      Width           =   600
    End
    Begin Label Label1
       AutoDeactivate  =   True
