@@ -94,6 +94,14 @@ Inherits Application
 
 
 	#tag MenuHandler
+		Function EditPreferences() As Boolean Handles EditPreferences.Action
+			WndPreferences.ShowModal
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function FileNew() As Boolean Handles FileNew.Action
 			NewDocument
 			
