@@ -105,6 +105,7 @@ Class=MessageQueue;Third Party Classes/CustomEditField/MessageCenter/MessageQueu
 Interface=MessageReceiver;Third Party Classes/CustomEditField/MessageCenter/MessageReceiver.xojo_code;&h4C96C7B6;&h4E252217;false
 Module=DragImage;Third Party Classes/CustomEditField/DragImage.xojo_code;&h67E17DBB;&h258C7F1B;false
 Class=XsEditPreferences;Preference Stuff/XsEditPreferences.xojo_code;&h1E13C7FF;&h1BFAEFFF;false
+Window=WndPreferences;Preference Stuff/WndPreferences.xojo_window;&hCA3DFFF;&h1BFAEFFF;false
 AppMenuBar=MainMenuBar
 MajorVersion=0
 MinorVersion=6
