@@ -4,6 +4,20 @@ Inherits Preferences
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  return BooleanValue( kPrefAutocompleteAppliesStandardCase, kDefaultAutocompleteAppliesStandardCase )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  BooleanValue( kPrefAutocompleteAppliesStandardCase ) = value
+			End Set
+		#tag EndSetter
+		AutocompleteAppliesStandardCase As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
 			  return StringValue( kPrefCodeFont, kDefaultCodeFont )
 			  
 			End Get
@@ -32,10 +46,16 @@ Inherits Preferences
 	#tag EndComputedProperty
 
 
+	#tag Constant, Name = kDefaultAutocompleteAppliesStandardCase, Type = Boolean, Dynamic = False, Default = \"False", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = kDefaultCodeFont, Type = String, Dynamic = False, Default = \"Monaco", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = kDefaultCodeFontSize, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefAutocompleteAppliesStandardCase, Type = String, Dynamic = False, Default = \"AutocompleteAppliesStandardCase", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefCodeFont, Type = String, Dynamic = False, Default = \"CodeFont", Scope = Public
@@ -46,6 +66,16 @@ Inherits Preferences
 
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="CodeFont"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="CodeFontSize"
+			Group="Behavior"
+			Type="Integer"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
@@ -58,11 +88,6 @@ Inherits Preferences
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="mCodeFont"
-			Group="Behavior"
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
