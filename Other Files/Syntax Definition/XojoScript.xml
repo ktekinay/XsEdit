@@ -51,17 +51,17 @@
             <entryRegEx>(#\w+)</entryRegEx>
         </highlightContext>        
 		
-		<highlightContext name="Comment" highlightColor="#7F0000" italic="true">
+		<highlightContext name="Comment" highlightColor="#7F0000" italic="false">
 			<startRegEx>'</startRegEx>
 			<endRegEx>[\n\r]</endRegEx>
 		</highlightContext>
 		
-		<highlightContext name="C-Comment" highlightColor="#7F0000" italic="true">
+		<highlightContext name="C-Comment" highlightColor="#7F0000" italic="false">
 			<startRegEx>//</startRegEx>
 			<endRegEx>[\n\r]</endRegEx>
 		</highlightContext>
 		
-		<highlightContext name="REM-Comment" highlightColor="#7F0000" italic="true">
+		<highlightContext name="REM-Comment" highlightColor="#7F0000" italic="false">
 			<startRegEx>^\s*rem\s</startRegEx>
 			<endRegEx>[\n\r]</endRegEx>
 		</highlightContext>
