@@ -92,7 +92,7 @@ Begin XsEditWindowBase WndPreferences
       Width           =   100
    End
    Begin ComboBox cboCodeFont
-      AutoComplete    =   False
+      AutoComplete    =   True
       AutoDeactivate  =   True
       Bold            =   False
       DataField       =   ""
