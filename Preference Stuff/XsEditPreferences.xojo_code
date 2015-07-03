@@ -4,7 +4,7 @@ Inherits Preferences
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return StringValue( kPrefCodeFont, "Monaco" )
+			  return StringValue( kPrefCodeFont, kDefaultCodeFont )
 			  
 			End Get
 		#tag EndGetter
@@ -20,7 +20,7 @@ Inherits Preferences
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return IntegerValue( kPrefCodeFontSize, 0 )
+			  return IntegerValue( kPrefCodeFontSize, kDefaultCodeFontSize )
 			End Get
 		#tag EndGetter
 		#tag Setter
@@ -31,6 +31,12 @@ Inherits Preferences
 		CodeFontSize As Integer
 	#tag EndComputedProperty
 
+
+	#tag Constant, Name = kDefaultCodeFont, Type = String, Dynamic = False, Default = \"Monaco", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kDefaultCodeFontSize, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
 
 	#tag Constant, Name = kPrefCodeFont, Type = String, Dynamic = False, Default = \"CodeFont", Scope = Public
 	#tag EndConstant
