@@ -4,6 +4,20 @@ Inherits Preferences
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  return BooleanValue( kPrefAutoCloseBrackets, kDefaultAutoCloseBrackets )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  BooleanValue( kPrefAutoCloseBrackets ) = value
+			End Set
+		#tag EndSetter
+		AutoCloseBrackets As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
 			  return BooleanValue( kPrefAutocompleteAppliesStandardCase, kDefaultAutocompleteAppliesStandardCase )
 			End Get
 		#tag EndGetter
@@ -46,6 +60,9 @@ Inherits Preferences
 	#tag EndComputedProperty
 
 
+	#tag Constant, Name = kDefaultAutoCloseBrackets, Type = Boolean, Dynamic = False, Default = \"False", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = kDefaultAutocompleteAppliesStandardCase, Type = Boolean, Dynamic = False, Default = \"False", Scope = Public
 	#tag EndConstant
 
@@ -53,6 +70,9 @@ Inherits Preferences
 	#tag EndConstant
 
 	#tag Constant, Name = kDefaultCodeFontSize, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefAutoCloseBrackets, Type = String, Dynamic = False, Default = \"AutoCloseBrackets", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefAutocompleteAppliesStandardCase, Type = String, Dynamic = False, Default = \"AutocompleteAppliesStandardCase", Scope = Public

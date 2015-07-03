@@ -231,6 +231,38 @@ Begin XsEditWindowBase WndPreferences
       Visible         =   True
       Width           =   270
    End
+   Begin CheckBox cbAutoCloseBrackets
+      AutoDeactivate  =   True
+      Bold            =   False
+      Caption         =   "Auto-close Brackets"
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   2
+      State           =   0
+      TabIndex        =   6
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   79
+      Underline       =   False
+      Value           =   False
+      Visible         =   True
+      Width           =   270
+   End
 End
 #tag EndWindow
 
@@ -273,6 +305,12 @@ End
 		  // Set the AutocompleteAppliesStandardCase checkbox
 		  //
 		  cbAutocompleteAppliesStandardCase.Value = App.Prefs.AutocompleteAppliesStandardCase
+		  
+		  //
+		  // Set the AutoCloseBrackets checkbox
+		  //
+		  cbAutoCloseBrackets.Value = App.Prefs.AutoCloseBrackets
+		  
 		End Sub
 	#tag EndEvent
 
@@ -305,6 +343,7 @@ End
 		  App.Prefs.CodeFont = chosenFont
 		  App.Prefs.CodeFontSize = fldCodeSize.Text.Val
 		  App.Prefs.AutocompleteAppliesStandardCase = cbAutocompleteAppliesStandardCase.Value
+		  App.Prefs.AutoCloseBrackets = cbAutoCloseBrackets.Value
 		  
 		  App.Prefs.Save
 		  

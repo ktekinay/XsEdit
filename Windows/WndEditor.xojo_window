@@ -1037,6 +1037,7 @@ End
 		  fldCode.TextFont = xsePrefs.CodeFont
 		  fldCode.TextSize = xsePrefs.CodeFontSize
 		  fldCode.AutocompleteAppliesStandardCase = xsePrefs.AutocompleteAppliesStandardCase
+		  fldCode.AutoCloseBrackets = xsePrefs.AutoCloseBrackets
 		  
 		  fldCode.IgnoreRepaint = false
 		  fldCode.Invalidate
