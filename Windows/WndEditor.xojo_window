@@ -1036,11 +1036,18 @@ End
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub PreferencesHaveChanged(prefs As Preferences)
+	#tag Method, Flags = &h21
+		Private Sub PreferencesHaveChanged(prefs As Preferences)
 		  dim xsePrefs as XsEditPreferences = XsEditPreferences( prefs )
 		  
+		  fldCode.IgnoreRepaint = true
 		  
+		  fldCode.TextFont = xsePrefs.CodeFont
+		  fldCode.TextSize = xsePrefs.CodeFontSize
+		  fldCode.AutocompleteAppliesStandardCase = xsePrefs.AutocompleteAppliesStandardCase
+		  
+		  fldCode.IgnoreRepaint = false
+		  fldCode.Invalidate
 		End Sub
 	#tag EndMethod
 
@@ -1309,8 +1316,6 @@ End
 		  // Set the static prefs here
 		  //
 		  
-		  fldCode.TextFont = "Monaco"
-		  
 		  fldCode.AutoIndentNewLines = true
 		  fldCode.IndentVisually = true
 		  
@@ -1323,7 +1328,6 @@ End
 		  fldCode.HighlightMatchingBrackets = true
 		  fldCode.HighlightMatchingBracketsMode = 2
 		  fldCode.EnableAutocomplete = true
-		  fldCode.AutocompleteAppliesStandardCase = false
 		  
 		  fldCode.ClearHighlightedRangesOnTextChange = true
 		  
