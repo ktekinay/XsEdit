@@ -179,14 +179,7 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events cboCodeFont
-#tag EndEvents
 #tag ViewBehavior
-	#tag ViewProperty
-		Name="AllFonts()"
-		Group="Behavior"
-		Type="Integer"
-	#tag EndViewProperty
 	#tag ViewProperty
 		Name="BackColor"
 		Visible=true

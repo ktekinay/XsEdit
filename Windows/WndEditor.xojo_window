@@ -27,7 +27,8 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
    Visible         =   True
    Width           =   600
    Begin Timer tmrReindent
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -37,7 +38,8 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
    Begin CustomEditField fldCode
       AcceptFocus     =   False
@@ -189,7 +191,8 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Width           =   100
    End
    Begin XojoScript XS
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -198,10 +201,12 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Source          =   ""
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
    Begin IPCSocket IDESocket
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -210,10 +215,12 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
    Begin Timer tmrSetAutocompleteScript
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -223,7 +230,8 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Scope           =   0
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
 End
 #tag EndWindow
