@@ -65,7 +65,7 @@ Begin XsEditWindowBase WndPreferences
       Enabled         =   True
       Height          =   20
       HelpTag         =   ""
-      Index           =   -2147483648
+      Index           =   0
       InitialParent   =   ""
       Italic          =   False
       Left            =   20
@@ -123,6 +123,114 @@ Begin XsEditWindowBase WndPreferences
       Visible         =   True
       Width           =   238
    End
+   Begin Label Label1
+      AutoDeactivate  =   True
+      Bold            =   False
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   1
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   409
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   2
+      Selectable      =   False
+      TabIndex        =   3
+      TabPanelIndex   =   0
+      Text            =   "Size:"
+      TextAlign       =   0
+      TextColor       =   &c00000000
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   21
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   46
+   End
+   Begin TextField fldCodeSize
+      AcceptTabs      =   False
+      Alignment       =   0
+      AutoDeactivate  =   True
+      AutomaticallyCheckSpelling=   False
+      BackColor       =   &cFFFFFF00
+      Bold            =   False
+      Border          =   True
+      CueText         =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Format          =   ""
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   467
+      LimitText       =   0
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Mask            =   "999"
+      Password        =   False
+      ReadOnly        =   False
+      Scope           =   0
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   ""
+      TextColor       =   &c00000000
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   20
+      Underline       =   False
+      UseFocusRing    =   True
+      Visible         =   True
+      Width           =   80
+   End
+   Begin CheckBox cbAutocompleteAppliesStandardCase
+      AutoDeactivate  =   True
+      Bold            =   False
+      Caption         =   "Autocomplete Applies Standard Case"
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   2
+      State           =   0
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   54
+      Underline       =   False
+      Value           =   False
+      Visible         =   True
+      Width           =   270
+   End
 End
 #tag EndWindow
 
@@ -155,8 +263,54 @@ End
 		  //
 		  cboCodeFont.AddRows AllFonts
 		  cboCodeFont.Text = App.Prefs.CodeFont
+		  
+		  //
+		  // Set the CodeFontSize field
+		  //
+		  fldCodeSize.Text = str( App.Prefs.CodeFontSize )
+		  
+		  //
+		  // Set the AutocompleteAppliesStandardCase checkbox
+		  //
+		  cbAutocompleteAppliesStandardCase.Value = App.Prefs.AutocompleteAppliesStandardCase
 		End Sub
 	#tag EndEvent
+
+
+	#tag Method, Flags = &h21
+		Private Function ValidateAndSave() As Boolean
+		  // Will attempt to validate the preferences. If it can't, will beep and somehow indicate the
+		  // faulty pref
+		  
+		  //
+		  // CodeFont
+		  //
+		  dim chosenFont as string = cboCodeFont.Text
+		  dim index as integer = AllFonts.IndexOf( chosenFont )
+		  if index = -1 then
+		    beep
+		    cboCodeFont.SelStart = 0
+		    cboCodeFont.SelLength = chosenFont.Len
+		    return false
+		  else
+		    //
+		    // Set it to the right case
+		    //
+		    chosenFont = AllFonts( index )
+		  end if
+		  
+		  //
+		  // If we get here, we can save
+		  //
+		  App.Prefs.CodeFont = chosenFont
+		  App.Prefs.CodeFontSize = fldCodeSize.Text.Val
+		  App.Prefs.AutocompleteAppliesStandardCase = cbAutocompleteAppliesStandardCase.Value
+		  
+		  App.Prefs.Save
+		  
+		  return true
+		End Function
+	#tag EndMethod
 
 
 	#tag Property, Flags = &h21
@@ -169,7 +323,9 @@ End
 #tag Events DialogButtonContainer1
 	#tag Event
 		Sub OkAction()
-		  #pragma warning "Finish this!"
+		  if ValidateAndSave then
+		    self.Close
+		  end if
 		End Sub
 	#tag EndEvent
 	#tag Event
