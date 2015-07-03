@@ -24,6 +24,12 @@ Protected Class Preferences
 		  Storage.Value(kKeyValues) = nil
 		  
 		  LoadPreferences
+		  
+		  WatcherTimer = new Timer
+		  AddHandler WatcherTimer.Action, WeakAddressOf WatcherTimerAction
+		  WatcherTimer.Mode = Timer.ModeOff
+		  WatcherTimer.Period = 20
+		  
 		End Sub
 	#tag EndMethod
 
@@ -39,6 +45,9 @@ Protected Class Preferences
 		Protected Sub Destructor()
 		  Save
 		  
+		  WatcherTimer.Mode = Timer.ModeOff
+		  RemoveHandler WatcherTimer.Action, WeakAddressOf WatcherTimerAction
+		  WatcherTimer = nil
 		End Sub
 	#tag EndMethod
 
@@ -92,9 +101,8 @@ Protected Class Preferences
 
 	#tag Method, Flags = &h21
 		Private Sub InformWatchers()
-		  for each watcher as PreferenceWatcher in Watchers
-		    watcher.PreferencesHaveChanged( self )
-		  next
+		  WatcherTimer.Mode = Timer.ModeSingle
+		  
 		End Sub
 	#tag EndMethod
 
@@ -397,6 +405,16 @@ Protected Class Preferences
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub WatcherTimerAction(sender As Timer)
+		  #pragma unused sender
+		  
+		  for each watcher as PreferenceWatcher in Watchers
+		    watcher.PreferencesHaveChanged( self )
+		  next
+		End Sub
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h1
 		Protected ApplicationId As String
@@ -465,6 +483,10 @@ Protected Class Preferences
 
 	#tag Property, Flags = &h21
 		Private Watchers() As PreferenceWatcher
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private WatcherTimer As Timer
 	#tag EndProperty
 
 
