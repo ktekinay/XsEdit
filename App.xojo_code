@@ -188,6 +188,15 @@ Inherits Application
 		ResourcesFolder As FolderItem
 	#tag EndComputedProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return ResourcesFolder.Child( "Syntax Definitions" ).Child( "XojoScript.xml" )
+			End Get
+		#tag EndGetter
+		SyntaxDefinitionFile As FolderItem
+	#tag EndComputedProperty
+
 
 	#tag Constant, Name = kEditClear, Type = String, Dynamic = False, Default = \"&Delete", Scope = Public
 		#Tag Instance, Platform = Windows, Language = Default, Definition  = \"&Delete"

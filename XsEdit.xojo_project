@@ -14,6 +14,7 @@ Folder=Search Stuff;Search Stuff;&h758907FF;&h0;false
 Window=WndSearch;Search Stuff/WndSearch.xojo_window;&h43CF17FF;&h758907FF;false
 Class=SearchReceiverWindowBase;Search Stuff/SearchReceiverWindowBase.xojo_code;&h4F462FFF;&h758907FF;false
 Folder=Widgets;Widgets;&h65D33FFF;&h0;false
+Class=ColorPicker_MTC;Widgets/ColorPicker_MTC.xojo_code;&h62D379D8;&h65D33FFF;false
 Window=DialogButtonContainer;Widgets/DialogButtonContainer.xojo_window;&h250AC3B6;&h65D33FFF;false
 Class=PlatformPushButton;Widgets/PlatformPushButton.xojo_code;&h3578F1B0;&h65D33FFF;false
 Module=IDECommunicator;Classes/IDECommunicator.xojo_code;&h715E068E;&h8E0CFFF;false
