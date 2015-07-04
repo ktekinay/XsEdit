@@ -252,6 +252,7 @@ Begin XsEditWindowBase WndSearch
       Selectable      =   False
       TabIndex        =   7
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Find:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -286,6 +287,7 @@ Begin XsEditWindowBase WndSearch
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Replace:"
       TextAlign       =   0
       TextColor       =   &c00000000
