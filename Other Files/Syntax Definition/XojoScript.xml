@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<highlightDefinition version="1.3">
+<highlightDefinition version="1.4">
 	<name>XojoScript</name>
 
 <!-- MODULE block -->
@@ -40,11 +40,11 @@
 	
 	<contexts defaultColor="#000000" caseSensitive="no">		
         <highlightContext name="Doubles" highlightColor="#006532">
-            <entryRegEx>(?&lt;=[^\w\d]|^)(([0-9]+\.[0-9]*)|([0-9]{11,}))(?=[^\w\d]|$)</entryRegEx>
+            <entryRegEx>(?&lt;=[^\w.]|^)(?=\d+\.|\.\d+|\d+e(?:\d|\b))(\d*\.\d*(?:e[-+]?\d*)?|\d+e[-+]?\d*)(?=[^\w.]|$)</entryRegEx>
         </highlightContext>    	
         
         <highlightContext name="Integers" highlightColor="#326598">
-            <entryRegEx>(?&lt;=[^\w\d]|^)([0-9]{1,10})(?=[^\w\d]|$)</entryRegEx>
+            <entryRegEx>(?&lt;=[^\w.]|^)\d+(?=[^\w.]|$)</entryRegEx>
         </highlightContext>
 
 		<highlightContext name="PreProcessor" highlightColor="#0000FF">
