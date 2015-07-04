@@ -1261,11 +1261,16 @@ End
 		    
 		    AutocompleterKeywords = new PaTrie
 		    
-		    for each keyword as String in ReplaceLineEndings( kAutoCompleteKeywords, &uA ).Trim.Split( &uA )
-		      keyword = keyword.Trim
-		      if keyword <> "" then
-		        call AutocompleterKeywords.AddKey( keyword, nil )
-		      end if
+		    dim contexts() as HighlightContext = fldCode.SyntaxDefinition.Contexts
+		    for each context as HighlightContext in contexts
+		      dim keywords() as string
+		      context.ListKeywords( keywords )
+		      for each keyword as string in keywords
+		        keyword = keyword.Trim
+		        if keyword <> "" then
+		          call AutocompleterKeywords.AddKey( keyword, nil )
+		        end if
+		      next
 		    next
 		    
 		    //
@@ -1404,9 +1409,6 @@ End
 		Private ResumeSetAutocompleteAtLine As Integer = 0
 	#tag EndProperty
 
-
-	#tag Constant, Name = kAutoCompleteKeywords, Type = String, Dynamic = False, Default = \"AddHandler\nAddressOf\nArray\nAs\nAssigns\nBreak\nByRef\nByte\nByVal\nCall\nCase\nCatch\nClass\nConst\nContinue\nCType\nDeclare\nDim\nDo\nDouble\nDownTo\nEach\nElse\nElseIf\nEnd\nEnum\nEvent\nException\nExit\nExtends\nFalse\nFinally\nFor\nFunction\nGetTypeInfo\nGOTO\nHandles\nIf\nImplements\nInput\nInterface\nIn\nInherits\nInt8\nInt16\nInt32\nInt64\nInteger\nLib\nLoop\nModule\nNext\nNil\nOptional\nParamArray\nPrint\nPrivate\nProtected\nRaise\nRaiseEvent\nRedim\nRemoveHandler\nReturn\nSelect\nSoft\nStatic\nStep\nString\nStructure\nSub\nSuper\nText\nThen\nTo\nTrue\nTry\nUint8\nUInt16\nUInt32\nUInt64\nUInteger\nUntil\nUsing\nWend\nWhile", Scope = Private
-	#tag EndConstant
 
 	#tag Constant, Name = kColorCurrentLine, Type = Color, Dynamic = False, Default = \"&cF4FF9C", Scope = Protected
 	#tag EndConstant
