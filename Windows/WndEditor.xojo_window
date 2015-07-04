@@ -367,7 +367,7 @@ End
 		  loop until not doItAgain
 		  
 		  dim hd as new HighlightDefinition
-		  if not hd.LoadFromXml( App.ResourcesFolder.Child( "Syntax Definitions" ).Child( "XojoScript.xml" ) ) then
+		  if not hd.LoadFromXml( App.SyntaxDefinitionFile ) then
 		    MsgBox "Could not load syntax definition"
 		    quit
 		  end if
@@ -1039,8 +1039,34 @@ End
 		  fldCode.AutocompleteAppliesStandardCase = xsePrefs.AutocompleteAppliesStandardCase
 		  fldCode.AutoCloseBrackets = xsePrefs.AutoCloseBrackets
 		  
+		  dim hd as HighlightDefinition = fldCode.SyntaxDefinition
+		  for each context as HighlightContext in hd.Contexts
+		    select case context.Name
+		    case "BasicTypes"
+		      context.HighlightColor = xsePrefs.ColorBasicTypes
+		      
+		    case "String"
+		      context.HighlightColor = xsePrefs.ColorStrings
+		      
+		    case "Keywords"
+		      context.HighlightColor = xsePrefs.ColorKeywords
+		      
+		    case "Comment", "C-Comment", "REM-Comment"
+		      context.HighlightColor = xsePrefs.ColorComments
+		      
+		    end select
+		    
+		  next
+		  
+		  //
+		  // Force CustomEditField to update the colors
+		  //
+		  
+		  fldCode.SyntaxDefinition = nil
+		  fldCode.SyntaxDefinition = hd
 		  fldCode.IgnoreRepaint = false
-		  fldCode.Invalidate
+		  fldCode.Redraw( true )
+		  
 		End Sub
 	#tag EndMethod
 
@@ -1323,6 +1349,8 @@ End
 		  // Set the static prefs here
 		  //
 		  
+		  fldCode.IgnoreRepaint = true
+		  
 		  fldCode.AutoIndentNewLines = true
 		  fldCode.IndentVisually = true
 		  
@@ -1338,8 +1366,11 @@ End
 		  
 		  fldCode.ClearHighlightedRangesOnTextChange = true
 		  
+		  fldCode.IgnoreRepaint = false
+		  
 		  //
 		  // Load the dynamic prefs
+		  // (will also call Invalidate)
 		  //
 		  
 		  PreferencesHaveChanged( App.Prefs )
