@@ -71,7 +71,7 @@
 			<endRegEx>[^"\n\r]*["\n\r]</endRegEx>
 		</highlightContext>
 
-        <highlightContext name="BasicTypes" highlightColor="#0000FF" bold="true">
+        <highlightContext name="BasicTypes" highlightColor="#0000FF" bold="false">
             <keywords>
 				<string>Boolean</string>
 				<string>Color</string>
@@ -94,7 +94,7 @@
             </keywords>
         </highlightContext>
 
-        <highlightContext name="Keywords" highlightColor="#0000FF" bold="true">
+        <highlightContext name="Keywords" highlightColor="#0000FF" bold="false">
             <keywords>
 				<string>#Bad</string>
 				<string>#Else</string>
