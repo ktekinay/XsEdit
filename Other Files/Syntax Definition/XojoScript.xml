@@ -40,7 +40,7 @@
 	
 	<contexts defaultColor="#000000" caseSensitive="no">		
         <highlightContext name="Doubles" highlightColor="#006532">
-            <entryRegEx>(?&lt;=[^\w\d]|^)(([0-9]+\.[0-9]*)|([0-9]{11,}))(?=[^\w\d]|$)</entryRegEx>
+            <entryRegEx>(?&lt;=[^\w.]|^)(?=\d+\.|\.\d+|\d+e(?:\d|\b))(\d*\.\d*(?:e[-+]?\d*)?|\d+e[-+]?\d*)(?=[^\w.]|$)</entryRegEx>
         </highlightContext>    	
         
         <highlightContext name="Integers" highlightColor="#326598">
