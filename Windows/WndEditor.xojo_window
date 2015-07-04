@@ -1,5 +1,5 @@
 #tag Window
-Begin SearchReceiverWindowBase WndEditor
+Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
    CloseButton     =   True
@@ -267,6 +267,12 @@ End
 	#tag EndEvent
 
 	#tag Event
+		Sub Close()
+		  App.Prefs.UnregisterWatcher( self )
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub EnableMenuItems()
 		  EditUndo.Enabled = fldCode.CanUndo
 		  EditRedo.Enabled = fldCode.CanRedo
@@ -369,9 +375,11 @@ End
 		  fldCode.SyntaxDefinition = hd
 		  
 		  SetAutocompleteWords()
-		  SetCEDPrefs()
+		  SetCEFPrefs()
 		  
 		  fldCode.SetScrollbars( sbHorizontal, sbVertical )
+		  
+		  App.Prefs.RegisterWatcher( self )
 		End Sub
 	#tag EndEvent
 
@@ -1021,6 +1029,22 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub PreferencesHaveChanged(prefs As Preferences)
+		  dim xsePrefs as XsEditPreferences = XsEditPreferences( prefs )
+		  
+		  fldCode.IgnoreRepaint = true
+		  
+		  fldCode.TextFont = xsePrefs.CodeFont
+		  fldCode.TextSize = xsePrefs.CodeFontSize
+		  fldCode.AutocompleteAppliesStandardCase = xsePrefs.AutocompleteAppliesStandardCase
+		  fldCode.AutoCloseBrackets = xsePrefs.AutoCloseBrackets
+		  
+		  fldCode.IgnoreRepaint = false
+		  fldCode.Invalidate
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub RaiseBadIncludeException(msg As String, faultyLine As String)
 		  dim charStart as integer = fldCode.Text.InStr( faultyLine ) - 1
 		  dim lineNum as integer = fldCode.LineNumAtCharPos( charStart )
@@ -1280,8 +1304,10 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub SetCEDPrefs()
-		  fldCode.TextFont = "Monaco"
+		Private Sub SetCEFPrefs()
+		  //
+		  // Set the static prefs here
+		  //
 		  
 		  fldCode.AutoIndentNewLines = true
 		  fldCode.IndentVisually = true
@@ -1295,10 +1321,14 @@ End
 		  fldCode.HighlightMatchingBrackets = true
 		  fldCode.HighlightMatchingBracketsMode = 2
 		  fldCode.EnableAutocomplete = true
-		  fldCode.AutocompleteAppliesStandardCase = false
 		  
 		  fldCode.ClearHighlightedRangesOnTextChange = true
 		  
+		  //
+		  // Load the dynamic prefs
+		  //
+		  
+		  PreferencesHaveChanged( App.Prefs )
 		End Sub
 	#tag EndMethod
 

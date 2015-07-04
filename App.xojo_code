@@ -94,6 +94,14 @@ Inherits Application
 
 
 	#tag MenuHandler
+		Function EditPreferences() As Boolean Handles EditPreferences.Action
+			WndPreferences.ShowModal
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function FileNew() As Boolean Handles FileNew.Action
 			NewDocument
 			
@@ -147,20 +155,20 @@ Inherits Application
 
 
 	#tag Property, Flags = &h21
-		Private mPrefs As Preferences
+		Private mPrefs As XsEditPreferences
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
 			  if mPrefs is nil then
-			    mPrefs = new Preferences( "com.mactechnologiesconsulting.xsedit" )
+			    mPrefs = new XsEditPreferences( "com.mactechnologiesconsulting.xsedit" )
 			  end if
 			  
 			  return mPrefs
 			End Get
 		#tag EndGetter
-		Prefs As Preferences
+		Prefs As XsEditPreferences
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0

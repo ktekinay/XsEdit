@@ -235,6 +235,20 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin MenuItem UntitledSeparator7
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin PrefsMenuItem EditPreferences
+         SpecialMenu = 0
+         Text = "Preferences..."
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
    End
    Begin MenuItem ScriptMenu
       SpecialMenu = 0

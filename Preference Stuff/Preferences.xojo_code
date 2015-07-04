@@ -9,6 +9,7 @@ Protected Class Preferences
 	#tag Method, Flags = &h0
 		Sub BooleanValue(name as String, assigns value as Boolean)
 		  ChildAdHocValues.Value(name) = value
+		  InformWatchers
 		End Sub
 	#tag EndMethod
 
@@ -23,6 +24,12 @@ Protected Class Preferences
 		  Storage.Value(kKeyValues) = nil
 		  
 		  LoadPreferences
+		  
+		  WatcherTimer = new Timer
+		  AddHandler WatcherTimer.Action, WeakAddressOf WatcherTimerAction
+		  WatcherTimer.Mode = Timer.ModeOff
+		  WatcherTimer.Period = 20
+		  
 		End Sub
 	#tag EndMethod
 
@@ -38,6 +45,9 @@ Protected Class Preferences
 		Protected Sub Destructor()
 		  Save
 		  
+		  WatcherTimer.Mode = Timer.ModeOff
+		  RemoveHandler WatcherTimer.Action, WeakAddressOf WatcherTimerAction
+		  WatcherTimer = nil
 		End Sub
 	#tag EndMethod
 
@@ -50,6 +60,7 @@ Protected Class Preferences
 	#tag Method, Flags = &h0
 		Sub DoubleValue(name as String, assigns value as Double)
 		  ChildAdHocValues.Value(name) = value
+		  InformWatchers
 		End Sub
 	#tag EndMethod
 
@@ -88,6 +99,13 @@ Protected Class Preferences
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub InformWatchers()
+		  WatcherTimer.Mode = Timer.ModeSingle
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Function IntegerValue(name as String, default as Integer = 0) As Integer
 		  Return ChildAdHocValues.Lookup(name, default)
@@ -97,6 +115,7 @@ Protected Class Preferences
 	#tag Method, Flags = &h0
 		Sub IntegerValue(name as String, assigns value as Integer)
 		  ChildAdHocValues.Value(name) = value
+		  InformWatchers
 		End Sub
 	#tag EndMethod
 
@@ -188,9 +207,20 @@ Protected Class Preferences
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub RegisterWatcher(watcher As PreferenceWatcher)
+		  //
+		  // Don't register the same watcher twice
+		  //
+		  UnregisterWatcher( watcher )
+		  Watchers.Append watcher
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Remove(key as String)
 		  if ChildAdHocValues.HasKey(key) then
 		    ChildAdHocValues.Remove(key)
+		    InformWatchers
 		  end if
 		End Sub
 	#tag EndMethod
@@ -361,6 +391,27 @@ Protected Class Preferences
 	#tag Method, Flags = &h0
 		Sub StringValue(name as String, assigns value as String)
 		  ChildAdHocValues.Value(name) = value
+		  InformWatchers
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub UnregisterWatcher(watcher As PreferenceWatcher)
+		  dim pos as integer = Watchers.IndexOf( watcher )
+		  if pos <> -1 then
+		    Watchers.Remove pos
+		  end if
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub WatcherTimerAction(sender As Timer)
+		  #pragma unused sender
+		  
+		  for each watcher as PreferenceWatcher in Watchers
+		    watcher.PreferencesHaveChanged( self )
+		  next
 		End Sub
 	#tag EndMethod
 
@@ -428,6 +479,14 @@ Protected Class Preferences
 
 	#tag Property, Flags = &h1
 		Protected Storage As Xojo.Core.Dictionary
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private Watchers() As PreferenceWatcher
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private WatcherTimer As Timer
 	#tag EndProperty
 
 
