@@ -1267,6 +1267,15 @@ End
 		      context.ListKeywords( keywords )
 		      for each keyword as string in keywords
 		        keyword = keyword.Trim
+		        
+		        //
+		        // The automcomplete engine only consideres word characters so
+		        // strip the "#" for now
+		        //
+		        if keyword.Left( 1 ) = "#" then
+		          keyword = keyword.Mid( 2 )
+		        end if
+		        
 		        if keyword <> "" then
 		          call AutocompleterKeywords.AddKey( keyword, nil )
 		        end if
