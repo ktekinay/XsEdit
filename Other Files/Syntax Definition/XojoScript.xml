@@ -96,13 +96,11 @@
 
         <highlightContext name="Keywords" highlightColor="#0000FF" bold="false">
             <keywords>
-				<string>#Bad</string>
 				<string>#Else</string>
 				<string>#ElseIf</string>
 				<string>#EndIf</string>
 				<string>#If</string>
 				<string>#Pragma</string>
-				<string>#Tag</string>
 				<string>AddHandler</string>
 				<string>AddressOf</string>
 				<string>And</string>
