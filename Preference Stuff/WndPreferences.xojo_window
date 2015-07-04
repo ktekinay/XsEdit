@@ -29,7 +29,7 @@ Begin XsEditWindowBase WndPreferences
    Begin DialogButtonContainer DialogButtonContainer1
       AcceptFocus     =   False
       AcceptTabs      =   True
-      AlternateCaption=   ""
+      AlternateCaption=   "Defaults"
       AutoDeactivate  =   True
       BackColor       =   &cFFFFFF00
       Backdrop        =   0
@@ -39,7 +39,6 @@ Begin XsEditWindowBase WndPreferences
       HasBackColor    =   False
       Height          =   54
       HelpTag         =   ""
-      Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
       LockBottom      =   True
@@ -52,7 +51,7 @@ Begin XsEditWindowBase WndPreferences
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
-      Top             =   100
+      Top             =   180
       Transparent     =   True
       UseFocusRing    =   False
       Visible         =   True
@@ -80,7 +79,6 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Code Font:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -147,7 +145,6 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Size:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -626,6 +623,21 @@ End
 
 
 	#tag Method, Flags = &h21
+		Private Sub RestoreDefaults()
+		  dim prefs as XsEditPreferences = App.Prefs
+		  
+		  cbAutoCloseBrackets.Value = prefs.kDefaultAutoCloseBrackets
+		  cbAutocompleteAppliesStandardCase.Value = prefs.kDefaultAutocompleteAppliesStandardCase
+		  cboCodeFont.Text = prefs.kDefaultCodeFont
+		  cpBasicTypes.Value = prefs.kDefaultColorBasicTypes
+		  cpComments.Value = prefs.kDefaultColorComments
+		  cpKeywords.Value = prefs.kDefaultColorKeywords
+		  cpStrings.Value = prefs.kDefaultColorStrings
+		  fldCodeSize.Text = str( prefs.kDefaultCodeFontSize )
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function ValidateAndSave() As Boolean
 		  // Will attempt to validate the preferences. If it can't, will beep and somehow indicate the
 		  // faulty pref
@@ -685,6 +697,11 @@ End
 		Sub CancelAction()
 		  self.Close
 		  
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub AlternateAction()
+		  RestoreDefaults
 		End Sub
 	#tag EndEvent
 #tag EndEvents
