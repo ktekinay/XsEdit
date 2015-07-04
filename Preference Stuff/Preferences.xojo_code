@@ -14,6 +14,33 @@ Protected Class Preferences
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub ColorValue(name As String, Assigns value As Color)
+		  dim textValue as Text = "&c" + value.Red.ToHex( 2 ) + value.Green.ToHex( 2 ) + value.Blue.ToHex( 2 ) + value.Alpha.ToHex( 2 )
+		  ChildAdHocValues.Value(name) = textValue
+		  InformWatchers
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function ColorValue(name As String, default As Color) As Color
+		  if not ChildAdHocValues.HasKey(name) then
+		    return default
+		  end if
+		  
+		  dim textValue as Text = ChildAdHocValues.Value(name)
+		  dim c as Color = RGB( _
+		  Integer.FromHex( textValue.Mid( 2, 2 ) ), _
+		  Integer.FromHex( textValue.Mid( 4, 2 ) ), _
+		  Integer.FromHex( textValue.Mid( 6, 2 ) ), _
+		  Integer.FromHex( textValue.Mid( 8, 2 ) ) _
+		  )
+		  
+		  return c
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Constructor(applicationId as String)
 		  Self.ApplicationId = applicationId
 		  PreferenceFile = EnsurePreferencesFile
