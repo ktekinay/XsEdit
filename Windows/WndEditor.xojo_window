@@ -375,7 +375,7 @@ End
 		  fldCode.SyntaxDefinition = hd
 		  
 		  SetAutocompleteWords()
-		  SetCEDPrefs()
+		  SetCEFPrefs()
 		  
 		  fldCode.SetScrollbars( sbHorizontal, sbVertical )
 		  
@@ -1304,7 +1304,7 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub SetCEDPrefs()
+		Private Sub SetCEFPrefs()
 		  //
 		  // Set the static prefs here
 		  //
