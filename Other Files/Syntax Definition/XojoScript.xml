@@ -67,8 +67,13 @@
 		</highlightContext>
 		
 		<highlightContext name="String" highlightColor="#6500FE">
+			<!--
 			<startRegEx>"</startRegEx>
 			<endRegEx>[^"\n\r]*["\n\r]</endRegEx>
+			-->
+			
+			<entryRegEx>"[^"\r\n]*["\r\n]|&amp;u[[:xdigit:]]*\b</entryRegEx>
+			
 		</highlightContext>
 
         <highlightContext name="BasicTypes" highlightColor="#0000FF" bold="false">
