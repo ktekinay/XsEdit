@@ -225,6 +225,18 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Top             =   0
       Width           =   32
    End
+   Begin Timer tmrSetContentsChanged
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   0
+      LockedInPosition=   False
+      Mode            =   0
+      Period          =   250
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   0
+      Width           =   32
+   End
 End
 #tag EndWindow
 
@@ -239,6 +251,7 @@ End
 		Function CancelClose(appQuitting as Boolean) As Boolean
 		  #pragma unused appQuitting
 		  
+		  SetContentsChanged()
 		  if not ContentsChanged then
 		    return false
 		  end if
@@ -1330,6 +1343,14 @@ End
 		      call AutocompleterKeywords.AddKey( method.Name, nil )
 		    next
 		    
+		    //
+		    // Additional
+		    //
+		    dim addl as string = kAdditionalKeywords
+		    addl = ReplaceLineEndings( addl, &uA ).Trim
+		    for each keyword as string in addl.Split( &uA )
+		      call AutocompleterKeywords.AddKey( keyword, nil )
+		    next
 		  end if
 		  
 		  //
@@ -1374,6 +1395,18 @@ End
 		  //
 		  
 		  PreferencesHaveChanged( App.Prefs )
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub SetContentsChanged()
+		  ContentsChanged = StrComp( CodeBeforeChanges, fldCode.Text, 0 ) <> 0
+		  if not ContentsChanged then
+		    fldCode.ClearDirtyLines
+		  end if
+		  
+		  tmrSetContentsChanged.Mode = Timer.ModeOff
+		  
 		End Sub
 	#tag EndMethod
 
@@ -1450,6 +1483,9 @@ End
 	#tag EndProperty
 
 
+	#tag Constant, Name = kAdditionalKeywords, Type = String, Dynamic = False, Default = \"Print\nInput", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = kColorCurrentLine, Type = Color, Dynamic = False, Default = \"&cF4FF9C", Scope = Protected
 	#tag EndConstant
 
@@ -1499,10 +1535,8 @@ End
 		  me.ClearLineIcons
 		  me.HelpTag = ""
 		  
-		  ContentsChanged = StrComp( CodeBeforeChanges, fldCode.Text, 0 ) <> 0
-		  if not ContentsChanged then
-		    me.ClearDirtyLines
-		  end if
+		  tmrSetContentsChanged.Mode = Timer.ModeSingle
+		  tmrSetContentsChanged.Reset
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -1795,6 +1829,13 @@ End
 		  
 		  LineNumberAtLastSetAutocomplete = curLineIndex
 		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tmrSetContentsChanged
+	#tag Event
+		Sub Action()
+		  SetContentsChanged()
 		End Sub
 	#tag EndEvent
 #tag EndEvents

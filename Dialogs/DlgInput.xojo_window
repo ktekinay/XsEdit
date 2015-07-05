@@ -118,7 +118,7 @@ Begin Window DlgInput
       LockRight       =   True
       LockTop         =   True
       Mask            =   ""
-      Multiline       =   True
+      Multiline       =   False
       ReadOnly        =   False
       Scope           =   0
       ScrollbarHorizontal=   False

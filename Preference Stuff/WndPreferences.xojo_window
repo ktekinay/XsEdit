@@ -39,6 +39,7 @@ Begin XsEditWindowBase WndPreferences
       HasBackColor    =   False
       Height          =   54
       HelpTag         =   ""
+      Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
       LockBottom      =   True
@@ -79,6 +80,7 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Code Font:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -145,6 +147,7 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Size:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -285,6 +288,7 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   7
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Colors:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -319,6 +323,7 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Strings:"
       TextAlign       =   2
       TextColor       =   &c00000000
@@ -383,6 +388,7 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   10
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Keywords:"
       TextAlign       =   2
       TextColor       =   &c00000000
@@ -447,6 +453,7 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   12
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Basic Types:"
       TextAlign       =   2
       TextColor       =   &c00000000
@@ -511,6 +518,7 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   14
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Comments:"
       TextAlign       =   2
       TextColor       =   &c00000000
