@@ -76,6 +76,18 @@
 			
 		</highlightContext>
 
+		<highlightContext name="color_red" highlightColor="#FF0000">
+				<entryRegEx>(?&lt;=&amp;c)[[:xdigit:]]{1,2}</entryRegEx>
+		</highlightContext>
+
+		<highlightContext name="color_green" highlightColor="#00FF00">
+				<entryRegEx>(?&lt;=&amp;c[[:xdigit:]]{2})[[:xdigit:]]{1,2}</entryRegEx>
+		</highlightContext>
+
+		<highlightContext name="color_blue" highlightColor="#0000FF">
+				<entryRegEx>(?&lt;=&amp;c[[:xdigit:]]{4})[[:xdigit:]]{1,2}</entryRegEx>
+		</highlightContext>
+
         <highlightContext name="BasicTypes" highlightColor="#0000FF" bold="false">
             <keywords>
 				<string>Boolean</string>
