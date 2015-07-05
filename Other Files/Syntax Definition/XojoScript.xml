@@ -62,7 +62,7 @@
 			<endRegEx>[^"\n\r]*["\n\r]</endRegEx>
 			-->
 			
-			<entryRegEx>"[^"\r\n]*["\r\n]|&amp;u[[:xdigit:]]*\b</entryRegEx>
+			<entryRegEx>"[^"\r\n]*(?:"|$)|&amp;u[[:xdigit:]]*\b</entryRegEx>
 			
 		</highlightContext>
 
