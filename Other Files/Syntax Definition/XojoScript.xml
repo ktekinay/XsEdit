@@ -81,6 +81,7 @@
         <highlightContext name="BasicTypes" highlightColor="#0000FF" bold="false">
             <keywords>
 				<string>Boolean</string>
+				<string>Byte</string>
 				<string>Color</string>
 				<string>Double</string>
 				<string>Integer</string>
@@ -114,6 +115,7 @@
 				<string>Array</string>
 				<string>As</string>
 				<string>Assigns</string>
+				<string>Break</string>
 				<string>ByRef</string>
 				<string>ByVal</string>
 				<string>Call</string>
@@ -141,15 +143,12 @@
 				<string>Finally</string>
 				<string>For</string>
 				<string>Function</string>
-				<string>Get</string>
-				<string>Global</string>
 				<string>GoTo</string>
 				<string>Handles</string>
 				<string>If</string>
 				<string>Implements</string>
 				<string>In</string>
 				<string>Inherits</string>
-				<string>Inline68K</string>
 				<string>Interface</string>
 				<string>Is</string>
 				<string>IsA</string>
