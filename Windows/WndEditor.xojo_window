@@ -1330,6 +1330,14 @@ End
 		      call AutocompleterKeywords.AddKey( method.Name, nil )
 		    next
 		    
+		    //
+		    // Additional
+		    //
+		    dim addl as string = kAdditionalKeywords
+		    addl = ReplaceLineEndings( addl, &uA ).Trim
+		    for each keyword as string in addl.Split( &uA )
+		      call AutocompleterKeywords.AddKey( keyword, nil )
+		    next
 		  end if
 		  
 		  //
@@ -1449,6 +1457,9 @@ End
 		Private ResumeSetAutocompleteAtLine As Integer = 0
 	#tag EndProperty
 
+
+	#tag Constant, Name = kAdditionalKeywords, Type = String, Dynamic = False, Default = \"Print\nInput", Scope = Protected
+	#tag EndConstant
 
 	#tag Constant, Name = kColorCurrentLine, Type = Color, Dynamic = False, Default = \"&cF4FF9C", Scope = Protected
 	#tag EndConstant
