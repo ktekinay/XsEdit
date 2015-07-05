@@ -228,6 +228,7 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
    Begin Timer tmrSetContentsChanged
       Height          =   32
       Index           =   -2147483648
+      InitialParent   =   ""
       Left            =   0
       LockedInPosition=   False
       Mode            =   0
