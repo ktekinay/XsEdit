@@ -250,6 +250,35 @@ Begin Menu MainMenuBar
          Visible = True
       End
    End
+   Begin MenuItem ViewMenu
+      SpecialMenu = 0
+      Text = "View"
+      Index = -2147483648
+      AutoEnable = True
+      Visible = True
+      Begin MenuItem ViewShowInvisibles
+         SpecialMenu = 0
+         Text = "Show &Invisibles"
+         Index = -2147483648
+         ShortcutKey = "I"
+         Shortcut = "Cmd+Option+I"
+         MenuModifier = True
+         MacOptionKey = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ViewShowLineNumbers
+         SpecialMenu = 0
+         Text = "Show &Line Numbers"
+         Index = -2147483648
+         ShortcutKey = "L"
+         Shortcut = "Cmd+Option+L"
+         MenuModifier = True
+         MacOptionKey = True
+         AutoEnable = True
+         Visible = True
+      End
+   End
    Begin MenuItem ScriptMenu
       SpecialMenu = 0
       Text = "Script"
