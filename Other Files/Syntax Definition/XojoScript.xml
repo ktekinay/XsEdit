@@ -52,17 +52,7 @@
         </highlightContext>        
 		
 		<highlightContext name="Comment" highlightColor="#7F0000" italic="false">
-			<startRegEx>'</startRegEx>
-			<endRegEx>[\n\r]</endRegEx>
-		</highlightContext>
-		
-		<highlightContext name="C-Comment" highlightColor="#7F0000" italic="false">
-			<startRegEx>//</startRegEx>
-			<endRegEx>[\n\r]</endRegEx>
-		</highlightContext>
-		
-		<highlightContext name="REM-Comment" highlightColor="#7F0000" italic="false">
-			<startRegEx>\brem\b</startRegEx>
+			<startRegEx>'|//|\brem\b</startRegEx>
 			<endRegEx>[\n\r]</endRegEx>
 		</highlightContext>
 		
