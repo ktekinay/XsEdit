@@ -193,6 +193,35 @@ Inherits Preferences
 		Private mDefaultColorStrings As Color
 	#tag EndProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return BooleanValue( kPrefShowInvisibles, kDefaultShowInvisibles )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  BooleanValue( kPrefShowInvisibles ) = value
+			  
+			End Set
+		#tag EndSetter
+		ShowInvisibles As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return BooleanValue( kPrefShowLineNumbers, kDefaultShowLineNumbers )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  BooleanValue( kPrefShowLineNumbers ) = value
+			End Set
+		#tag EndSetter
+		ShowLineNumbers As Boolean
+	#tag EndComputedProperty
+
 
 	#tag Constant, Name = kDefaultAutoCloseBrackets, Type = Boolean, Dynamic = False, Default = \"False", Scope = Public
 	#tag EndConstant
@@ -204,6 +233,12 @@ Inherits Preferences
 	#tag EndConstant
 
 	#tag Constant, Name = kDefaultCodeFontSize, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kDefaultShowInvisibles, Type = Boolean, Dynamic = False, Default = \"False", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kDefaultShowLineNumbers, Type = Boolean, Dynamic = False, Default = \"True", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefAutoCloseBrackets, Type = String, Dynamic = False, Default = \"AutoCloseBrackets", Scope = Public
@@ -230,6 +265,12 @@ Inherits Preferences
 	#tag Constant, Name = kPrefColorStrings, Type = String, Dynamic = False, Default = \"StringsColor", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = kPrefShowInvisibles, Type = String, Dynamic = False, Default = \"ShowInvisibles", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefShowLineNumbers, Type = String, Dynamic = False, Default = \"ShowLineNumbers", Scope = Public
+	#tag EndConstant
+
 
 	#tag ViewBehavior
 		#tag ViewProperty
@@ -254,6 +295,30 @@ Inherits Preferences
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="ColorBasicTypes"
+			Group="Behavior"
+			InitialValue="&c000000"
+			Type="Color"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ColorComments"
+			Group="Behavior"
+			InitialValue="&c000000"
+			Type="Color"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ColorKeywords"
+			Group="Behavior"
+			InitialValue="&c000000"
+			Type="Color"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ColorStrings"
+			Group="Behavior"
+			InitialValue="&c000000"
+			Type="Color"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
@@ -266,6 +331,12 @@ Inherits Preferences
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="mDefaultColorBasicTypes"
+			Group="Behavior"
+			InitialValue="&c000000"
+			Type="Color"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"

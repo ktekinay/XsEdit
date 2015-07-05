@@ -228,6 +228,7 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
    Begin Timer tmrSetContentsChanged
       Height          =   32
       Index           =   -2147483648
+      InitialParent   =   ""
       Left            =   0
       LockedInPosition=   False
       Mode            =   0
@@ -289,6 +290,9 @@ End
 		Sub EnableMenuItems()
 		  EditUndo.Enabled = fldCode.CanUndo
 		  EditRedo.Enabled = fldCode.CanRedo
+		  
+		  ViewShowInvisibles.Checked = App.Prefs.ShowInvisibles
+		  ViewShowLineNumbers.Checked = App.Prefs.ShowLineNumbers
 		  
 		  ScriptGoToErrorLine.Enabled = LastCompilerErrorLine > 0
 		  
@@ -645,6 +649,24 @@ End
 	#tag MenuHandler
 		Function ScriptRunInIDE() As Boolean Handles ScriptRunInIDE.Action
 			self.ScriptRunInIDE
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function ViewShowInvisibles() As Boolean Handles ViewShowInvisibles.Action
+			App.Prefs.ShowInvisibles = not App.Prefs.ShowInvisibles
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function ViewShowLineNumbers() As Boolean Handles ViewShowLineNumbers.Action
+			App.Prefs.ShowLineNumbers = not App.Prefs.ShowLineNumbers
 			
 			Return True
 			
@@ -1051,6 +1073,8 @@ End
 		  fldCode.TextSize = xsePrefs.CodeFontSize
 		  fldCode.AutocompleteAppliesStandardCase = xsePrefs.AutocompleteAppliesStandardCase
 		  fldCode.AutoCloseBrackets = xsePrefs.AutoCloseBrackets
+		  fldCode.DisplayInvisibleCharacters = xsePrefs.ShowInvisibles
+		  fldCode.DisplayLineNumbers = xsePrefs.ShowLineNumbers
 		  
 		  dim hd as HighlightDefinition = fldCode.SyntaxDefinition
 		  for each context as HighlightContext in hd.Contexts
