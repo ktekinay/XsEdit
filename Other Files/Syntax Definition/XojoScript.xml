@@ -44,7 +44,7 @@
         </highlightContext>    	
         
         <highlightContext name="Integers" highlightColor="#326598">
-            <entryRegEx>(?&lt;=[^\w.&#x7F;-&#x10F7FF;]|^)\d+(?=[^\w.&#x7F;-&#x10F7FF;]|$)</entryRegEx>
+            <entryRegEx>(?&lt;=[^\w.&#x7F;-&#x10F7FF;]|^)(?:\d+|&amp;h[[:xdigit:]]*\b|&amp;o[0-7]*\b|&amp;b[01]*\b)(?=[^\w.&#x7F;-&#x10F7FF;]|$)</entryRegEx>
         </highlightContext>
 
 		<highlightContext name="PreProcessor" highlightColor="#0000FF">
