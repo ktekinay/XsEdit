@@ -1373,7 +1373,10 @@ End
 		    dim addl as string = kAdditionalKeywords
 		    addl = ReplaceLineEndings( addl, &uA ).Trim
 		    for each keyword as string in addl.Split( &uA )
-		      call AutocompleterKeywords.AddKey( keyword, nil )
+		      keyword = keyword.Trim
+		      if keyword <> "" then
+		        call AutocompleterKeywords.AddKey( keyword, nil )
+		      end if
 		    next
 		  end if
 		  
@@ -1507,7 +1510,7 @@ End
 	#tag EndProperty
 
 
-	#tag Constant, Name = kAdditionalKeywords, Type = String, Dynamic = False, Default = \"Print\nInput", Scope = Protected
+	#tag Constant, Name = kAdditionalKeywords, Type = String, Dynamic = False, Default = \"Abs\nAcos\nAppend\nAsc\nAscB\nAsin\nAtan\nAtan2\nBin\nCdbl\nCeil\nChr\nChrB\nCMY\nCos\nCountFields\nCStr\nEndOfLine\nExp\nFloor\nFormat\nHex\nHSV\nInput\nInStr\nInStrB\nLeft\nLeftB\nLen\nLenB\nLog\nLowercase\nLTrim\nMax\nMicroseconds\nMid\nMidB\nMin\nNthField\nOct\nPow\nPrint\nReplace\nReplaceAll\nReplaceAllB\nReplaceB\nRGB\nRight\nRightB\nRnd\nRound\nRTrim\nSin\nSqrt\nStr\nStrComp\nTan\nTicks\nTitlecase\nTrim\nUbound\nUppercase\nVal", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = kColorCurrentLine, Type = Color, Dynamic = False, Default = \"&cF4FF9C", Scope = Protected
