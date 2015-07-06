@@ -13,10 +13,16 @@ Protected Class Preferences
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function ColorToText(c As Color) As Text
+		  dim textValue as Text = "&c" + c.Red.ToHex( 2 ) + c.Green.ToHex( 2 ) + c.Blue.ToHex( 2 ) + c.Alpha.ToHex( 2 )
+		  return textValue
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub ColorValue(name As String, Assigns value As Color)
-		  dim textValue as Text = "&c" + value.Red.ToHex( 2 ) + value.Green.ToHex( 2 ) + value.Blue.ToHex( 2 ) + value.Alpha.ToHex( 2 )
-		  ChildAdHocValues.Value(name) = textValue
+		  ChildAdHocValues.Value(name) = ColorToText(value)
 		  InformWatchers
 		End Sub
 	#tag EndMethod
@@ -28,14 +34,7 @@ Protected Class Preferences
 		  end if
 		  
 		  dim textValue as Text = ChildAdHocValues.Value(name)
-		  dim c as Color = RGB( _
-		  Integer.FromHex( textValue.Mid( 2, 2 ) ), _
-		  Integer.FromHex( textValue.Mid( 4, 2 ) ), _
-		  Integer.FromHex( textValue.Mid( 6, 2 ) ), _
-		  Integer.FromHex( textValue.Mid( 8, 2 ) ) _
-		  )
-		  
-		  return c
+		  return TextToColor(textValue)
 		  
 		End Function
 	#tag EndMethod
@@ -76,20 +75,33 @@ Protected Class Preferences
 		  //
 		  // Make sure computed properties are done first
 		  //
-		  dim doComputed as boolean
+		  dim doComputed as boolean = true
 		  
 		  do
-		    doComputed = not doComputed
-		    
 		    for each prop as Xojo.Introspection.PropertyInfo in props
 		      if prop.IsComputed = doComputed then
 		        dim propName as text = prop.Name
 		        if data.HasKey(propName) then
-		          prop.Value(restoreTo) = data.Value(propName)
+		          dim value as auto = data.Value(propName)
+		          
+		          dim propType as text = prop.PropertyType.Name
+		          if propType = "Color" then
+		            value = TextToColor(value)
+		            
+		          elseif propType = "String" then
+		            dim t as text = value
+		            dim s as string = t
+		            value = s
+		            
+		          end if
+		          
+		          prop.Value(restoreTo) = value
 		        end if
 		      end if
 		    next
-		  loop until not doComputed
+		    
+		    doComputed = not doComputed
+		  loop until doComputed
 		End Sub
 	#tag EndMethod
 
@@ -407,7 +419,7 @@ Protected Class Preferences
 		  // Does simple serialization of an object
 		  // Will only accept simple types (no arrays or objects)
 		  
-		  static acceptableTypes() as string = split("boolean,double,single,string,text,int8,int16,int32,int64,uint8,uint16,uint32,uint64", ",")
+		  static acceptableTypes() as string = split("boolean,color,double,single,string,text,int8,int16,int32,int64,uint8,uint16,uint32,uint64", ",")
 		  
 		  dim ti as Xojo.Introspection.TypeInfo = Xojo.Introspection.GetType(o)
 		  dim props() as Xojo.Introspection.PropertyInfo = ti.Properties
@@ -434,6 +446,8 @@ Protected Class Preferences
 		    if propType = "String" and CType(value, string) = "" then
 		      dim t as text
 		      value = t
+		    elseif propType = "Color" then
+		      value = ColorToText(CType(value, color))
 		    end if
 		    
 		    root.Value(prop.Name) = value
@@ -509,6 +523,19 @@ Protected Class Preferences
 		  ChildAdHocValues.Value(name) = value
 		  InformWatchers
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function TextToColor(t As Text) As Color
+		  dim c as Color = RGB( _
+		  Integer.FromHex( t.Mid( 2, 2 ) ), _
+		  Integer.FromHex( t.Mid( 4, 2 ) ), _
+		  Integer.FromHex( t.Mid( 6, 2 ) ), _
+		  Integer.FromHex( t.Mid( 8, 2 ) ) _
+		  )
+		  
+		  return c
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
