@@ -1373,7 +1373,10 @@ End
 		    dim addl as string = kAdditionalKeywords
 		    addl = ReplaceLineEndings( addl, &uA ).Trim
 		    for each keyword as string in addl.Split( &uA )
-		      call AutocompleterKeywords.AddKey( keyword, nil )
+		      keyword = keyword.Trim
+		      if keyword <> "" then
+		        call AutocompleterKeywords.AddKey( keyword, nil )
+		      end if
 		    next
 		  end if
 		  
