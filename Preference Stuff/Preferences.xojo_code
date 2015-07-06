@@ -68,6 +68,31 @@ Protected Class Preferences
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub DeserializeProperties(data As Xojo.Core.Dictionary, restoreTo As Object)
+		  dim ti as Xojo.Introspection.TypeInfo = Xojo.Introspection.GetType(restoreTo)
+		  dim props() as Xojo.Introspection.PropertyInfo = ti.Properties
+		  
+		  //
+		  // Make sure computed properties are done first
+		  //
+		  dim doComputed as boolean
+		  
+		  do
+		    doComputed = not doComputed
+		    
+		    for each prop as Xojo.Introspection.PropertyInfo in props
+		      if prop.IsComputed = doComputed then
+		        dim propName as text = prop.Name
+		        if data.HasKey(propName) then
+		          prop.Value(restoreTo) = data.Value(propName)
+		        end if
+		      end if
+		    next
+		  loop until not doComputed
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Sub Destructor()
 		  Save
@@ -234,6 +259,28 @@ Protected Class Preferences
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub ObjectValue(name As String, Assigns value As Object)
+		  ChildObjectValues.Value(name) = SerializeProperties(value)
+		  InformWatchers()
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function ObjectValue(name As String, default As Object, newInstance As Object) As Object
+		  // Restores the name to given new instance or return default if not found
+		  
+		  dim data as Xojo.Core.Dictionary = ChildObjectValues.Lookup(name, nil)
+		  if data is nil then
+		    return default
+		  end if
+		  
+		  DeserializeProperties(data, newInstance)
+		  return newInstance
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub RegisterWatcher(watcher As PreferenceWatcher)
 		  //
 		  // Don't register the same watcher twice
@@ -355,6 +402,48 @@ Protected Class Preferences
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function SerializeProperties(o As Object) As Xojo.Core.Dictionary
+		  // Does simple serialization of an object
+		  // Will only accept simple types (no arrays or objects)
+		  
+		  static acceptableTypes() as string = split("boolean,double,single,string,text,int8,int16,int32,int64,uint8,uint16,uint32,uint64", ",")
+		  
+		  dim ti as Xojo.Introspection.TypeInfo = Xojo.Introspection.GetType(o)
+		  dim props() as Xojo.Introspection.PropertyInfo = ti.Properties
+		  
+		  dim root as new Xojo.Core.Dictionary
+		  
+		  for each prop as Xojo.Introspection.PropertyInfo in props
+		    //
+		    // Make sure the prop type is fine
+		    //
+		    dim propType as text = prop.PropertyType.Name
+		    if acceptableTypes.IndexOf(propType) = -1 then
+		      dim err as new TypeMismatchException
+		      err.Message = "Can't serialize the type " + propType
+		      raise err
+		    end if
+		    
+		    dim value as auto = prop.Value(o)
+		    
+		    //
+		    // Work around a current bug in Xojo where empty string will
+		    // generate an error when converted to JSON
+		    //
+		    if propType = "String" and CType(value, string) = "" then
+		      dim t as text
+		      value = t
+		    end if
+		    
+		    root.Value(prop.Name) = value
+		    
+		  next
+		  
+		  return root
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0, CompatibilityFlags = TargetHasGUI
 		Sub Store(widget as Listbox, prefix as String = "")
 		  dim child as new Xojo.Core.Dictionary
@@ -465,6 +554,16 @@ Protected Class Preferences
 			End Get
 		#tag EndGetter
 		Protected ChildListboxValues As Xojo.Core.Dictionary
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h1
+		#tag Getter
+			Get
+			  return GetValuesChild("Objects")
+			  
+			End Get
+		#tag EndGetter
+		Protected ChildObjectValues As Xojo.Core.Dictionary
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h1
