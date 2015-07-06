@@ -278,15 +278,14 @@ Protected Class Preferences
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function ObjectValue(name As String, default As Object, newInstance As Object) As Object
-		  // Restores the name to given new instance or return default if not found
+		Function ObjectValue(name As String, newInstance As Object) As Object
+		  // Restores the name to given new instance or returns that instance if not found
 		  
 		  dim data as Xojo.Core.Dictionary = ChildObjectValues.Lookup(name, nil)
-		  if data is nil then
-		    return default
+		  if data isa Xojo.Core.Dictionary then
+		    DeserializeProperties(data, newInstance)
 		  end if
 		  
-		  DeserializeProperties(data, newInstance)
 		  return newInstance
 		  
 		End Function
