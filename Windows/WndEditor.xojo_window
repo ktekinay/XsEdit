@@ -1080,16 +1080,16 @@ End
 		  for each context as HighlightContext in hd.Contexts
 		    select case context.Name
 		    case "BasicTypes"
-		      context.HighlightColor = xsePrefs.ColorBasicTypes
+		      xsePrefs.ContextBasicType.CopyTo context
 		      
 		    case "String"
-		      context.HighlightColor = xsePrefs.ColorStrings
+		      xsePrefs.ContextString.CopyTo context
 		      
 		    case "Keywords"
-		      context.HighlightColor = xsePrefs.ColorKeywords
+		      xsePrefs.ContextKeyword.CopyTo context
 		      
-		    case "Comment", "C-Comment", "REM-Comment"
-		      context.HighlightColor = xsePrefs.ColorComments
+		    case "Comment"
+		      xsePrefs.ContextComment.CopyTo context
 		      
 		    end select
 		    
@@ -1513,9 +1513,6 @@ End
 	#tag Constant, Name = kAdditionalKeywords, Type = String, Dynamic = False, Default = \"Abs\nAcos\nAppend\nAsc\nAscB\nAsin\nAtan\nAtan2\nBin\nCdbl\nCeil\nChr\nChrB\nCMY\nCos\nCountFields\nCStr\nEndOfLine\nExp\nFloor\nFormat\nHex\nHSV\nInput\nInStr\nInStrB\nLeft\nLeftB\nLen\nLenB\nLog\nLowercase\nLTrim\nMax\nMicroseconds\nMid\nMidB\nMin\nNthField\nOct\nPow\nPrint\nReplace\nReplaceAll\nReplaceAllB\nReplaceB\nRGB\nRight\nRightB\nRnd\nRound\nRTrim\nSin\nSqrt\nStr\nStrComp\nTan\nTicks\nTitlecase\nTrim\nUbound\nUppercase\nVal", Scope = Protected
 	#tag EndConstant
 
-	#tag Constant, Name = kColorCurrentLine, Type = Color, Dynamic = False, Default = \"&cF4FF9C", Scope = Protected
-	#tag EndConstant
-
 	#tag Constant, Name = kColorError, Type = Color, Dynamic = False, Default = \"&cFF00007F", Scope = Private
 	#tag EndConstant
 
@@ -1635,11 +1632,15 @@ End
 	#tag EndEvent
 	#tag Event
 		Function UseBackgroundColorForLine(lineIndex as integer, byref lineBackgroundColor as color) As boolean
+		  if not App.Prefs.UseActiveLineHighlight then
+		    return false
+		  end if
+		  
 		  dim startLine as integer = me.LineNumAtCharPos( me.SelStart )
 		  dim endLine as integer = me.LineNumAtCharPos( me.SelStart + me.SelLength )
 		  
 		  if lineIndex >= startLine and lineIndex <= endLine then
-		    lineBackgroundColor = kColorCurrentLine
+		    lineBackgroundColor = App.Prefs.ActiveLineHighlightColor
 		    return true
 		  end if
 		End Function
