@@ -192,7 +192,7 @@ Inherits Preferences
 	#tag Constant, Name = kDefaultAutocompleteAppliesStandardCase, Type = Boolean, Dynamic = False, Default = \"False", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = kDefaultCodeFont, Type = String, Dynamic = False, Default = \"Monaco", Scope = Public
+	#tag Constant, Name = kDefaultCodeFont, Type = String, Dynamic = False, Default = \"System", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = kDefaultCodeFontSize, Type = Double, Dynamic = False, Default = \"0", Scope = Public
@@ -293,6 +293,11 @@ Inherits Preferences
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="ShowLineNumbers"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ShowToolbar"
 			Group="Behavior"
 			Type="Boolean"
 		#tag EndViewProperty
