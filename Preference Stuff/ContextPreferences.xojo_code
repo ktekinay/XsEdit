@@ -1,6 +1,28 @@
 #tag Class
 Protected Class ContextPreferences
 	#tag Method, Flags = &h0
+		Function Clone() As ContextPreferences
+		  dim copy as new ContextPreferences
+		  
+		  copy.BackgroundColor = BackgroundColor
+		  copy.Bold = Bold
+		  copy.HasBackgroundColor = HasBackgroundColor
+		  copy.HighlightColor = HighlightColor
+		  copy.Italic = Italic
+		  copy.Name = Name
+		  copy.Underline = Underline
+		  
+		  return copy
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub Constructor()
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Constructor(syntaxFile As FolderItem, contextName As String)
 		  dim contexts as Dictionary = ContextsForFile( syntaxFile )
 		  dim context as HighlightContext = contexts.Value( contextName )
