@@ -13,7 +13,7 @@ Begin Toolbar TBEditor
 	End
 	Begin ToolButton BtnRunInIDE
 		Caption = "#kTBEditorLabelRunInIDE"
-		HelpTag = ""
+		HelpTag = "#TBEditorHelpTagRunInIDE"
 		Style = 0
 		Enabled = False
 		Icon = 971927551
