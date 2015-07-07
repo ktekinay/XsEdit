@@ -74,6 +74,16 @@ Protected Class ContextPreferences
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub CopyTo(context As HighlightContext)
+		  context.HighlightColor = HighlightColor
+		  context.BackgroundColor = if( HasBackgroundColor, BackgroundColor, DefaultBackgroundColor )
+		  context.Bold = Bold
+		  context.Italic = Italic
+		  context.Underline = Underline
+		End Sub
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h0
 		BackgroundColor As Color
