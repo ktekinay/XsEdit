@@ -271,296 +271,6 @@ Begin XsEditWindowBase WndPreferences
       Enabled         =   True
       Height          =   20
       HelpTag         =   ""
-      Index           =   2
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Multiline       =   False
-      Scope           =   2
-      Selectable      =   False
-      TabIndex        =   7
-      TabPanelIndex   =   0
-      Text            =   "Colors:"
-      TextAlign       =   0
-      TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   111
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   100
-   End
-   Begin Label Label1
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   20
-      HelpTag         =   ""
-      Index           =   3
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   45
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Multiline       =   False
-      Scope           =   2
-      Selectable      =   False
-      TabIndex        =   8
-      TabPanelIndex   =   0
-      Text            =   "Strings:"
-      TextAlign       =   2
-      TextColor       =   &c00000000
-      TextFont        =   "SmallSystem"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   136
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   45
-   End
-   Begin ColorPicker_MTC cpStrings
-      AcceptFocus     =   False
-      AcceptTabs      =   False
-      AutoDeactivate  =   True
-      Backdrop        =   0
-      DoubleBuffer    =   False
-      Enabled         =   True
-      EraseBackground =   True
-      Height          =   32
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Left            =   102
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      PromptText      =   "Select a color:"
-      Scope           =   0
-      TabIndex        =   9
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   129
-      Transparent     =   True
-      UseFocusRing    =   True
-      Value           =   &c00000000
-      Visible         =   True
-      Width           =   32
-   End
-   Begin Label Label1
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   20
-      HelpTag         =   ""
-      Index           =   4
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   156
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Multiline       =   False
-      Scope           =   2
-      Selectable      =   False
-      TabIndex        =   10
-      TabPanelIndex   =   0
-      Text            =   "Keywords:"
-      TextAlign       =   2
-      TextColor       =   &c00000000
-      TextFont        =   "SmallSystem"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   136
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   66
-   End
-   Begin ColorPicker_MTC cpKeywords
-      AcceptFocus     =   False
-      AcceptTabs      =   False
-      AutoDeactivate  =   True
-      Backdrop        =   0
-      DoubleBuffer    =   False
-      Enabled         =   True
-      EraseBackground =   True
-      Height          =   32
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Left            =   234
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      PromptText      =   "Select a color:"
-      Scope           =   0
-      TabIndex        =   11
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   129
-      Transparent     =   True
-      UseFocusRing    =   True
-      Value           =   &c00000000
-      Visible         =   True
-      Width           =   32
-   End
-   Begin Label Label1
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   20
-      HelpTag         =   ""
-      Index           =   5
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   278
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Multiline       =   False
-      Scope           =   2
-      Selectable      =   False
-      TabIndex        =   12
-      TabPanelIndex   =   0
-      Text            =   "Basic Types:"
-      TextAlign       =   2
-      TextColor       =   &c00000000
-      TextFont        =   "SmallSystem"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   136
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   74
-   End
-   Begin ColorPicker_MTC cpBasicTypes
-      AcceptFocus     =   False
-      AcceptTabs      =   False
-      AutoDeactivate  =   True
-      Backdrop        =   0
-      DoubleBuffer    =   False
-      Enabled         =   True
-      EraseBackground =   True
-      Height          =   32
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Left            =   364
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      PromptText      =   "Select a color:"
-      Scope           =   0
-      TabIndex        =   13
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   129
-      Transparent     =   True
-      UseFocusRing    =   True
-      Value           =   &c00000000
-      Visible         =   True
-      Width           =   32
-   End
-   Begin Label Label1
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   20
-      HelpTag         =   ""
-      Index           =   6
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   401
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Multiline       =   False
-      Scope           =   2
-      Selectable      =   False
-      TabIndex        =   14
-      TabPanelIndex   =   0
-      Text            =   "Comments:"
-      TextAlign       =   2
-      TextColor       =   &c00000000
-      TextFont        =   "SmallSystem"
-      TextSize        =   0.0
-      TextUnit        =   0
-      Top             =   136
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   74
-   End
-   Begin ColorPicker_MTC cpComments
-      AcceptFocus     =   False
-      AcceptTabs      =   False
-      AutoDeactivate  =   True
-      Backdrop        =   0
-      DoubleBuffer    =   False
-      Enabled         =   True
-      EraseBackground =   True
-      Height          =   32
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Left            =   487
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      PromptText      =   "Select a color:"
-      Scope           =   0
-      TabIndex        =   15
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   129
-      Transparent     =   True
-      UseFocusRing    =   True
-      Value           =   &c00000000
-      Visible         =   True
-      Width           =   32
-   End
-   Begin Label Label1
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   20
-      HelpTag         =   ""
       Index           =   7
       InitialParent   =   ""
       Italic          =   False
@@ -581,7 +291,7 @@ Begin XsEditWindowBase WndPreferences
       TextFont        =   "System"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   184
+      Top             =   111
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -612,7 +322,7 @@ Begin XsEditWindowBase WndPreferences
       TabIndex        =   17
       TabPanelIndex   =   0
       TabStop         =   True
-      Top             =   216
+      Top             =   143
       Transparent     =   True
       UseFocusRing    =   False
       Visible         =   True
@@ -643,7 +353,7 @@ Begin XsEditWindowBase WndPreferences
       TabIndex        =   18
       TabPanelIndex   =   0
       TabStop         =   True
-      Top             =   260
+      Top             =   187
       Transparent     =   True
       UseFocusRing    =   False
       Visible         =   True
@@ -674,11 +384,104 @@ Begin XsEditWindowBase WndPreferences
       TabIndex        =   19
       TabPanelIndex   =   0
       TabStop         =   True
-      Top             =   304
+      Top             =   231
       Transparent     =   True
       UseFocusRing    =   False
       Visible         =   True
       Width           =   431
+   End
+   Begin TextContextControl ccBasicTypesContext
+      AcceptFocus     =   False
+      AcceptTabs      =   True
+      AutoDeactivate  =   True
+      BackColor       =   &cFFFFFF00
+      Backdrop        =   0
+      Background      =   &c00000000
+      ContextName     =   "BasicTypes"
+      Enabled         =   True
+      EraseBackground =   True
+      Foreground      =   &c00000000
+      HasBackColor    =   False
+      Height          =   32
+      HelpTag         =   ""
+      InitialParent   =   ""
+      Left            =   63
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   20
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Top             =   275
+      Transparent     =   True
+      UseFocusRing    =   False
+      Visible         =   True
+      Width           =   431
+   End
+   Begin CheckBox cbUseActiveLineHighlight
+      AutoDeactivate  =   True
+      Bold            =   False
+      Caption         =   "Highlight Active Line"
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   310
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   2
+      State           =   0
+      TabIndex        =   21
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   54
+      Underline       =   False
+      Value           =   False
+      Visible         =   True
+      Width           =   155
+   End
+   Begin ColorPicker_MTC cpActiveLineHighlightColor
+      AcceptFocus     =   False
+      AcceptTabs      =   False
+      AutoDeactivate  =   True
+      Backdrop        =   0
+      DoubleBuffer    =   False
+      Enabled         =   True
+      EraseBackground =   True
+      Height          =   32
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   492
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      PromptText      =   "Select a color:"
+      Scope           =   0
+      TabIndex        =   22
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Top             =   52
+      Transparent     =   True
+      UseFocusRing    =   True
+      Value           =   &c00000000
+      Visible         =   True
+      Width           =   32
    End
 End
 #tag EndWindow
@@ -728,28 +531,20 @@ End
 		  //
 		  cbAutoCloseBrackets.Value = App.Prefs.AutoCloseBrackets
 		  
-		  
 		  //
-		  // Set the colors
+		  // Set the UseActiveLineHighlight checkbox
 		  //
-		  cpStrings.PromptText = "Select a color for Strings:"
-		  cpStrings.Value = App.Prefs.ColorStrings
-		  
-		  cpKeywords.PromptText = "Select a color for Keywords:"
-		  cpKeywords.Value = App.Prefs.ColorKeywords
-		  
-		  cpBasicTypes.PromptText = "Select a color for Basic Types:"
-		  cpBasicTypes.Value = App.Prefs.ColorBasicTypes
-		  
-		  cpComments.PromptText = "Select a color for Comments:"
-		  cpComments.Value = App.Prefs.ColorComments
+		  cbUseActiveLineHighlight.Value = App.Prefs.UseActiveLineHighlight
+		  cpActiveLineHighlightColor.Value = App.Prefs.ActiveLineHighlightColor
+		  cpActiveLineHighlightColor.Visible = cbUseActiveLineHighlight.Value
 		  
 		  //
 		  // Contexts
 		  //
 		  ccStringsContext.SetFromPrefs( App.Prefs.ContextString, new ContextPreferences( App.SyntaxDefinitionFile, "String" ) )
 		  ccKeywordsContext.SetFromPrefs( App.Prefs.ContextKeyword, new ContextPreferences( App.SyntaxDefinitionFile, "Keywords" ) )
-		  ccCommentsContext.SetFromPrefs( App.Prefs.ContextKeyword, new ContextPreferences( App.SyntaxDefinitionFile, "Comment" ) )
+		  ccCommentsContext.SetFromPrefs( App.Prefs.ContextComment, new ContextPreferences( App.SyntaxDefinitionFile, "Comment" ) )
+		  ccBasicTypesContext.SetFromPrefs( App.Prefs.ContextBasicType, new ContextPreferences( App.SyntaxDefinitionFile, "BasicTypes" ) )
 		  
 		End Sub
 	#tag EndEvent
@@ -761,14 +556,17 @@ End
 		  
 		  cbAutoCloseBrackets.Value = prefs.kDefaultAutoCloseBrackets
 		  cbAutocompleteAppliesStandardCase.Value = prefs.kDefaultAutocompleteAppliesStandardCase
+		  cbUseActiveLineHighlight.Value = prefs.kDefaultUseActiveLineHighlight
+		  cpActiveLineHighlightColor.Value = prefs.kDefaultActiveHighlightColor
+		  cpActiveLineHighlightColor.Visible = cbUseActiveLineHighlight.Value
+		  
 		  cboCodeFont.Text = prefs.kDefaultCodeFont
-		  cpBasicTypes.Value = prefs.kDefaultColorBasicTypes
-		  cpComments.Value = prefs.kDefaultColorComments
-		  cpKeywords.Value = prefs.kDefaultColorKeywords
-		  cpStrings.Value = prefs.kDefaultColorStrings
 		  fldCodeSize.Text = str( prefs.kDefaultCodeFontSize )
 		  
 		  ccStringsContext.RestoreDefaults
+		  ccCommentsContext.RestoreDefaults
+		  ccBasicTypesContext.RestoreDefaults
+		  ccKeywordsContext.RestoreDefaults
 		End Sub
 	#tag EndMethod
 
@@ -801,14 +599,13 @@ End
 		  App.Prefs.CodeFontSize = fldCodeSize.Text.Val
 		  App.Prefs.AutocompleteAppliesStandardCase = cbAutocompleteAppliesStandardCase.Value
 		  App.Prefs.AutoCloseBrackets = cbAutoCloseBrackets.Value
-		  App.Prefs.ColorStrings = cpStrings.Value
-		  App.Prefs.ColorKeywords = cpKeywords.Value
-		  App.Prefs.ColorBasicTypes = cpBasicTypes.Value
-		  App.Prefs.ColorComments = cpComments.Value
+		  App.Prefs.UseActiveLineHighlight = cbUseActiveLineHighlight.Value
+		  App.Prefs.ActiveLineHighlightColor = cpActiveLineHighlightColor.Value
 		  
 		  App.Prefs.ContextString = ccStringsContext.ToContextPreferences
 		  App.Prefs.ContextKeyword = ccKeywordsContext.ToContextPreferences
 		  App.Prefs.ContextComment = ccCommentsContext.ToContextPreferences
+		  App.Prefs.ContextBasicType = ccBasicTypesContext.ToContextPreferences
 		  
 		  App.Prefs.Save
 		  
@@ -842,6 +639,33 @@ End
 		Sub AlternateAction()
 		  RestoreDefaults
 		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events cbUseActiveLineHighlight
+	#tag Event
+		Sub Action()
+		  cpActiveLineHighlightColor.Visible = me.Value
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events cpActiveLineHighlightColor
+	#tag Event
+		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
+		  base.Append new MenuItem( "Restore Default" )
+		  return true
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function ContextualMenuAction(hitItem as MenuItem) As Boolean
+		  select case hitItem.Text
+		  case "Restore Default"
+		    me.Value = App.Prefs.kDefaultActiveHighlightColor
+		    return true
+		    
+		  end select
+		  
+		  return false
+		End Function
 	#tag EndEvent
 #tag EndEvents
 #tag ViewBehavior
