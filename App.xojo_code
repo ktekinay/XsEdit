@@ -212,6 +212,12 @@ Inherits Application
 		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"Ctrl+Q"
 	#tag EndConstant
 
+	#tag Constant, Name = kViewHideToolbar, Type = String, Dynamic = False, Default = \"Hide Toolbar", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kViewShowToolbar, Type = String, Dynamic = False, Default = \"Show Toolbar", Scope = Public
+	#tag EndConstant
+
 
 	#tag ViewBehavior
 	#tag EndViewBehavior

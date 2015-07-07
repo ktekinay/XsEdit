@@ -278,6 +278,24 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin MenuItem UntitledSeparator8
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ViewToggleToolbar
+         SpecialMenu = 0
+         Text = "#App.kViewHideToolbar"
+         Index = -2147483648
+         ShortcutKey = "T"
+         Shortcut = "Cmd+Option+T"
+         MenuModifier = True
+         MacOptionKey = True
+         AutoEnable = True
+         Visible = True
+      End
    End
    Begin MenuItem ScriptMenu
       SpecialMenu = 0
@@ -287,7 +305,7 @@ Begin Menu MainMenuBar
       Visible = True
       Begin MenuItem ScriptCompile
          SpecialMenu = 0
-         Text = "#WndEditor.kToolbarCompile"
+         Text = "#kTBEditorLabelCompile"
          Index = -2147483648
          ShortcutKey = "K"
          Shortcut = "Cmd+K"
@@ -297,7 +315,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem ScriptRunInIDE
          SpecialMenu = 0
-         Text = "#WndEditor.kToolbarRunInIDE"
+         Text = "#kTBEditorLabelRunInIDE"
          Index = -2147483648
          ShortcutKey = "R"
          Shortcut = "Cmd+R"
@@ -314,7 +332,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem ScriptRun
          SpecialMenu = 0
-         Text = "#WndEditor.kToolbarTestRun"
+         Text = "#kTBEditorLabelTestRun"
          Index = -2147483648
          ShortcutKey = "R"
          Shortcut = "Cmd+Shift+R"

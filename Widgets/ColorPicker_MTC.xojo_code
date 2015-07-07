@@ -3,7 +3,7 @@ Protected Class ColorPicker_MTC
 Inherits Canvas
 	#tag Event
 		Function MouseDown(X As Integer, Y As Integer) As Boolean
-		  return true
+		  return not IsContextualClick
 		  
 		  #pragma unused X
 		  #pragma unused Y

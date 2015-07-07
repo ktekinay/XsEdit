@@ -238,6 +238,19 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Top             =   0
       Width           =   32
    End
+   Begin Timer tmrCheckForXojoIDE
+      Height          =   32
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   0
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   1000
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   0
+      Width           =   32
+   End
 End
 #tag EndWindow
 
@@ -245,6 +258,8 @@ End
 	#tag Event
 		Sub Activate()
 		  SetTitle()
+		  AdjustRunInIDEButton
+		  tmrCheckForXojoIDE.Mode = Timer.ModeMultiple
 		End Sub
 	#tag EndEvent
 
@@ -287,6 +302,12 @@ End
 	#tag EndEvent
 
 	#tag Event
+		Sub Deactivate()
+		  tmrCheckForXojoIDE.Mode = Timer.ModeOff
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub EnableMenuItems()
 		  EditUndo.Enabled = fldCode.CanUndo
 		  EditRedo.Enabled = fldCode.CanRedo
@@ -299,6 +320,13 @@ End
 		  dim find as string = WndSearch.Options.FindTerm
 		  EditFindNext.Enabled = find <> ""
 		  EditFindPrevious.Enabled = find <> ""
+		  
+		  dim toggleToolbarText as string = if( App.Prefs.ShowToolbar, App.kViewHideToolbar, App.kViewShowToolbar )
+		  if ViewToggleToolbar.Text <> toggleToolbarText then
+		    ViewToggleToolbar.Text = toggleToolbarText
+		  end if
+		  
+		  ScriptRunInIDE.Enabled = IsIDEAvailable
 		End Sub
 	#tag EndEvent
 
@@ -673,6 +701,33 @@ End
 		End Function
 	#tag EndMenuHandler
 
+	#tag MenuHandler
+		Function ViewToggleToolbar() As Boolean Handles ViewToggleToolbar.Action
+			App.Prefs.ShowToolbar = ViewToggleToolbar.Text = App.kViewShowToolbar
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+
+	#tag Method, Flags = &h21
+		Private Sub AdjustRunInIDEButton()
+		  dim shouldEnable as boolean = IsIDEAvailable
+		  
+		  dim btn as ToolItem = tbToolbar.Item( kTBEditorButtonIndexRunInIDE )
+		  btn.Enabled = shouldEnable
+		  
+		  dim tag as string
+		  if shouldEnable then
+		    tag = kTBEditorHelpTagRunInIDE
+		  else
+		    tag = kTBEditorHelpTagRunInIDE + kTBEditorHelpTagIDEUnavailableSuffix
+		  end if
+		  if btn.HelpTag <> tag then
+		    btn.HelpTag = tag
+		  end if
+		End Sub
+	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Function CharPosOfNext(options As SearchOptions) As Integer
@@ -1067,6 +1122,8 @@ End
 		Private Sub PreferencesHaveChanged(prefs As Preferences)
 		  dim xsePrefs as XsEditPreferences = XsEditPreferences( prefs )
 		  
+		  tbToolbar.Visible = xsePrefs.ShowToolbar
+		  
 		  fldCode.IgnoreRepaint = true
 		  
 		  fldCode.TextFont = xsePrefs.CodeFont
@@ -1077,22 +1134,13 @@ End
 		  fldCode.DisplayLineNumbers = xsePrefs.ShowLineNumbers
 		  
 		  dim hd as HighlightDefinition = fldCode.SyntaxDefinition
+		  dim interestingPrefs as Dictionary = xsePrefs.InterestingContextPrefsDictionary
+		  
 		  for each context as HighlightContext in hd.Contexts
-		    select case context.Name
-		    case "BasicTypes"
-		      context.HighlightColor = xsePrefs.ColorBasicTypes
-		      
-		    case "String"
-		      context.HighlightColor = xsePrefs.ColorStrings
-		      
-		    case "Keywords"
-		      context.HighlightColor = xsePrefs.ColorKeywords
-		      
-		    case "Comment", "C-Comment", "REM-Comment"
-		      context.HighlightColor = xsePrefs.ColorComments
-		      
-		    end select
-		    
+		    if interestingPrefs.HasKey( context.Name ) then
+		      dim contextPref as ContextPreferences = interestingPrefs.Value( context.Name )
+		      contextPref.CopyTo context
+		    end if
 		  next
 		  
 		  //
@@ -1475,6 +1523,24 @@ End
 		Private CodeBeforeChanges As String
 	#tag EndProperty
 
+	#tag ComputedProperty, Flags = &h21
+		#tag Getter
+			Get
+			  dim isAvailable as boolean = true // Assume this
+			  dim ipcPath as string = IDECommunicator.FindIPCPath
+			  if ipcPath = "" then
+			    isAvailable = false
+			  else
+			    dim f as new FolderItem( ipcPath, FolderItem.PathTypeNative )
+			    isAvailable = f isa FolderItem and f.Exists
+			  end if
+			  
+			  return isAvailable
+			End Get
+		#tag EndGetter
+		Private IsIDEAvailable As Boolean
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h21
 		Private LastCompilerErrorCode As Integer = -1
 	#tag EndProperty
@@ -1513,9 +1579,6 @@ End
 	#tag Constant, Name = kAdditionalKeywords, Type = String, Dynamic = False, Default = \"Abs\nAcos\nAppend\nAsc\nAscB\nAsin\nAtan\nAtan2\nBin\nCdbl\nCeil\nChr\nChrB\nCMY\nCos\nCountFields\nCStr\nEndOfLine\nExp\nFloor\nFormat\nHex\nHSV\nInput\nInStr\nInStrB\nLeft\nLeftB\nLen\nLenB\nLog\nLowercase\nLTrim\nMax\nMicroseconds\nMid\nMidB\nMin\nNthField\nOct\nPow\nPrint\nReplace\nReplaceAll\nReplaceAllB\nReplaceB\nRGB\nRight\nRightB\nRnd\nRound\nRTrim\nSin\nSqrt\nStr\nStrComp\nTan\nTicks\nTitlecase\nTrim\nUbound\nUppercase\nVal", Scope = Protected
 	#tag EndConstant
 
-	#tag Constant, Name = kColorCurrentLine, Type = Color, Dynamic = False, Default = \"&cF4FF9C", Scope = Protected
-	#tag EndConstant
-
 	#tag Constant, Name = kColorError, Type = Color, Dynamic = False, Default = \"&cFF00007F", Scope = Private
 	#tag EndConstant
 
@@ -1532,15 +1595,6 @@ End
 	#tag EndConstant
 
 	#tag Constant, Name = kIncludeDirective, Type = String, Dynamic = False, Default = \"#include", Scope = Private
-	#tag EndConstant
-
-	#tag Constant, Name = kToolbarCompile, Type = String, Dynamic = False, Default = \"Compile", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = kToolbarRunInIDE, Type = String, Dynamic = False, Default = \"Run in IDE", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = kToolbarTestRun, Type = String, Dynamic = False, Default = \"Test Run", Scope = Public
 	#tag EndConstant
 
 
@@ -1635,11 +1689,15 @@ End
 	#tag EndEvent
 	#tag Event
 		Function UseBackgroundColorForLine(lineIndex as integer, byref lineBackgroundColor as color) As boolean
+		  if not App.Prefs.UseActiveLineHighlight then
+		    return false
+		  end if
+		  
 		  dim startLine as integer = me.LineNumAtCharPos( me.SelStart )
 		  dim endLine as integer = me.LineNumAtCharPos( me.SelStart + me.SelLength )
 		  
 		  if lineIndex >= startLine and lineIndex <= endLine then
-		    lineBackgroundColor = kColorCurrentLine
+		    lineBackgroundColor = App.Prefs.ActiveLineHighlightColor
 		    return true
 		  end if
 		End Function
@@ -1688,13 +1746,13 @@ End
 	#tag Event
 		Sub Action(item As ToolItem)
 		  select case item.Caption
-		  case kToolbarCompile
+		  case kTBEditorLabelCompile
 		    ScriptCompile
 		    
-		  case kToolbarTestRun
+		  case kTBEditorLabelTestRun
 		    ScriptTestRun
 		    
-		  case kToolbarRunInIDE
+		  case kTBEditorLabelRunInIDE
 		    ScriptRunInIDE
 		  end select
 		End Sub
@@ -1863,6 +1921,13 @@ End
 	#tag Event
 		Sub Action()
 		  SetContentsChanged()
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tmrCheckForXojoIDE
+	#tag Event
+		Sub Action()
+		  AdjustRunInIDEButton
 		End Sub
 	#tag EndEvent
 #tag EndEvents

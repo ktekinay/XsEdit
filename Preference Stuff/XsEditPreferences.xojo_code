@@ -6,59 +6,65 @@ Inherits Preferences
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(applicationId)
 		  
-		  //
-		  // Read the syntax definition
-		  //
-		  
-		  dim hd as new HighlightDefinition
-		  if not hd.LoadFromXml( App.SyntaxDefinitionFile ) then
-		    MsgBox "Could not load syntax definition"
-		    quit
-		  end if
-		  
-		  for each context as HighlightContext in hd.Contexts
-		    select case context.Name
-		    case "String"
-		      mDefaultColorStrings = context.HighlightColor
-		      
-		    case "Keywords"
-		      mDefaultColorKeywords = context.HighlightColor
-		      
-		    case "BasicTypes"
-		      mDefaultColorBasicTypes = context.HighlightColor
-		      
-		    case "Comment"
-		      mDefaultColorComments = context.HighlightColor
-		      
-		    end select
-		  next
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function kDefaultColorBasicTypes() As Color
-		  return mDefaultColorBasicTypes
+		Function ContextPrefValue(contextName As String) As ContextPreferences
+		  return ContextPreferences( ObjectValue( contextName + " Context" , new ContextPreferences( App.SyntaxDefinitionFile, contextName ) ) )
+		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function kDefaultColorComments() As Color
-		  return mDefaultColorComments
+		Sub ContextPrefValue(contextName As String, Assigns value As ContextPreferences)
+		  ObjectValue( contextName + " Context" ) = value
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function InterestingContextPrefs() As ContextPreferences()
+		  dim interestingNames() as string = array( _
+		  "Keywords", "BasicTypes", "Doubles", "Integers", "String", "PreProcessor", "Comment" _
+		  )
+		  
+		  dim arr() as ContextPreferences
+		  for i as integer = 0 to interestingNames.Ubound
+		    dim contextName as string = interestingNames( i )
+		    arr.Append ContextPrefValue( contextName )
+		  next
+		  
+		  return arr
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function kDefaultColorKeywords() As Color
-		  return mDefaultColorKeywords
+		Function InterestingContextPrefsDictionary() As Dictionary
+		  dim arr() as ContextPreferences = InterestingContextPrefs
+		  dim d as new Dictionary
+		  for each pref as ContextPreferences in arr
+		    d.Value( pref.Name ) = pref
+		  next
+		  
+		  return d
+		  
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function kDefaultColorStrings() As Color
-		  return mDefaultColorStrings
-		End Function
-	#tag EndMethod
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return ColorValue( kPrefActiveLineHighlightColor, kDefaultActiveHighlightColor )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  ColorValue( kPrefActiveLineHighlightColor ) = value
+			End Set
+		#tag EndSetter
+		ActiveLineHighlightColor As Color
+	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
@@ -121,81 +127,6 @@ Inherits Preferences
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return ColorValue( kPrefColorBasicTypes, kDefaultColorBasicTypes )
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  ColorValue( kPrefColorBasicTypes ) = value
-			End Set
-		#tag EndSetter
-		ColorBasicTypes As Color
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return ColorValue( kPrefColorComments, kDefaultColorComments )
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  ColorValue( kPrefColorComments ) = value
-			  
-			End Set
-		#tag EndSetter
-		ColorComments As Color
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return ColorValue( kPrefColorKeywords, kDefaultColorKeywords )
-			  
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  ColorValue( kPrefColorKeywords ) = value
-			End Set
-		#tag EndSetter
-		ColorKeywords As Color
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return ColorValue( kPrefColorStrings, kDefaultColorStrings )
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  ColorValue( kPrefColorStrings ) = value
-			  
-			End Set
-		#tag EndSetter
-		ColorStrings As Color
-	#tag EndComputedProperty
-
-	#tag Property, Flags = &h0
-		mDefaultColorBasicTypes As Color
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mDefaultColorComments As Color
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mDefaultColorKeywords As Color
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mDefaultColorStrings As Color
-	#tag EndProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
 			  return BooleanValue( kPrefShowInvisibles, kDefaultShowInvisibles )
 			End Get
 		#tag EndGetter
@@ -222,6 +153,38 @@ Inherits Preferences
 		ShowLineNumbers As Boolean
 	#tag EndComputedProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return BooleanValue( kPrefShowToolbar, kDefaultShowToolbar )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  BooleanValue( kPrefShowToolbar ) = value
+			End Set
+		#tag EndSetter
+		ShowToolbar As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return BooleanValue( kPrefUseActiveLineHighlight, kDefaultUseActiveLineHighlight )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  BooleanValue( kPrefUseActiveLineHighlight ) = value
+			  
+			End Set
+		#tag EndSetter
+		UseActiveLineHighlight As Boolean
+	#tag EndComputedProperty
+
+
+	#tag Constant, Name = kDefaultActiveHighlightColor, Type = Color, Dynamic = False, Default = \"&cF4FF9C", Scope = Public
+	#tag EndConstant
 
 	#tag Constant, Name = kDefaultAutoCloseBrackets, Type = Boolean, Dynamic = False, Default = \"False", Scope = Public
 	#tag EndConstant
@@ -241,6 +204,15 @@ Inherits Preferences
 	#tag Constant, Name = kDefaultShowLineNumbers, Type = Boolean, Dynamic = False, Default = \"True", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = kDefaultShowToolbar, Type = Boolean, Dynamic = False, Default = \"True", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kDefaultUseActiveLineHighlight, Type = Boolean, Dynamic = False, Default = \"True", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefActiveLineHighlightColor, Type = String, Dynamic = False, Default = \"ActiveLine Highlight Color", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = kPrefAutoCloseBrackets, Type = String, Dynamic = False, Default = \"AutoCloseBrackets", Scope = Public
 	#tag EndConstant
 
@@ -253,26 +225,26 @@ Inherits Preferences
 	#tag Constant, Name = kPrefCodeFontSize, Type = String, Dynamic = False, Default = \"CodeFontSize", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = kPrefColorBasicTypes, Type = String, Dynamic = False, Default = \"BasicTypesColor", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = kPrefColorComments, Type = String, Dynamic = False, Default = \"CommentsColor", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = kPrefColorKeywords, Type = String, Dynamic = False, Default = \"KeywordsColor", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = kPrefColorStrings, Type = String, Dynamic = False, Default = \"StringsColor", Scope = Public
-	#tag EndConstant
-
 	#tag Constant, Name = kPrefShowInvisibles, Type = String, Dynamic = False, Default = \"ShowInvisibles", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefShowLineNumbers, Type = String, Dynamic = False, Default = \"ShowLineNumbers", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = kPrefShowToolbar, Type = String, Dynamic = False, Default = \"ShowToolbar", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefUseActiveLineHighlight, Type = String, Dynamic = False, Default = \"Use Active Line Highlight", Scope = Public
+	#tag EndConstant
+
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="ActiveLineHighlightColor"
+			Group="Behavior"
+			InitialValue="&c000000"
+			Type="Color"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="AutoCloseBrackets"
 			Group="Behavior"
@@ -295,30 +267,6 @@ Inherits Preferences
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="ColorBasicTypes"
-			Group="Behavior"
-			InitialValue="&c000000"
-			Type="Color"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ColorComments"
-			Group="Behavior"
-			InitialValue="&c000000"
-			Type="Color"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ColorKeywords"
-			Group="Behavior"
-			InitialValue="&c000000"
-			Type="Color"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ColorStrings"
-			Group="Behavior"
-			InitialValue="&c000000"
-			Type="Color"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
@@ -333,16 +281,20 @@ Inherits Preferences
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="mDefaultColorBasicTypes"
-			Group="Behavior"
-			InitialValue="&c000000"
-			Type="Color"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
 			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ShowInvisibles"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ShowLineNumbers"
+			Group="Behavior"
+			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
@@ -356,6 +308,11 @@ Inherits Preferences
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="UseActiveLineHighlight"
+			Group="Behavior"
+			Type="Boolean"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

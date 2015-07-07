@@ -13,10 +13,16 @@ Protected Class Preferences
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function ColorToText(c As Color) As Text
+		  dim textValue as Text = "&c" + c.Red.ToHex( 2 ) + c.Green.ToHex( 2 ) + c.Blue.ToHex( 2 ) + c.Alpha.ToHex( 2 )
+		  return textValue
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub ColorValue(name As String, Assigns value As Color)
-		  dim textValue as Text = "&c" + value.Red.ToHex( 2 ) + value.Green.ToHex( 2 ) + value.Blue.ToHex( 2 ) + value.Alpha.ToHex( 2 )
-		  ChildAdHocValues.Value(name) = textValue
+		  ChildAdHocValues.Value(name) = ColorToText(value)
 		  InformWatchers
 		End Sub
 	#tag EndMethod
@@ -28,14 +34,7 @@ Protected Class Preferences
 		  end if
 		  
 		  dim textValue as Text = ChildAdHocValues.Value(name)
-		  dim c as Color = RGB( _
-		  Integer.FromHex( textValue.Mid( 2, 2 ) ), _
-		  Integer.FromHex( textValue.Mid( 4, 2 ) ), _
-		  Integer.FromHex( textValue.Mid( 6, 2 ) ), _
-		  Integer.FromHex( textValue.Mid( 8, 2 ) ) _
-		  )
-		  
-		  return c
+		  return TextToColor(textValue)
 		  
 		End Function
 	#tag EndMethod
@@ -65,6 +64,38 @@ Protected Class Preferences
 		  if PreferenceFile <> nil and PreferenceFile.Exists then
 		    PreferenceFile.Delete
 		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub DeserializeProperties(data As Xojo.Core.Dictionary, restoreTo As Object)
+		  dim ti as Introspection.TypeInfo = Introspection.GetType(restoreTo)
+		  dim props() as Introspection.PropertyInfo = ti.GetProperties
+		  
+		  //
+		  // Make sure computed properties are done first
+		  //
+		  dim doComputed as boolean = true
+		  
+		  do
+		    for each prop as Introspection.PropertyInfo in props
+		      if prop.IsComputed = doComputed then
+		        dim propName as string = prop.Name
+		        if data.HasKey(propName) then
+		          dim value as variant = data.Value(propName)
+		          
+		          dim propType as string = prop.PropertyType.Name
+		          if propType = "Color" then
+		            value = TextToColor(value)
+		          end if
+		          
+		          prop.Value(restoreTo) = value
+		        end if
+		      end if
+		    next
+		    
+		    doComputed = not doComputed
+		  loop until doComputed
 		End Sub
 	#tag EndMethod
 
@@ -234,6 +265,27 @@ Protected Class Preferences
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub ObjectValue(name As String, Assigns value As Object)
+		  ChildObjectValues.Value(name) = SerializeProperties(value)
+		  InformWatchers()
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function ObjectValue(name As String, newInstance As Object) As Object
+		  // Restores the name to given new instance or returns that instance if not found
+		  
+		  dim data as Xojo.Core.Dictionary = ChildObjectValues.Lookup(name, nil)
+		  if data isa Xojo.Core.Dictionary then
+		    DeserializeProperties(data, newInstance)
+		  end if
+		  
+		  return newInstance
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub RegisterWatcher(watcher As PreferenceWatcher)
 		  //
 		  // Don't register the same watcher twice
@@ -355,6 +407,57 @@ Protected Class Preferences
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function SerializeProperties(o As Object) As Xojo.Core.Dictionary
+		  // Does simple serialization of an object
+		  // Will only accept simple types (no arrays or objects)
+		  
+		  static acceptableTypes() as string = split("boolean,color,double,single,string,text,int8,int16,int32,int64,uint8,uint16,uint32,uint64", ",")
+		  
+		  dim ti as Introspection.TypeInfo = Introspection.GetType(o)
+		  dim props() as Introspection.PropertyInfo = ti.GetProperties
+		  
+		  dim root as new Xojo.Core.Dictionary
+		  
+		  for each prop as Introspection.PropertyInfo in props
+		    if prop.IsShared or not prop.CanRead or not prop.CanWrite then
+		      continue for prop
+		    end if
+		    
+		    //
+		    // Make sure the prop type is fine
+		    //
+		    dim propType as string = prop.PropertyType.Name
+		    if acceptableTypes.IndexOf(propType) = -1 then
+		      dim err as new TypeMismatchException
+		      err.Message = "Can't serialize the type " + propType
+		      raise err
+		    end if
+		    
+		    dim value as variant = prop.Value(o)
+		    
+		    //
+		    // Work around a current bug in Xojo where empty string will
+		    // generate an error when converted to JSON
+		    //
+		    if propType = "String" and value.StringValue = "" then
+		      dim t as text
+		      value = t
+		    elseif propType = "Color" then
+		      //
+		      // A bug in Xojo 2015r22 corrupts colors as they go through an Auto
+		      //
+		      value = ColorToText(value.ColorValue)
+		    end if
+		    
+		    root.Value(prop.Name) = value
+		    
+		  next
+		  
+		  return root
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0, CompatibilityFlags = TargetHasGUI
 		Sub Store(widget as Listbox, prefix as String = "")
 		  dim child as new Xojo.Core.Dictionary
@@ -422,6 +525,19 @@ Protected Class Preferences
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function TextToColor(t As Text) As Color
+		  dim c as Color = RGB( _
+		  Integer.FromHex( t.Mid( 2, 2 ) ), _
+		  Integer.FromHex( t.Mid( 4, 2 ) ), _
+		  Integer.FromHex( t.Mid( 6, 2 ) ), _
+		  Integer.FromHex( t.Mid( 8, 2 ) ) _
+		  )
+		  
+		  return c
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub UnregisterWatcher(watcher As PreferenceWatcher)
 		  dim pos as integer = Watchers.IndexOf( watcher )
@@ -465,6 +581,16 @@ Protected Class Preferences
 			End Get
 		#tag EndGetter
 		Protected ChildListboxValues As Xojo.Core.Dictionary
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h1
+		#tag Getter
+			Get
+			  return GetValuesChild("Objects")
+			  
+			End Get
+		#tag EndGetter
+		Protected ChildObjectValues As Xojo.Core.Dictionary
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h1
