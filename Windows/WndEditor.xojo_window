@@ -299,6 +299,11 @@ End
 		  dim find as string = WndSearch.Options.FindTerm
 		  EditFindNext.Enabled = find <> ""
 		  EditFindPrevious.Enabled = find <> ""
+		  
+		  dim toggleToolbarText as string = if( App.Prefs.ShowToolbar, App.kViewHideToolbar, App.kViewShowToolbar )
+		  if ViewToggleToolbar.Text <> toggleToolbarText then
+		    ViewToggleToolbar.Text = toggleToolbarText
+		  end if
 		End Sub
 	#tag EndEvent
 
@@ -668,6 +673,14 @@ End
 		Function ViewShowLineNumbers() As Boolean Handles ViewShowLineNumbers.Action
 			App.Prefs.ShowLineNumbers = not App.Prefs.ShowLineNumbers
 			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function ViewToggleToolbar() As Boolean Handles ViewToggleToolbar.Action
+			App.Prefs.ShowToolbar = ViewToggleToolbar.Text = App.kViewShowToolbar
 			Return True
 			
 		End Function
@@ -1066,6 +1079,8 @@ End
 	#tag Method, Flags = &h21
 		Private Sub PreferencesHaveChanged(prefs As Preferences)
 		  dim xsePrefs as XsEditPreferences = XsEditPreferences( prefs )
+		  
+		  tbToolbar.Visible = xsePrefs.ShowToolbar
 		  
 		  fldCode.IgnoreRepaint = true
 		  

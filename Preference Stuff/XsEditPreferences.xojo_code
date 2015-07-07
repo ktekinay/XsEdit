@@ -156,6 +156,20 @@ Inherits Preferences
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  return BooleanValue( kPrefShowToolbar, kDefaultShowToolbar )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  BooleanValue( kPrefShowToolbar ) = value
+			End Set
+		#tag EndSetter
+		ShowToolbar As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
 			  return BooleanValue( kPrefUseActiveLineHighlight, kDefaultUseActiveLineHighlight )
 			End Get
 		#tag EndGetter
@@ -190,6 +204,9 @@ Inherits Preferences
 	#tag Constant, Name = kDefaultShowLineNumbers, Type = Boolean, Dynamic = False, Default = \"True", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = kDefaultShowToolbar, Type = Boolean, Dynamic = False, Default = \"True", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = kDefaultUseActiveLineHighlight, Type = Boolean, Dynamic = False, Default = \"True", Scope = Public
 	#tag EndConstant
 
@@ -212,6 +229,9 @@ Inherits Preferences
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefShowLineNumbers, Type = String, Dynamic = False, Default = \"ShowLineNumbers", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefShowToolbar, Type = String, Dynamic = False, Default = \"ShowToolbar", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefUseActiveLineHighlight, Type = String, Dynamic = False, Default = \"Use Active Line Highlight", Scope = Public

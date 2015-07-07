@@ -278,6 +278,24 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin MenuItem UntitledSeparator8
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem ViewToggleToolbar
+         SpecialMenu = 0
+         Text = "#App.kViewHideToolbar"
+         Index = -2147483648
+         ShortcutKey = "T"
+         Shortcut = "Cmd+Option+T"
+         MenuModifier = True
+         MacOptionKey = True
+         AutoEnable = True
+         Visible = True
+      End
    End
    Begin MenuItem ScriptMenu
       SpecialMenu = 0
