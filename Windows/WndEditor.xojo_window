@@ -1757,6 +1757,53 @@ End
 		  end select
 		End Sub
 	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  dim btn as ToolButton
+		  
+		  btn = new ToolButton
+		  btn.Caption = kTBEditorLabelCompile
+		  btn.Name = "btnCompile"
+		  #if TargetMacOS
+		    btn.Icon = systemrun3
+		  #else
+		    btn.Icon = systemrun3small
+		  #endif
+		  me.Append btn
+		  
+		  //
+		  // Add a space
+		  //
+		  btn = new ToolButton
+		  #if TargetMacOS
+		    btn.Style = ToolButton.ToolStyleSpace
+		  #else
+		    btn.Style = ToolButton.ToolStyleSeparator
+		  #endif
+		  me.Append btn
+		  
+		  btn = new ToolButton
+		  btn.Caption = kTBEditorLabelRunInIDE
+		  btn.Name = "btnRunInIDE"
+		  #if TargetMacOS
+		    btn.Icon = arrowright3
+		  #else
+		    btn.Icon = arrowright3small
+		  #endif
+		  me.Append btn
+		  
+		  btn = new ToolButton
+		  btn.Caption = kTBEditorLabelTestRun
+		  btn.Name = "btnTestRun"
+		  #if TargetMacOS
+		    btn.Icon = arrowrightdouble3
+		  #else
+		    btn.Icon = arrowrightdouble3small
+		  #endif
+		  me.Append btn
+		  
+		End Sub
+	#tag EndEvent
 #tag EndEvents
 #tag Events XS
 	#tag Event

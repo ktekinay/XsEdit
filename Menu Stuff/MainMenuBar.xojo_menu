@@ -261,9 +261,10 @@ Begin Menu MainMenuBar
          Text = "Show &Invisibles"
          Index = -2147483648
          ShortcutKey = "I"
-         Shortcut = "Cmd+Option+I"
+         Shortcut = "Cmd+Option+Alt+I"
          MenuModifier = True
          MacOptionKey = True
+         PCAltKey = True
          AutoEnable = True
          Visible = True
       End
@@ -272,9 +273,10 @@ Begin Menu MainMenuBar
          Text = "Show &Line Numbers"
          Index = -2147483648
          ShortcutKey = "L"
-         Shortcut = "Cmd+Option+L"
+         Shortcut = "Cmd+Option+Alt+L"
          MenuModifier = True
          MacOptionKey = True
+         PCAltKey = True
          AutoEnable = True
          Visible = True
       End
@@ -290,9 +292,10 @@ Begin Menu MainMenuBar
          Text = "#App.kViewHideToolbar"
          Index = -2147483648
          ShortcutKey = "T"
-         Shortcut = "Cmd+Option+T"
+         Shortcut = "Cmd+Option+Alt+T"
          MenuModifier = True
          MacOptionKey = True
+         PCAltKey = True
          AutoEnable = True
          Visible = True
       End
