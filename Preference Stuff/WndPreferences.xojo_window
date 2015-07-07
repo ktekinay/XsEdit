@@ -9,7 +9,7 @@ Begin XsEditWindowBase WndPreferences
    FullScreen      =   False
    FullScreenButton=   False
    HasBackColor    =   False
-   Height          =   234
+   Height          =   460
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
@@ -39,7 +39,6 @@ Begin XsEditWindowBase WndPreferences
       HasBackColor    =   False
       Height          =   54
       HelpTag         =   ""
-      Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
       LockBottom      =   True
@@ -52,7 +51,7 @@ Begin XsEditWindowBase WndPreferences
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
-      Top             =   180
+      Top             =   406
       Transparent     =   True
       UseFocusRing    =   False
       Visible         =   True
@@ -80,7 +79,6 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Code Font:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -147,7 +145,6 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Size:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -288,7 +285,6 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   7
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Colors:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -323,7 +319,6 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Strings:"
       TextAlign       =   2
       TextColor       =   &c00000000
@@ -388,7 +383,6 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   10
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Keywords:"
       TextAlign       =   2
       TextColor       =   &c00000000
@@ -453,7 +447,6 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   12
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Basic Types:"
       TextAlign       =   2
       TextColor       =   &c00000000
@@ -518,7 +511,6 @@ Begin XsEditWindowBase WndPreferences
       Selectable      =   False
       TabIndex        =   14
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Comments:"
       TextAlign       =   2
       TextColor       =   &c00000000
@@ -560,6 +552,133 @@ Begin XsEditWindowBase WndPreferences
       Value           =   &c00000000
       Visible         =   True
       Width           =   32
+   End
+   Begin Label Label1
+      AutoDeactivate  =   True
+      Bold            =   False
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   7
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   2
+      Selectable      =   False
+      TabIndex        =   16
+      TabPanelIndex   =   0
+      Text            =   "Contexts:"
+      TextAlign       =   0
+      TextColor       =   &c00000000
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   184
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   100
+   End
+   Begin TextContextControl ccStringsContext
+      AcceptFocus     =   False
+      AcceptTabs      =   True
+      AutoDeactivate  =   True
+      BackColor       =   &cFFFFFF00
+      Backdrop        =   0
+      Background      =   &c00000000
+      ContextName     =   "String"
+      Enabled         =   True
+      EraseBackground =   True
+      Foreground      =   &c00000000
+      HasBackColor    =   False
+      Height          =   32
+      HelpTag         =   ""
+      InitialParent   =   ""
+      Left            =   63
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   17
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Top             =   216
+      Transparent     =   True
+      UseFocusRing    =   False
+      Visible         =   True
+      Width           =   431
+   End
+   Begin TextContextControl ccKeywordsContext
+      AcceptFocus     =   False
+      AcceptTabs      =   True
+      AutoDeactivate  =   True
+      BackColor       =   &cFFFFFF00
+      Backdrop        =   0
+      Background      =   &c00000000
+      ContextName     =   "Keywords"
+      Enabled         =   True
+      EraseBackground =   True
+      Foreground      =   &c00000000
+      HasBackColor    =   False
+      Height          =   32
+      HelpTag         =   ""
+      InitialParent   =   ""
+      Left            =   63
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   18
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Top             =   260
+      Transparent     =   True
+      UseFocusRing    =   False
+      Visible         =   True
+      Width           =   431
+   End
+   Begin TextContextControl ccCommentsContext
+      AcceptFocus     =   False
+      AcceptTabs      =   True
+      AutoDeactivate  =   True
+      BackColor       =   &cFFFFFF00
+      Backdrop        =   0
+      Background      =   &c00000000
+      ContextName     =   "Comment"
+      Enabled         =   True
+      EraseBackground =   True
+      Foreground      =   &c00000000
+      HasBackColor    =   False
+      Height          =   32
+      HelpTag         =   ""
+      InitialParent   =   ""
+      Left            =   63
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   19
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Top             =   304
+      Transparent     =   True
+      UseFocusRing    =   False
+      Visible         =   True
+      Width           =   431
    End
 End
 #tag EndWindow
@@ -625,6 +744,12 @@ End
 		  cpComments.PromptText = "Select a color for Comments:"
 		  cpComments.Value = App.Prefs.ColorComments
 		  
+		  //
+		  // Contexts
+		  //
+		  ccStringsContext.SetFromPrefs( App.Prefs.ContextString, new ContextPreferences( App.SyntaxDefinitionFile, "String" ) )
+		  ccKeywordsContext.SetFromPrefs( App.Prefs.ContextKeyword, new ContextPreferences( App.SyntaxDefinitionFile, "Keywords" ) )
+		  ccCommentsContext.SetFromPrefs( App.Prefs.ContextKeyword, new ContextPreferences( App.SyntaxDefinitionFile, "Comment" ) )
 		  
 		End Sub
 	#tag EndEvent
@@ -642,6 +767,8 @@ End
 		  cpKeywords.Value = prefs.kDefaultColorKeywords
 		  cpStrings.Value = prefs.kDefaultColorStrings
 		  fldCodeSize.Text = str( prefs.kDefaultCodeFontSize )
+		  
+		  ccStringsContext.RestoreDefaults
 		End Sub
 	#tag EndMethod
 
@@ -678,6 +805,10 @@ End
 		  App.Prefs.ColorKeywords = cpKeywords.Value
 		  App.Prefs.ColorBasicTypes = cpBasicTypes.Value
 		  App.Prefs.ColorComments = cpComments.Value
+		  
+		  App.Prefs.ContextString = ccStringsContext.ToContextPreferences
+		  App.Prefs.ContextKeyword = ccKeywordsContext.ToContextPreferences
+		  App.Prefs.ContextComment = ccCommentsContext.ToContextPreferences
 		  
 		  App.Prefs.Save
 		  
