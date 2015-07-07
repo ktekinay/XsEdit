@@ -26,6 +26,7 @@ Protected Class SearchOptions
 			Name="FindTerm"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -36,6 +37,11 @@ Protected Class SearchOptions
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="IsCaseSensitive"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="IsWholeWord"
 			Group="Behavior"
 			Type="Boolean"
 		#tag EndViewProperty
@@ -62,6 +68,7 @@ Protected Class SearchOptions
 			Name="ReplaceTerm"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
