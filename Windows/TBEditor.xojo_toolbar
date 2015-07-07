@@ -1,7 +1,7 @@
 #tag Toolbar
 Begin Toolbar TBEditor
 	Begin ToolButton btnCompile
-		Caption = "#WndEditor.kToolbarCompile"
+		Caption = "#kTBEditorLabelCompile"
 		HelpTag = ""
 		Style = 0
 		Icon = 977608703
@@ -12,13 +12,13 @@ Begin Toolbar TBEditor
 		Style = 5
 	End
 	Begin ToolButton BtnRunInIDE
-		Caption = "#WndEditor.kToolbarRunInIDE"
+		Caption = "#kTBEditorLabelRunInIDE"
 		HelpTag = ""
 		Style = 0
 		Icon = 971927551
 	End
 	Begin ToolButton BtnRun
-		Caption = "#WndEditor.kToolbarTestRun"
+		Caption = "#kTBEditorLabelTestRun"
 		HelpTag = ""
 		Style = 0
 		Icon = 866236415

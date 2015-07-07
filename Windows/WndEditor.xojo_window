@@ -1537,15 +1537,6 @@ End
 	#tag Constant, Name = kIncludeDirective, Type = String, Dynamic = False, Default = \"#include", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kToolbarCompile, Type = String, Dynamic = False, Default = \"Compile", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = kToolbarRunInIDE, Type = String, Dynamic = False, Default = \"Run in IDE", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = kToolbarTestRun, Type = String, Dynamic = False, Default = \"Test Run", Scope = Public
-	#tag EndConstant
-
 
 #tag EndWindowCode
 
@@ -1695,13 +1686,13 @@ End
 	#tag Event
 		Sub Action(item As ToolItem)
 		  select case item.Caption
-		  case kToolbarCompile
+		  case kTBEditorLabelCompile
 		    ScriptCompile
 		    
-		  case kToolbarTestRun
+		  case kTBEditorLabelTestRun
 		    ScriptTestRun
 		    
-		  case kToolbarRunInIDE
+		  case kTBEditorLabelRunInIDE
 		    ScriptRunInIDE
 		  end select
 		End Sub

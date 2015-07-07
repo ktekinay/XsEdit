@@ -305,7 +305,7 @@ Begin Menu MainMenuBar
       Visible = True
       Begin MenuItem ScriptCompile
          SpecialMenu = 0
-         Text = "#WndEditor.kToolbarCompile"
+         Text = "#kTBEditorLabelCompile"
          Index = -2147483648
          ShortcutKey = "K"
          Shortcut = "Cmd+K"
@@ -315,7 +315,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem ScriptRunInIDE
          SpecialMenu = 0
-         Text = "#WndEditor.kToolbarRunInIDE"
+         Text = "#kTBEditorLabelRunInIDE"
          Index = -2147483648
          ShortcutKey = "R"
          Shortcut = "Cmd+R"
@@ -332,7 +332,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem ScriptRun
          SpecialMenu = 0
-         Text = "#WndEditor.kToolbarTestRun"
+         Text = "#kTBEditorLabelTestRun"
          Index = -2147483648
          ShortcutKey = "R"
          Shortcut = "Cmd+Shift+R"
