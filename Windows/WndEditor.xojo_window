@@ -238,6 +238,19 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Top             =   0
       Width           =   32
    End
+   Begin Timer tmrCheckForXojoIDE
+      Height          =   32
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   0
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   1000
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   0
+      Width           =   32
+   End
 End
 #tag EndWindow
 
@@ -1861,6 +1874,22 @@ End
 	#tag Event
 		Sub Action()
 		  SetContentsChanged()
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tmrCheckForXojoIDE
+	#tag Event
+		Sub Action()
+		  dim shouldEnable as boolean = true // Assume this
+		  dim ipcPath as string = IDECommunicator.FindIPCPath
+		  if ipcPath = "" then
+		    shouldEnable = false
+		  else
+		    dim f as new FolderItem( ipcPath, FolderItem.PathTypeNative )
+		    shouldEnable = f isa FolderItem and f.Exists
+		  end if
+		  
+		  tbToolbar.Item( kTBEditorButtonIndexRunInIDE ).Enabled = shouldEnable
 		End Sub
 	#tag EndEvent
 #tag EndEvents
