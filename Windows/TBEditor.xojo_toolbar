@@ -15,6 +15,7 @@ Begin Toolbar TBEditor
 		Caption = "#kTBEditorLabelRunInIDE"
 		HelpTag = ""
 		Style = 0
+		Enabled = False
 		Icon = 971927551
 	End
 	Begin ToolButton BtnRun
