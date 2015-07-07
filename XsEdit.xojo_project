@@ -140,6 +140,6 @@ DefaultEncoding=&h0
 AppIcon=XsEdit.xojo_resources;&h0
 OSXBundleID=com.mactechnologiesconsulting.xsedit
 DebuggerCommandLine=
-UseGDIPlus=False
+UseGDIPlus=True
 UseBuildsFolder=True
 IsWebProject=False
