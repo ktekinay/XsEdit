@@ -25,7 +25,7 @@ Begin ContainerControl TextContextControl
    UseFocusRing    =   False
    Visible         =   True
    Width           =   431
-   Begin Label ContextLbl
+   Begin Label lblContextName
       AutoDeactivate  =   True
       Bold            =   False
       DataField       =   ""
@@ -219,15 +219,102 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Open()
+		  
+		End Sub
+	#tag EndEvent
+
+
+	#tag Method, Flags = &h21
+		Private Sub ColorPickerConstructContextMenu(base As MenuItem)
+		  base.Append new MenuItem( kMenuRestoreDefault )
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function ColorPickerContextualMenuAction(sender as ColorPicker_MTC, hitItem As MenuItem) As Boolean
+		  
+		  select case hitItem.Text
+		  case kMenuRestoreDefault
+		    
+		    dim prefs as ContextPreferences = DefaultPreferences
+		    if sender is cpForeground then
+		      sender.Value = prefs.HighlightColor
+		    elseif sender is cpBackground then
+		      HasBackgroundColor = prefs.HasBackgroundColor
+		      if HasBackgroundColor then
+		        sender.Value = prefs.BackgroundColor
+		      else
+		        sender.Value = kDefaultBackgroundColor
+		      end if
+		    end if
+		    
+		  case else
+		    return false
+		    
+		  end select
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub RestoreDefaults()
+		  dim pref as ContextPreferences = DefaultPreferences.Clone
+		  SetFromPrefs( pref, DefaultPreferences )
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub SetFromPrefs(prefs As ContextPreferences, defaultPrefs As ContextPreferences)
+		  cbBold.Value = prefs.Bold
+		  cbItalic.Value = prefs.Italic
+		  cbUnderline.Value = prefs.Underline
+		  
+		  if prefs.HasBackgroundColor then
+		    cpBackground.Value = prefs.BackgroundColor
+		  else
+		    cpBackground.Value = &cFFFFFF00
+		  end
+		  
+		  cpForeground.Value = prefs.HighlightColor
+		  
+		  DefaultPreferences = defaultPrefs
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function ToContextPreferences() As ContextPreferences
+		  dim r as ContextPreferences = DefaultPreferences.Clone
+		  
+		  r.BackgroundColor = cpBackground.Value
+		  r.Bold = cbBold.Value
+		  r.HasBackgroundColor = HasBackgroundColor
+		  r.HighlightColor = cpForeground.Value
+		  r.Italic = cbItalic.Value
+		  r.Underline = cbUnderline.Value
+		  
+		  return r
+		End Function
+	#tag EndMethod
+
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return mBackground
+			  if HasBackgroundColor then
+			    return cpBackground.Value
+			    
+			  else
+			    return kDefaultBackgroundColor
+			    
+			  end if
+			  
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
-			  mBackground = value
 			  cpBackground.Value = value
 			End Set
 		#tag EndSetter
@@ -237,12 +324,11 @@ End
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return mBold
+			  return cbBold.Value
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
-			  mBold = value
 			  cbBold.Value = value
 			End Set
 		#tag EndSetter
@@ -258,36 +344,42 @@ End
 		#tag Setter
 			Set
 			  mContextName = value
-			  ContextLbl.Text = value + ":"
+			  lblContextName.Text = value + ":"
 			End Set
 		#tag EndSetter
 		ContextName As String
 	#tag EndComputedProperty
 
+	#tag Property, Flags = &h21
+		Private DefaultPreferences As ContextPreferences
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return mForeground
+			  return cpForeground.Value
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
-			  mForeground = value
 			  cpForeground.Value = value
 			End Set
 		#tag EndSetter
 		Foreground As Color
 	#tag EndComputedProperty
 
+	#tag Property, Flags = &h21
+		Private HasBackgroundColor As Boolean
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return mItalic
+			  return cbItalic.Value
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
-			  mItalic = value
 			  cbItalic.Value = value
 			End Set
 		#tag EndSetter
@@ -295,38 +387,17 @@ End
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
-		Private mBackground As Color
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mBold As Boolean
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
 		Private mContextName As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mForeground As Color
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mItalic As Boolean
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mUnderline As Boolean
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return mUnderline
+			  return cbUnderline.Value
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
-			  mUnderline = value
 			  cbUnderline.Value = value
 			End Set
 		#tag EndSetter
@@ -334,8 +405,58 @@ End
 	#tag EndComputedProperty
 
 
+	#tag Constant, Name = kDefaultBackgroundColor, Type = Color, Dynamic = False, Default = \"&cFFFFFF00", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kMenuRestoreDefault, Type = String, Dynamic = False, Default = \"Restore Default", Scope = Private
+	#tag EndConstant
+
+
 #tag EndWindowCode
 
+#tag Events cpForeground
+	#tag Event
+		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
+		  #pragma unused x
+		  #pragma unused y
+		  
+		  ColorPickerConstructContextMenu( base )
+		  return true
+		  
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function ContextualMenuAction(hitItem as MenuItem) As Boolean
+		  return ColorPickerContextualMenuAction( me, hitItem )
+		End Function
+	#tag EndEvent
+#tag EndEvents
+#tag Events cpBackground
+	#tag Event
+		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
+		  #pragma unused x
+		  #pragma unused y
+		  
+		  ColorPickerConstructContextMenu( base )
+		  return true
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function ContextualMenuAction(hitItem as MenuItem) As Boolean
+		  return ColorPickerContextualMenuAction( me, hitItem )
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub ValueChanged()
+		  if me.Value <> kDefaultBackgroundColor then
+		    HasBackgroundColor = true
+		  else
+		    HasBackgroundColor = false
+		  end if
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="AcceptFocus"
