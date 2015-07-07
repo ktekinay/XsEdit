@@ -9,27 +9,27 @@ Begin Window WndAbout
    FullScreen      =   False
    FullScreenButton=   False
    HasBackColor    =   False
-   Height          =   262
+   Height          =   300
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
-   MaxHeight       =   32000
-   MaximizeButton  =   True
-   MaxWidth        =   32000
+   MaxHeight       =   300
+   MaximizeButton  =   False
+   MaxWidth        =   446
    MenuBar         =   0
    MenuBarVisible  =   True
-   MinHeight       =   262
+   MinHeight       =   300
    MinimizeButton  =   True
    MinWidth        =   446
    Placement       =   2
-   Resizeable      =   True
+   Resizeable      =   False
    Title           =   "About"
    Visible         =   True
    Width           =   446
    Begin HTMLViewer HtmlViewerAbout
       AutoDeactivate  =   True
       Enabled         =   True
-      Height          =   262
+      Height          =   300
       HelpTag         =   ""
       Index           =   -2147483648
       Left            =   0
@@ -38,7 +38,7 @@ Begin Window WndAbout
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
-      Renderer        =   0
+      Renderer        =   1
       Scope           =   2
       TabIndex        =   0
       TabPanelIndex   =   0
@@ -51,12 +51,12 @@ End
 #tag EndWindow
 
 #tag WindowCode
-	#tag Constant, Name = kAbout, Type = String, Dynamic = False, Default = \"<html>\n<head>\n\t<title>About XsEdit</title>\n\t<style>\n\t\tbody {\n\t\t\tmargin: 0;\n\t\t\tpadding: 0;\n\t\t\toverflow-x: hidden;\n\t\t}\n\t\t\n\t\ta\x2C a:visited {\n\t\t\tcolor: #0000ff;\n\t\t}\n\t\t\n\t\t#appHeader {\n\t\t\tbackground-color: #efefef;\n\t\t\tmargin:0px;\n\t\t}\n\t\t\n\t\t#appTitle {\n\t\t\ttext-align: center;\n\t\t\tfont-size: 2.0em;\n\t\t\tfont-weight: bold;\n\t\t\tpadding: 12px 30px;\n\t\t}\n\t\t\n\t\t#appVer {\n\t\t\ttext-align: center;\n\t\t\tfont-size: 0.8em;\n\t\t\tmargin-bottom: 12px;\n\t\t\tpadding-bottom: 8px;\n\t\t\tborder-bottom: 1px solid #808080;\n\t\t}\n\t\t\n\t\t#about {\n\t\t\tpadding: 0px 30px;\n\t\t\theight: 120px;\n\t\t\toverflow-y: scroll;\n\t\t}\n\t\t\n\t\t#copyright {\n\t\t\ttext-align: center;\n\t\t\tbottom: 0px;\n\t\t\tposition: absolute;\n\t\t\twidth: 100%;\n\t\t\tpadding: 4px;\n\t\t\tborder-top: 1px solid #808080;\n\t\t\tbackground-color: #efefef;\n\t\t\tfont-size: 0.8em;\n\t\t}\n\t</style>\n</head>\n\n<body>\n<div id\x3D\"appHeader\">\n\t<div id\x3D\"appTitle\">XsEdit</div>\n\t<div id\x3D\"appVer\">$(Version)</div>\n</div>\n\n<div id\x3D\"about\">\n\t<p>\n\t\tAn advanced open-source XojoScript editor\n\t</p>\n\t<p>\n\t\tA <strong>special thanks</strong> goes out to Thomas Tempelmann for the open source\n\t\t<a href\x3D\"https://github.com/tempelmann/custom-editfield\">Custom Edit Field</a>.\n\t</p>\n\t<p>\n\t\tXsEdit is is distributed under the\n\t\t<a href\x3D\"https://raw.githubusercontent.com/ktekinay/XsEdit/develop/LICENSE.txt\">MIT license</a>.\n\t</p>\n</div>\n\n<div id\x3D\"copyright\">\n\tCopyright &copy;2015 by Kem Tekinay and Jeremy Cowgar. All rights reserved.\n</div>\n</html>", Scope = Private
 	#tag Property, Flags = &h21
 		Private IsInitialLoad As Boolean = True
 	#tag EndProperty
 
 
+	#tag Constant, Name = kAbout, Type = String, Dynamic = False, Default = \"<html>\n<head>\n\t<title>About XsEdit</title>\n\t<style>\n\t\tbody {\n\t\t\tmargin: 0;\n\t\t\tpadding: 0;\n\t\t\toverflow-x: hidden;\n\t\t}\n\t\t\n\t\ta\x2C a:visited {\n\t\t\tcolor: #0000ff;\n\t\t}\n\t\t\n\t\t#appHeader {\n\t\t\tbackground-color: #efefef;\n\t\t\tmargin:0px;\n\t\t}\n\t\t\n\t\t#appTitle {\n\t\t\ttext-align: center;\n\t\t\tfont-size: 2.0em;\n\t\t\tfont-weight: bold;\n\t\t\tpadding: 12px 30px;\n\t\t}\n\t\t\n\t\t#appVer {\n\t\t\ttext-align: center;\n\t\t\tfont-size: 0.8em;\n\t\t\tmargin-bottom: 12px;\n\t\t\tpadding-bottom: 8px;\n\t\t\tborder-bottom: 1px solid #808080;\n\t\t}\n\t\t\n\t\t#about {\n\t\t\tpadding: 0px 30px;\n\t\t\theight: 140px;\n\t\t\toverflow-y: scroll;\n\t\t}\n\t\t\n\t\t#copyright {\n\t\t\ttext-align: center;\n\t\t\tbottom: 0px;\n\t\t\tposition: absolute;\n\t\t\twidth: 100%;\n\t\t\tpadding: 4px;\n\t\t\tborder-top: 1px solid #808080;\n\t\t\tbackground-color: #efefef;\n\t\t\tfont-size: 0.8em;\n\t\t}\n\t</style>\n</head>\n\n<body>\n<div id\x3D\"appHeader\">\n\t<div id\x3D\"appTitle\">XsEdit</div>\n\t<div id\x3D\"appVer\">$(Version)</div>\n</div>\n\n<div id\x3D\"about\">\n\t<p>\n\t\tAn advanced open-source XojoScript editor\n\t</p>\n\t<p>\n\t\tA <strong>special thanks</strong> goes out to Thomas Tempelmann for the open source\n\t\t<a href\x3D\"https://github.com/tempelmann/custom-editfield\">Custom Edit Field</a>.\n\t</p>\n\t<p>\n\t\tXsEdit is is distributed under the\n\t\t<a href\x3D\"https://raw.githubusercontent.com/ktekinay/XsEdit/develop/LICENSE.txt\">MIT license</a>.\n\t</p>\n</div>\n\n<div id\x3D\"copyright\">\n\tCopyright &copy;2015 by Kem Tekinay and Jeremy Cowgar. All rights reserved.\n</div>\n</html>", Scope = Private
 	#tag EndConstant
 
 
