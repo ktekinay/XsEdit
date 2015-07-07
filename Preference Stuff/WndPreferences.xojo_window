@@ -651,6 +651,9 @@ End
 #tag Events cpActiveLineHighlightColor
 	#tag Event
 		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
+		  #pragma unused x
+		  #pragma unused y
+		  
 		  base.Append new MenuItem( "Restore Default" )
 		  return true
 		End Function
