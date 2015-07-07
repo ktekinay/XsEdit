@@ -258,6 +258,8 @@ End
 	#tag Event
 		Sub Activate()
 		  SetTitle()
+		  AdjustRunInIDEButton
+		  tmrCheckForXojoIDE.Mode = Timer.ModeMultiple
 		End Sub
 	#tag EndEvent
 
@@ -300,6 +302,12 @@ End
 	#tag EndEvent
 
 	#tag Event
+		Sub Deactivate()
+		  tmrCheckForXojoIDE.Mode = Timer.ModeOff
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub EnableMenuItems()
 		  EditUndo.Enabled = fldCode.CanUndo
 		  EditRedo.Enabled = fldCode.CanRedo
@@ -317,6 +325,8 @@ End
 		  if ViewToggleToolbar.Text <> toggleToolbarText then
 		    ViewToggleToolbar.Text = toggleToolbarText
 		  end if
+		  
+		  ScriptRunInIDE.Enabled = IsIDEAvailable
 		End Sub
 	#tag EndEvent
 
@@ -699,6 +709,25 @@ End
 		End Function
 	#tag EndMenuHandler
 
+
+	#tag Method, Flags = &h21
+		Private Sub AdjustRunInIDEButton()
+		  dim shouldEnable as boolean = IsIDEAvailable
+		  
+		  dim btn as ToolItem = tbToolbar.Item( kTBEditorButtonIndexRunInIDE )
+		  btn.Enabled = shouldEnable
+		  
+		  dim tag as string
+		  if shouldEnable then
+		    tag = kTBEditorHelpTagRunInIDE
+		  else
+		    tag = kTBEditorHelpTagRunInIDE + kTBEditorHelpTagIDEUnavailableSuffix
+		  end if
+		  if btn.HelpTag <> tag then
+		    btn.HelpTag = tag
+		  end if
+		End Sub
+	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Function CharPosOfNext(options As SearchOptions) As Integer
@@ -1494,6 +1523,24 @@ End
 		Private CodeBeforeChanges As String
 	#tag EndProperty
 
+	#tag ComputedProperty, Flags = &h21
+		#tag Getter
+			Get
+			  dim isAvailable as boolean = true // Assume this
+			  dim ipcPath as string = IDECommunicator.FindIPCPath
+			  if ipcPath = "" then
+			    isAvailable = false
+			  else
+			    dim f as new FolderItem( ipcPath, FolderItem.PathTypeNative )
+			    isAvailable = f isa FolderItem and f.Exists
+			  end if
+			  
+			  return isAvailable
+			End Get
+		#tag EndGetter
+		Private IsIDEAvailable As Boolean
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h21
 		Private LastCompilerErrorCode As Integer = -1
 	#tag EndProperty
@@ -1880,16 +1927,7 @@ End
 #tag Events tmrCheckForXojoIDE
 	#tag Event
 		Sub Action()
-		  dim shouldEnable as boolean = true // Assume this
-		  dim ipcPath as string = IDECommunicator.FindIPCPath
-		  if ipcPath = "" then
-		    shouldEnable = false
-		  else
-		    dim f as new FolderItem( ipcPath, FolderItem.PathTypeNative )
-		    shouldEnable = f isa FolderItem and f.Exists
-		  end if
-		  
-		  tbToolbar.Item( kTBEditorButtonIndexRunInIDE ).Enabled = shouldEnable
+		  AdjustRunInIDEButton
 		End Sub
 	#tag EndEvent
 #tag EndEvents
