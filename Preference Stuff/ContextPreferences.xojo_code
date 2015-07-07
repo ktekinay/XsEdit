@@ -32,6 +32,7 @@ Protected Class ContextPreferences
 		  //
 		  BackgroundColor = context.BackgroundColor
 		  Bold = context.Bold
+		  DefaultBackgroundColor = context.BackgroundColor
 		  HasBackgroundColor = context.HasBackgroundColor
 		  HighlightColor = context.HighlightColor
 		  Italic = context.Italic
@@ -91,6 +92,10 @@ Protected Class ContextPreferences
 
 	#tag Property, Flags = &h0
 		Bold As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private DefaultBackgroundColor As Color
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
