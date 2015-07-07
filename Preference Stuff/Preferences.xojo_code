@@ -69,8 +69,8 @@ Protected Class Preferences
 
 	#tag Method, Flags = &h21
 		Private Sub DeserializeProperties(data As Xojo.Core.Dictionary, restoreTo As Object)
-		  dim ti as Xojo.Introspection.TypeInfo = Xojo.Introspection.GetType(restoreTo)
-		  dim props() as Xojo.Introspection.PropertyInfo = ti.Properties
+		  dim ti as Introspection.TypeInfo = Introspection.GetType(restoreTo)
+		  dim props() as Introspection.PropertyInfo = ti.GetProperties
 		  
 		  //
 		  // Make sure computed properties are done first
@@ -78,21 +78,15 @@ Protected Class Preferences
 		  dim doComputed as boolean = true
 		  
 		  do
-		    for each prop as Xojo.Introspection.PropertyInfo in props
+		    for each prop as Introspection.PropertyInfo in props
 		      if prop.IsComputed = doComputed then
-		        dim propName as text = prop.Name
+		        dim propName as string = prop.Name
 		        if data.HasKey(propName) then
-		          dim value as auto = data.Value(propName)
+		          dim value as variant = data.Value(propName)
 		          
-		          dim propType as text = prop.PropertyType.Name
+		          dim propType as string = prop.PropertyType.Name
 		          if propType = "Color" then
 		            value = TextToColor(value)
-		            
-		          elseif propType = "String" then
-		            dim t as text = value
-		            dim s as string = t
-		            value = s
-		            
 		          end if
 		          
 		          prop.Value(restoreTo) = value
@@ -420,33 +414,40 @@ Protected Class Preferences
 		  
 		  static acceptableTypes() as string = split("boolean,color,double,single,string,text,int8,int16,int32,int64,uint8,uint16,uint32,uint64", ",")
 		  
-		  dim ti as Xojo.Introspection.TypeInfo = Xojo.Introspection.GetType(o)
-		  dim props() as Xojo.Introspection.PropertyInfo = ti.Properties
+		  dim ti as Introspection.TypeInfo = Introspection.GetType(o)
+		  dim props() as Introspection.PropertyInfo = ti.GetProperties
 		  
 		  dim root as new Xojo.Core.Dictionary
 		  
-		  for each prop as Xojo.Introspection.PropertyInfo in props
+		  for each prop as Introspection.PropertyInfo in props
+		    if prop.IsShared or not prop.CanRead or not prop.CanWrite then
+		      continue for prop
+		    end if
+		    
 		    //
 		    // Make sure the prop type is fine
 		    //
-		    dim propType as text = prop.PropertyType.Name
+		    dim propType as string = prop.PropertyType.Name
 		    if acceptableTypes.IndexOf(propType) = -1 then
 		      dim err as new TypeMismatchException
 		      err.Message = "Can't serialize the type " + propType
 		      raise err
 		    end if
 		    
-		    dim value as auto = prop.Value(o)
+		    dim value as variant = prop.Value(o)
 		    
 		    //
 		    // Work around a current bug in Xojo where empty string will
 		    // generate an error when converted to JSON
 		    //
-		    if propType = "String" and CType(value, string) = "" then
+		    if propType = "String" and value.StringValue = "" then
 		      dim t as text
 		      value = t
 		    elseif propType = "Color" then
-		      value = ColorToText(CType(value, color))
+		      //
+		      // A bug in Xojo 2015r22 corrupts colors as they go through an Auto
+		      //
+		      value = ColorToText(value.ColorValue)
 		    end if
 		    
 		    root.Value(prop.Name) = value
