@@ -177,6 +177,48 @@ Inherits Preferences
 		ColorStrings As Color
 	#tag EndComputedProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return ContextPreferences( ObjectValue( kPrefContextComments, new ContextPreferences( App.SyntaxDefinitionFile, "Comment" ) ) )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  ObjectValue( kPrefContextComments ) = value
+			End Set
+		#tag EndSetter
+		ContextComment As ContextPreferences
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return ContextPreferences( ObjectValue( kPrefContextKeywords, new ContextPreferences( App.SyntaxDefinitionFile, "Keywords" ) ) )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  ObjectValue( kPrefContextKeywords ) = value
+			End Set
+		#tag EndSetter
+		ContextKeyword As ContextPreferences
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return ContextPreferences( ObjectValue( kPrefContextStrings, new ContextPreferences( App.SyntaxDefinitionFile, "String" ) ) )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  ObjectValue( kPrefContextStrings ) = value
+			End Set
+		#tag EndSetter
+		ContextString As ContextPreferences
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h0
 		mDefaultColorBasicTypes As Color
 	#tag EndProperty
@@ -265,6 +307,15 @@ Inherits Preferences
 	#tag Constant, Name = kPrefColorStrings, Type = String, Dynamic = False, Default = \"StringsColor", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = kPrefContextComments, Type = String, Dynamic = False, Default = \"Comment Context", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefContextKeywords, Type = String, Dynamic = False, Default = \"Keywords Context", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefContextStrings, Type = String, Dynamic = False, Default = \"Strings Context", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = kPrefShowInvisibles, Type = String, Dynamic = False, Default = \"ShowInvisibles", Scope = Public
 	#tag EndConstant
 
@@ -343,6 +394,16 @@ Inherits Preferences
 			Visible=true
 			Group="ID"
 			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ShowInvisibles"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ShowLineNumbers"
+			Group="Behavior"
+			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
