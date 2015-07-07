@@ -73,7 +73,7 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 
 ## Release Notes
 
-1.0 (____, 2015)
+1.0 (July 7, 2015)
 
 - Initial release.
 
