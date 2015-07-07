@@ -9,6 +9,48 @@ Inherits Preferences
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function ContextPrefValue(contextName As String) As ContextPreferences
+		  return ContextPreferences( ObjectValue( contextName + " Context" , new ContextPreferences( App.SyntaxDefinitionFile, contextName ) ) )
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ContextPrefValue(contextName As String, Assigns value As ContextPreferences)
+		  ObjectValue( contextName + " Context" ) = value
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function InterestingContextPrefs() As ContextPreferences()
+		  dim interestingNames() as string = array( _
+		  "Keywords", "BasicTypes", "Doubles", "Integers", "String", "PreProcessor", "Comment" _
+		  )
+		  
+		  dim arr() as ContextPreferences
+		  for i as integer = 0 to interestingNames.Ubound
+		    dim contextName as string = interestingNames( i )
+		    arr.Append ContextPrefValue( contextName )
+		  next
+		  
+		  return arr
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function InterestingContextPrefsDictionary() As Dictionary
+		  dim arr() as ContextPreferences = InterestingContextPrefs
+		  dim d as new Dictionary
+		  for each pref as ContextPreferences in arr
+		    d.Value( pref.Name ) = pref
+		  next
+		  
+		  return d
+		  
+		End Function
+	#tag EndMethod
+
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
@@ -80,62 +122,6 @@ Inherits Preferences
 			End Set
 		#tag EndSetter
 		CodeFontSize As Integer
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return ContextPreferences( ObjectValue( kPrefContextBasicTypes, new ContextPreferences( App.SyntaxDefinitionFile, "BasicTypes" ) ) )
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  ObjectValue( kPrefContextBasicTypes ) = value
-			End Set
-		#tag EndSetter
-		ContextBasicType As ContextPreferences
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return ContextPreferences( ObjectValue( kPrefContextComments, new ContextPreferences( App.SyntaxDefinitionFile, "Comment" ) ) )
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  ObjectValue( kPrefContextComments ) = value
-			End Set
-		#tag EndSetter
-		ContextComment As ContextPreferences
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return ContextPreferences( ObjectValue( kPrefContextKeywords, new ContextPreferences( App.SyntaxDefinitionFile, "Keywords" ) ) )
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  ObjectValue( kPrefContextKeywords ) = value
-			End Set
-		#tag EndSetter
-		ContextKeyword As ContextPreferences
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return ContextPreferences( ObjectValue( kPrefContextStrings, new ContextPreferences( App.SyntaxDefinitionFile, "String" ) ) )
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  ObjectValue( kPrefContextStrings ) = value
-			End Set
-		#tag EndSetter
-		ContextString As ContextPreferences
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -222,18 +208,6 @@ Inherits Preferences
 	#tag Constant, Name = kPrefCodeFontSize, Type = String, Dynamic = False, Default = \"CodeFontSize", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = kPrefContextBasicTypes, Type = String, Dynamic = False, Default = \"BasicTypes Context", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = kPrefContextComments, Type = String, Dynamic = False, Default = \"Comment Context", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = kPrefContextKeywords, Type = String, Dynamic = False, Default = \"Keywords Context", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = kPrefContextStrings, Type = String, Dynamic = False, Default = \"Strings Context", Scope = Public
-	#tag EndConstant
-
 	#tag Constant, Name = kPrefShowInvisibles, Type = String, Dynamic = False, Default = \"ShowInvisibles", Scope = Public
 	#tag EndConstant
 
@@ -245,6 +219,12 @@ Inherits Preferences
 
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="ActiveLineHighlightColor"
+			Group="Behavior"
+			InitialValue="&c000000"
+			Type="Color"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="AutoCloseBrackets"
 			Group="Behavior"
@@ -267,30 +247,6 @@ Inherits Preferences
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="ColorBasicTypes"
-			Group="Behavior"
-			InitialValue="&c000000"
-			Type="Color"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ColorComments"
-			Group="Behavior"
-			InitialValue="&c000000"
-			Type="Color"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ColorKeywords"
-			Group="Behavior"
-			InitialValue="&c000000"
-			Type="Color"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ColorStrings"
-			Group="Behavior"
-			InitialValue="&c000000"
-			Type="Color"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
@@ -303,12 +259,6 @@ Inherits Preferences
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="mDefaultColorBasicTypes"
-			Group="Behavior"
-			InitialValue="&c000000"
-			Type="Color"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -338,6 +288,11 @@ Inherits Preferences
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="UseActiveLineHighlight"
+			Group="Behavior"
+			Type="Boolean"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

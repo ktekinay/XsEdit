@@ -9,7 +9,7 @@ Begin XsEditWindowBase WndPreferences
    FullScreen      =   False
    FullScreenButton=   False
    HasBackColor    =   False
-   Height          =   460
+   Height          =   220
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
@@ -51,7 +51,7 @@ Begin XsEditWindowBase WndPreferences
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
-      Top             =   406
+      Top             =   166
       Transparent     =   True
       UseFocusRing    =   False
       Visible         =   True
@@ -297,130 +297,6 @@ Begin XsEditWindowBase WndPreferences
       Visible         =   True
       Width           =   100
    End
-   Begin TextContextControl ccStringsContext
-      AcceptFocus     =   False
-      AcceptTabs      =   True
-      AutoDeactivate  =   True
-      BackColor       =   &cFFFFFF00
-      Backdrop        =   0
-      Background      =   &c00000000
-      ContextName     =   "String"
-      Enabled         =   True
-      EraseBackground =   True
-      Foreground      =   &c00000000
-      HasBackColor    =   False
-      Height          =   32
-      HelpTag         =   ""
-      InitialParent   =   ""
-      Left            =   63
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Scope           =   0
-      TabIndex        =   17
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   143
-      Transparent     =   True
-      UseFocusRing    =   False
-      Visible         =   True
-      Width           =   431
-   End
-   Begin TextContextControl ccKeywordsContext
-      AcceptFocus     =   False
-      AcceptTabs      =   True
-      AutoDeactivate  =   True
-      BackColor       =   &cFFFFFF00
-      Backdrop        =   0
-      Background      =   &c00000000
-      ContextName     =   "Keywords"
-      Enabled         =   True
-      EraseBackground =   True
-      Foreground      =   &c00000000
-      HasBackColor    =   False
-      Height          =   32
-      HelpTag         =   ""
-      InitialParent   =   ""
-      Left            =   63
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Scope           =   0
-      TabIndex        =   18
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   187
-      Transparent     =   True
-      UseFocusRing    =   False
-      Visible         =   True
-      Width           =   431
-   End
-   Begin TextContextControl ccCommentsContext
-      AcceptFocus     =   False
-      AcceptTabs      =   True
-      AutoDeactivate  =   True
-      BackColor       =   &cFFFFFF00
-      Backdrop        =   0
-      Background      =   &c00000000
-      ContextName     =   "Comment"
-      Enabled         =   True
-      EraseBackground =   True
-      Foreground      =   &c00000000
-      HasBackColor    =   False
-      Height          =   32
-      HelpTag         =   ""
-      InitialParent   =   ""
-      Left            =   63
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Scope           =   0
-      TabIndex        =   19
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   231
-      Transparent     =   True
-      UseFocusRing    =   False
-      Visible         =   True
-      Width           =   431
-   End
-   Begin TextContextControl ccBasicTypesContext
-      AcceptFocus     =   False
-      AcceptTabs      =   True
-      AutoDeactivate  =   True
-      BackColor       =   &cFFFFFF00
-      Backdrop        =   0
-      Background      =   &c00000000
-      ContextName     =   "BasicTypes"
-      Enabled         =   True
-      EraseBackground =   True
-      Foreground      =   &c00000000
-      HasBackColor    =   False
-      Height          =   32
-      HelpTag         =   ""
-      InitialParent   =   ""
-      Left            =   63
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Scope           =   0
-      TabIndex        =   20
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   275
-      Transparent     =   True
-      UseFocusRing    =   False
-      Visible         =   True
-      Width           =   431
-   End
    Begin CheckBox cbUseActiveLineHighlight
       AutoDeactivate  =   True
       Bold            =   False
@@ -541,10 +417,29 @@ End
 		  //
 		  // Contexts
 		  //
-		  ccStringsContext.SetFromPrefs( App.Prefs.ContextString, new ContextPreferences( App.SyntaxDefinitionFile, "String" ) )
-		  ccKeywordsContext.SetFromPrefs( App.Prefs.ContextKeyword, new ContextPreferences( App.SyntaxDefinitionFile, "Keywords" ) )
-		  ccCommentsContext.SetFromPrefs( App.Prefs.ContextComment, new ContextPreferences( App.SyntaxDefinitionFile, "Comment" ) )
-		  ccBasicTypesContext.SetFromPrefs( App.Prefs.ContextBasicType, new ContextPreferences( App.SyntaxDefinitionFile, "BasicTypes" ) )
+		  'ccStringsContext.SetFromPrefs( App.Prefs.ContextString, new ContextPreferences( App.SyntaxDefinitionFile, "String" ) )
+		  'ccKeywordsContext.SetFromPrefs( App.Prefs.ContextKeyword, new ContextPreferences( App.SyntaxDefinitionFile, "Keywords" ) )
+		  'ccCommentsContext.SetFromPrefs( App.Prefs.ContextComment, new ContextPreferences( App.SyntaxDefinitionFile, "Comment" ) )
+		  'ccBasicTypesContext.SetFromPrefs( App.Prefs.ContextBasicType, new ContextPreferences( App.SyntaxDefinitionFile, "BasicTypes" ) )
+		  
+		  dim contextPrefs() as ContextPreferences = App.Prefs.InterestingContextPrefs
+		  
+		  const kUseLeft = 63
+		  const kStartTop = 143
+		  const kTopOffset = 44
+		  
+		  for i as integer = 0 to contextPrefs.Ubound
+		    dim contextPref as ContextPreferences = contextPrefs( i )
+		    
+		    dim cc as new TextContextControl
+		    cc.ContextName = contextPref.Name
+		    cc.SetFromPrefs contextPref, new ContextPreferences( App.SyntaxDefinitionFile, contextPref.Name )
+		    
+		    cc.EmbedWithin self, kUseLeft, kStartTop + ( kTopOffset * i )
+		    ContextControls.Append cc
+		    
+		    self.Height = self.Height + kTopOffset
+		  next
 		  
 		End Sub
 	#tag EndEvent
@@ -563,10 +458,9 @@ End
 		  cboCodeFont.Text = prefs.kDefaultCodeFont
 		  fldCodeSize.Text = str( prefs.kDefaultCodeFontSize )
 		  
-		  ccStringsContext.RestoreDefaults
-		  ccCommentsContext.RestoreDefaults
-		  ccBasicTypesContext.RestoreDefaults
-		  ccKeywordsContext.RestoreDefaults
+		  for each cc as TextContextControl in ContextControls
+		    cc.RestoreDefaults
+		  next
 		End Sub
 	#tag EndMethod
 
@@ -602,10 +496,9 @@ End
 		  App.Prefs.UseActiveLineHighlight = cbUseActiveLineHighlight.Value
 		  App.Prefs.ActiveLineHighlightColor = cpActiveLineHighlightColor.Value
 		  
-		  App.Prefs.ContextString = ccStringsContext.ToContextPreferences
-		  App.Prefs.ContextKeyword = ccKeywordsContext.ToContextPreferences
-		  App.Prefs.ContextComment = ccCommentsContext.ToContextPreferences
-		  App.Prefs.ContextBasicType = ccBasicTypesContext.ToContextPreferences
+		  for each cc as TextContextControl in ContextControls
+		    App.Prefs.ContextPrefValue( cc.ContextName ) = cc.ToContextPreferences
+		  next
 		  
 		  App.Prefs.Save
 		  
@@ -616,6 +509,10 @@ End
 
 	#tag Property, Flags = &h21
 		Private AllFonts() As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private ContextControls() As TextContextControl
 	#tag EndProperty
 
 

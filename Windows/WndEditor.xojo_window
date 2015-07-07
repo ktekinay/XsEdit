@@ -1077,22 +1077,13 @@ End
 		  fldCode.DisplayLineNumbers = xsePrefs.ShowLineNumbers
 		  
 		  dim hd as HighlightDefinition = fldCode.SyntaxDefinition
+		  dim interestingPrefs as Dictionary = xsePrefs.InterestingContextPrefsDictionary
+		  
 		  for each context as HighlightContext in hd.Contexts
-		    select case context.Name
-		    case "BasicTypes"
-		      xsePrefs.ContextBasicType.CopyTo context
-		      
-		    case "String"
-		      xsePrefs.ContextString.CopyTo context
-		      
-		    case "Keywords"
-		      xsePrefs.ContextKeyword.CopyTo context
-		      
-		    case "Comment"
-		      xsePrefs.ContextComment.CopyTo context
-		      
-		    end select
-		    
+		    if interestingPrefs.HasKey( context.Name ) then
+		      dim contextPref as ContextPreferences = interestingPrefs.Value( context.Name )
+		      contextPref.CopyTo context
+		    end if
 		  next
 		  
 		  //
