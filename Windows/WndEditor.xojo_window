@@ -1395,7 +1395,7 @@ End
 		    
 		    //
 		    // Add all methods and properties from IDEEmulator
-		    // except those with "exclude" attribute 
+		    // except those with "exclude" attribute
 		    //
 		    
 		    dim ti as Introspection.TypeInfo = GetTypeInfo( IDEEmulator )
@@ -1589,7 +1589,7 @@ End
 	#tag EndProperty
 
 
-	#tag Constant, Name = kAdditionalKeywords, Type = String, Dynamic = False, Default = \"Abs\nAcos\nAppend\nAsc\nAscB\nAsin\nAtan\nAtan2\nBin\nCdbl\nCeil\nChr\nChrB\nCMY\nCos\nCountFields\nCStr\nEndOfLine\nExp\nFloor\nFormat\nHex\nHSV\nInput\nInStr\nInStrB\nLeft\nLeftB\nLen\nLenB\nLog\nLowercase\nLTrim\nMax\nMicroseconds\nMid\nMidB\nMin\nNthField\nOct\nPow\nPrint\nReplace\nReplaceAll\nReplaceAllB\nReplaceB\nRGB\nRight\nRightB\nRnd\nRound\nRTrim\nSin\nSqrt\nStr\nStrComp\nTan\nTicks\nTitlecase\nTrim\nUbound\nUppercase\nVal", Scope = Protected
+	#tag Constant, Name = kAdditionalKeywords, Type = String, Dynamic = False, Default = \"Abs\nAcos\nAppend\nAsc\nAscB\nAsin\nAtan\nAtan2\nAuto\nBin\nCdbl\nCeil\nChr\nChrB\nCMY\nCos\nCountFields\nCStr\nEndOfLine\nExp\nFloor\nFormat\nHex\nHSV\nInput\nInStr\nInStrB\nLeft\nLeftB\nLen\nLenB\nLog\nLowercase\nLTrim\nMax\nMicroseconds\nMid\nMidB\nMin\nNthField\nOct\nPow\nPrint\nReplace\nReplaceAll\nReplaceAllB\nReplaceB\nRGB\nRight\nRightB\nRnd\nRound\nRTrim\nSin\nSqrt\nStr\nStrComp\nTan\nTicks\nTitlecase\nToText\nTrim\nUbound\nUppercase\nVal\n\nVariant\nBooleanValue\nInt32Value\nSingleValue\nCFStringRefValue\nInt64Value\nStringValue\nCStringValue\nIntegerValue\nUInt32Value\nColorValue\nOSTypeValue\nUInt64Value\nCurrencyValue\nObjectValue\nWStringValue\nDateValue\nPStringValue\nWindowPtrValue\nDoubleValue\nPtrValue\n\nArrayElementType\nEquals\nHash\nIsArray\nIsNull\nIsNumeric\n\nType\nTypeArray\nTypeBoolean\nTypeCFStringRef\nTypeColor\nTypeCString\nTypeCurrency\nTypeDate\nTypeDouble\nTypeInteger\nTypeLong\nTypeNil\nTypeObject\nTypeOSType\nTypePString\nTypePtr\nTypeSingle\nTypeString\nTypeStructure\nTypeWindowPtr\nTypeWString", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = kColorError, Type = Color, Dynamic = False, Default = \"&cFF00007F", Scope = Private
