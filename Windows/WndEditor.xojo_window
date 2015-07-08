@@ -1395,6 +1395,7 @@ End
 		    
 		    //
 		    // Add all methods and properties from IDEEmulator
+		    // except those with "exclude" attribute 
 		    //
 		    
 		    dim ti as Introspection.TypeInfo = GetTypeInfo( IDEEmulator )
@@ -1404,6 +1405,12 @@ End
 		    //
 		    dim props() as Introspection.PropertyInfo = ti.GetProperties
 		    for each prop as Introspection.PropertyInfo in props
+		      dim attrs() as Introspection.AttributeInfo = prop.GetAttributes
+		      for each attr as Introspection.AttributeInfo in attrs
+		        if attr.Name = "exclude" then
+		          continue for prop
+		        end if
+		      next
 		      call AutocompleterKeywords.AddKey( prop.Name, nil )
 		    next
 		    
@@ -1412,6 +1419,12 @@ End
 		    //
 		    dim methods() as Introspection.MethodInfo = ti.GetMethods
 		    for each method as Introspection.MethodInfo in methods
+		      dim attrs() as Introspection.AttributeInfo = method.GetAttributes
+		      for each attr as Introspection.AttributeInfo in attrs
+		        if attr.Name = "exclude" then
+		          continue for method
+		        end if
+		      next
 		      call AutocompleterKeywords.AddKey( method.Name, nil )
 		    next
 		    
