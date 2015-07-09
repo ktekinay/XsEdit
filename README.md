@@ -77,7 +77,7 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 
 - Initial release.
 
-1.1 (____, 2015)
+1.1 (July 9, 2015)
 
 - Emulated methods, functions, and properties will show a message if used in a script that's run within XsEdit.
 - Fixed bug in CustomEditField that munged the test when pasting multiple lines at once.
