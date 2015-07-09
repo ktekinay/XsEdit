@@ -312,6 +312,12 @@ End
 		  EditUndo.Enabled = fldCode.CanUndo
 		  EditRedo.Enabled = fldCode.CanRedo
 		  
+		  if IsLineCommented( fldCode.LineNumAtCharPos( fldCode.SelStart ) ) then
+		    EditComment.Text = App.kEditUncomment
+		  else
+		    EditComment.Text = App.kEditComment
+		  end if
+		  
 		  ViewShowInvisibles.Checked = App.Prefs.ShowInvisibles
 		  ViewShowLineNumbers.Checked = App.Prefs.ShowLineNumbers
 		  
