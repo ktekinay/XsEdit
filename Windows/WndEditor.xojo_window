@@ -1322,21 +1322,6 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub SelectAfterLineIndex(lineIndex As Integer)
-		  lineIndex = lineIndex + 1
-		  
-		  dim charPos as integer
-		  if lineIndex >= fldCode.LineCount then
-		    charPos = fldCode.Text.Len
-		  else
-		    charPos = fldCode.CharPosAtLineNum( lineIndex )
-		  end if
-		  fldCode.SelStart = charPos
-		  
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
 		Private Function SelectedLineIndexes() As Integer()
 		  // Returns an array of the line indexes that cover the current selection
 		  
