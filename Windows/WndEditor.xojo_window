@@ -512,7 +512,8 @@ End
 			rx.SearchPattern = "^\s*(?://|'|rem\b)\s*(.*)"
 			rx.ReplacementPattern = "$1"
 			
-			for each lineIndex as integer in lineIndexes
+			for i as integer = lineIndexes.Ubound downto 0
+			dim lineIndex as integer = lineIndexes( i )
 			dim startPos as integer = fldCode.CharPosAtLineNum( lineIndex )
 			dim endPos as integer = fldCode.CharPosAtLineNum( lineIndex + 1 )
 			if endPos = -1 then
@@ -526,7 +527,18 @@ End
 			
 			thisLine = rx.Replace( thisLine )
 			if thisLine <> origLine then
+			if thisLine = "" then
+			thisLine = EndOfLine
+			end if
 			fldCode.SelText = thisLine
+			
+			//
+			// Mark it dirty
+			//
+			fldCode.SelText = " "
+			fldCode.SelStart = fldCode.SelStart - 1
+			fldCode.SelLength = 1
+			fldCode.SelText = ""
 			end if
 			next
 			
@@ -544,13 +556,7 @@ End
 			//
 			// Select the affected lines
 			//
-			dim startPos as integer = fldCode.CharPosAtLineNum( lineIndexes( 0 ) )
-			dim endPos as integer = fldCode.CharPosAtLineNum( lineIndexes( lineIndexes.Ubound ) + 1 )
-			if endPos = -1 then
-			endPos = fldCode.Text.Len
-			end if
-			fldCode.SelStart = startPos
-			fldCode.SelLength = endPos - startPos
+			SelectLineRange( lineIndexes( 0 ), lineIndexes( lineIndexes.Ubound ) )
 			
 			fldCode.IgnoreRepaint = false
 			fldCode.Invalidate
@@ -1352,6 +1358,19 @@ End
 		  
 		  return r
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub SelectLineRange(firstLineIndex As Integer, lastLineIndex As Integer)
+		  dim startPos as integer = fldCode.CharPosAtLineNum( firstLineIndex )
+		  dim endPos as integer = fldCode.CharPosAtLineNum( lastLineIndex + 1 )
+		  if endPos = -1 then
+		    endPos = fldCode.Text.Len
+		  end if
+		  
+		  fldCode.SelStart = startPos
+		  fldCode.SelLength = endPos - startPos
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
