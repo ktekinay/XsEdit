@@ -1181,7 +1181,7 @@ End
 		    return SaveAs()
 		  end if
 		  
-		  MyDocument.TextContents_MTC = fldCode.Text
+		  MyDocument.TextContents_MTC = ReplaceLineEndings( fldCode.Text, EndOfLine )
 		  ContentsChanged = false
 		  fldCode.ClearDirtyLines
 		  
