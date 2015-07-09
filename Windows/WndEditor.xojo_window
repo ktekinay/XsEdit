@@ -528,7 +528,7 @@ End
 			thisLine = rx.Replace( thisLine )
 			if thisLine <> origLine then
 			if thisLine = "" then
-			 thisLine = EndOfLine
+			thisLine = EndOfLine
 			end if
 			fldCode.SelText = thisLine
 			end if
