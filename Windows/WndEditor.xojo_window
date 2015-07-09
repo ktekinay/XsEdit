@@ -312,6 +312,12 @@ End
 		  EditUndo.Enabled = fldCode.CanUndo
 		  EditRedo.Enabled = fldCode.CanRedo
 		  
+		  if IsLineCommented( fldCode.LineNumAtCharPos( fldCode.SelStart ) ) then
+		    EditComment.Text = App.kEditUncomment
+		  else
+		    EditComment.Text = App.kEditComment
+		  end if
+		  
 		  ViewShowInvisibles.Checked = App.Prefs.ShowInvisibles
 		  ViewShowLineNumbers.Checked = App.Prefs.ShowLineNumbers
 		  
@@ -495,17 +501,62 @@ End
 			
 			fldCode.IgnoreRepaint = true
 			
-			for each index as integer in lineIndexes
-			dim charPos as integer = fldCode.CharPosAtLineNum( index )
+			//
+			// See if the first line is already commented
+			//
+			dim doUncomment as boolean = IsLineCommented( lineIndexes( 0 ) )
+			
+			if doUncomment then
+			
+			dim rx as new RegEx
+			rx.SearchPattern = "^\s*(?://|'|rem\b)\s*(.*)"
+			rx.ReplacementPattern = "$1"
+			
+			for i as integer = lineIndexes.Ubound downto 0
+			dim lineIndex as integer = lineIndexes( i )
+			dim startPos as integer = fldCode.CharPosAtLineNum( lineIndex )
+			dim endPos as integer = fldCode.CharPosAtLineNum( lineIndex + 1 )
+			if endPos = -1 then
+			endPos = fldCode.Text.Len
+			end if
+			
+			fldCode.SelStart = startPos
+			fldCode.SelLength = endPos - startPos
+			dim thisLine as string = fldCode.SelText
+			dim origLine as string = thisLine
+			
+			thisLine = rx.Replace( thisLine )
+			if thisLine <> origLine then
+			if thisLine = "" then
+			thisLine = EndOfLine
+			end if
+			fldCode.SelText = thisLine
+			
+			//
+			// Mark it dirty
+			//
+			fldCode.SelText = " "
+			fldCode.SelStart = fldCode.SelStart - 1
+			fldCode.SelLength = 1
+			fldCode.SelText = ""
+			end if
+			next
+			
+			else
+			
+			for each lineIndex as integer in lineIndexes
+			dim charPos as integer = fldCode.CharPosAtLineNum( lineIndex )
 			fldCode.SelStart = charPos
 			fldCode.SelLength = 0
 			fldCode.SelText = kCommentToken
 			next
 			
+			end if
+			
 			//
-			// Select after the last line
+			// Select the affected lines
 			//
-			SelectAfterLineIndex( lineIndexes( lineIndexes.Ubound ) )
+			SelectLineRange( lineIndexes( 0 ), lineIndexes( lineIndexes.Ubound ) )
 			
 			fldCode.IgnoreRepaint = false
 			fldCode.Invalidate
@@ -536,48 +587,6 @@ End
 	#tag MenuHandler
 		Function EditRedo() As Boolean Handles EditRedo.Action
 			fldCode.Redo
-			Return True
-			
-		End Function
-	#tag EndMenuHandler
-
-	#tag MenuHandler
-		Function EditUncomment() As Boolean Handles EditUncomment.Action
-			dim lineIndexes() as integer = SelectedLineIndexes
-			if lineIndexes.Ubound = -1 then
-			return true
-			end if
-			
-			dim rx as new RegEx
-			rx.SearchPattern = "^([\x20\t]*)(" + kCommentToken + ")"
-			rx.ReplacementPattern = "$1"
-			
-			fldCode.IgnoreRepaint = true
-			
-			for each lineIndex as integer in lineIndexes
-			dim startPos as integer = fldCode.CharPosAtLineNum( lineIndex )
-			dim endPos as integer
-			if lineIndex >= fldCode.LineCount then
-			endPos = fldCode.Text.Len
-			else
-			endPos = fldCode.CharPosAtLineNum( lineIndex + 1 )
-			end if
-			fldCode.SelStart = startPos
-			fldCode.SelLength = endPos - startPos
-			dim thisLine as string = fldCode.SelText
-			dim origLine as string = thisLine
-			
-			thisLine = rx.Replace( thisLine )
-			if thisLine <> origLine then
-			fldCode.SelText = thisLine
-			end if
-			next
-			
-			SelectAfterLineIndex( lineIndexes( lineIndexes.Ubound ) )
-			
-			fldCode.IgnoreRepaint = false
-			fldCode.Invalidate
-			
 			Return True
 			
 		End Function
@@ -1080,22 +1089,15 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function LineAtLineIndex(lineIndex As Integer) As String
-		  // Returns the text of the line at lineIndex
-		  
-		  if lineIndex >= fldCode.LineCount then
-		    return ""
+		Private Function IsLineCommented(lineIndex As Integer) As Boolean
+		  static rx as RegEx
+		  if rx is nil then
+		    rx = new RegEx
+		    rx.SearchPattern = "^\s*(?://|'|rem\b)"
 		  end if
 		  
-		  dim startCharPos as integer = fldCode.CharPosAtLineNum( lineIndex ) + 1
-		  dim endCharPos as integer
-		  if lineIndex = ( fldCode.LineCount - 1 ) then
-		    endCharPos = fldCode.Text.Len
-		  else
-		    endCharPos = fldCode.CharPosAtLineNum( lineIndex + 1 ) + 1
-		  end if
-		  
-		  return fldCode.Text.Mid( startCharPos, endCharPos - startCharPos ).Trim
+		  dim line as string = fldCode.GetLine( lineIndex )
+		  return rx.Search( line ) isa RegExMatch
 		End Function
 	#tag EndMethod
 
@@ -1181,7 +1183,7 @@ End
 		    return SaveAs()
 		  end if
 		  
-		  MyDocument.TextContents_MTC = fldCode.Text
+		  MyDocument.TextContents_MTC = ReplaceLineEndings( fldCode.Text, EndOfLine )
 		  ContentsChanged = false
 		  fldCode.ClearDirtyLines
 		  
@@ -1336,26 +1338,18 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub SelectAfterLineIndex(lineIndex As Integer)
-		  lineIndex = lineIndex + 1
-		  
-		  dim charPos as integer
-		  if lineIndex >= fldCode.LineCount then
-		    charPos = fldCode.Text.Len
-		  else
-		    charPos = fldCode.CharPosAtLineNum( lineIndex )
-		  end if
-		  fldCode.SelStart = charPos
-		  
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
 		Private Function SelectedLineIndexes() As Integer()
 		  // Returns an array of the line indexes that cover the current selection
 		  
+		  dim selText as string = fldCode.SelText
+		  
 		  dim startLine as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
 		  dim endLine as integer = fldCode.LineNumAtCharPos( fldCode.SelStart + fldCode.SelLength )
+		  
+		  dim lastChar as string = selText.Right( 1 )
+		  if startLine <> endLine and ( lastChar = &uA or lastChar = &u0D ) then
+		    endLine = endLine - 1
+		  end if
 		  
 		  dim r() as integer
 		  for i as integer = startLine to endLine
@@ -1364,6 +1358,19 @@ End
 		  
 		  return r
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub SelectLineRange(firstLineIndex As Integer, lastLineIndex As Integer)
+		  dim startPos as integer = fldCode.CharPosAtLineNum( firstLineIndex )
+		  dim endPos as integer = fldCode.CharPosAtLineNum( lastLineIndex + 1 )
+		  if endPos = -1 then
+		    endPos = fldCode.Text.Len
+		  end if
+		  
+		  fldCode.SelStart = startPos
+		  fldCode.SelLength = endPos - startPos
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
@@ -1395,6 +1402,7 @@ End
 		    
 		    //
 		    // Add all methods and properties from IDEEmulator
+		    // except those with "exclude" attribute
 		    //
 		    
 		    dim ti as Introspection.TypeInfo = GetTypeInfo( IDEEmulator )
@@ -1404,6 +1412,12 @@ End
 		    //
 		    dim props() as Introspection.PropertyInfo = ti.GetProperties
 		    for each prop as Introspection.PropertyInfo in props
+		      dim attrs() as Introspection.AttributeInfo = prop.GetAttributes
+		      for each attr as Introspection.AttributeInfo in attrs
+		        if attr.Name = "exclude" then
+		          continue for prop
+		        end if
+		      next
 		      call AutocompleterKeywords.AddKey( prop.Name, nil )
 		    next
 		    
@@ -1412,6 +1426,12 @@ End
 		    //
 		    dim methods() as Introspection.MethodInfo = ti.GetMethods
 		    for each method as Introspection.MethodInfo in methods
+		      dim attrs() as Introspection.AttributeInfo = method.GetAttributes
+		      for each attr as Introspection.AttributeInfo in attrs
+		        if attr.Name = "exclude" then
+		          continue for method
+		        end if
+		      next
 		      call AutocompleterKeywords.AddKey( method.Name, nil )
 		    next
 		    
@@ -1576,7 +1596,7 @@ End
 	#tag EndProperty
 
 
-	#tag Constant, Name = kAdditionalKeywords, Type = String, Dynamic = False, Default = \"Abs\nAcos\nAppend\nAsc\nAscB\nAsin\nAtan\nAtan2\nBin\nCdbl\nCeil\nChr\nChrB\nCMY\nCos\nCountFields\nCStr\nEndOfLine\nExp\nFloor\nFormat\nHex\nHSV\nInput\nInStr\nInStrB\nLeft\nLeftB\nLen\nLenB\nLog\nLowercase\nLTrim\nMax\nMicroseconds\nMid\nMidB\nMin\nNthField\nOct\nPow\nPrint\nReplace\nReplaceAll\nReplaceAllB\nReplaceB\nRGB\nRight\nRightB\nRnd\nRound\nRTrim\nSin\nSqrt\nStr\nStrComp\nTan\nTicks\nTitlecase\nTrim\nUbound\nUppercase\nVal", Scope = Protected
+	#tag Constant, Name = kAdditionalKeywords, Type = String, Dynamic = False, Default = \"Abs\nAcos\nAppend\nAsc\nAscB\nAsin\nAtan\nAtan2\nAuto\nBin\nCdbl\nCeil\nChr\nChrB\nCMY\nCos\nCountFields\nCStr\nEndOfLine\nExp\nFloor\nFormat\nHex\nHSV\nIndexOf\nInput\nInStr\nInStrB\nLeft\nLeftB\nLen\nLenB\nLog\nLowercase\nLTrim\nMax\nMicroseconds\nMid\nMidB\nMin\nNthField\nOct\nPow\nPrint\nRemove\nReplace\nReplaceAll\nReplaceAllB\nReplaceB\nRGB\nRight\nRightB\nRnd\nRound\nRTrim\nSin\nSqrt\nStr\nStrComp\nTan\nTicks\nTitlecase\nToText\nTrim\nUbound\nUppercase\nVal\n\nVariant\nBooleanValue\nInt32Value\nSingleValue\nCFStringRefValue\nInt64Value\nStringValue\nTextValue\nCStringValue\nIntegerValue\nUInt32Value\nColorValue\nOSTypeValue\nUInt64Value\nCurrencyValue\nObjectValue\nWStringValue\nDateValue\nPStringValue\nWindowPtrValue\nDoubleValue\nPtrValue\n\nArrayElementType\nEquals\nHash\nIsArray\nIsNull\nIsNumeric\n\nType\nTypeArray\nTypeBoolean\nTypeCFStringRef\nTypeColor\nTypeCString\nTypeCurrency\nTypeDate\nTypeDouble\nTypeInteger\nTypeLong\nTypeNil\nTypeObject\nTypeOSType\nTypePString\nTypePtr\nTypeSingle\nTypeString\nTypeStructure\nTypeText\nTypeWindowPtr\nTypeWString", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = kColorError, Type = Color, Dynamic = False, Default = \"&cFF00007F", Scope = Private
@@ -1924,7 +1944,7 @@ End
 		      return
 		    end if
 		    
-		    dim thisLine as string = LineAtLineIndex( lineIndex )
+		    dim thisLine as string = fldCode.GetLine( lineIndex )
 		    dim match as RegExMatch
 		    
 		    match = rxDimFinder.Search( thisLine )

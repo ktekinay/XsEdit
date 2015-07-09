@@ -203,6 +203,12 @@ Inherits Application
 		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"&Delete"
 	#tag EndConstant
 
+	#tag Constant, Name = kEditComment, Type = String, Dynamic = False, Default = \"Comment", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kEditUncomment, Type = String, Dynamic = False, Default = \"Uncomment", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = kFileQuit, Type = String, Dynamic = False, Default = \"&Quit", Scope = Public
 		#Tag Instance, Platform = Windows, Language = Default, Definition  = \"E&xit"
 	#tag EndConstant
