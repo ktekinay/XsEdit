@@ -82,3 +82,4 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 - Emulated methods, functions, and properties will show a message if used in a script that's run within XsEdit.
 - Fixed bug in CustomEditField that munged the test when pasting multiple lines at once.
 - Added additional keywords.
+- Files will be saved with the EOL for the given platform.
