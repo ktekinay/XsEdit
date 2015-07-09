@@ -1080,22 +1080,8 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function LineAtLineIndex(lineIndex As Integer) As String
-		  // Returns the text of the line at lineIndex
-		  
-		  if lineIndex >= fldCode.LineCount then
-		    return ""
 		  end if
 		  
-		  dim startCharPos as integer = fldCode.CharPosAtLineNum( lineIndex ) + 1
-		  dim endCharPos as integer
-		  if lineIndex = ( fldCode.LineCount - 1 ) then
-		    endCharPos = fldCode.Text.Len
-		  else
-		    endCharPos = fldCode.CharPosAtLineNum( lineIndex + 1 ) + 1
-		  end if
-		  
-		  return fldCode.Text.Mid( startCharPos, endCharPos - startCharPos ).Trim
 		End Function
 	#tag EndMethod
 
@@ -1937,7 +1923,7 @@ End
 		      return
 		    end if
 		    
-		    dim thisLine as string = LineAtLineIndex( lineIndex )
+		    dim thisLine as string = fldCode.GetLine( lineIndex )
 		    dim match as RegExMatch
 		    
 		    match = rxDimFinder.Search( thisLine )
