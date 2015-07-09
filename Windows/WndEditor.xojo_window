@@ -512,7 +512,8 @@ End
 			rx.SearchPattern = "^\s*(?://|'|rem\b)\s*(.*)"
 			rx.ReplacementPattern = "$1"
 			
-			for each lineIndex as integer in lineIndexes
+			for i as integer = lineIndexes.Ubound downto 0
+			dim lineIndex as integer = lineIndexes( i )
 			dim startPos as integer = fldCode.CharPosAtLineNum( lineIndex )
 			dim endPos as integer = fldCode.CharPosAtLineNum( lineIndex + 1 )
 			if endPos = -1 then
@@ -526,6 +527,9 @@ End
 			
 			thisLine = rx.Replace( thisLine )
 			if thisLine <> origLine then
+			if thisLine = "" then
+			 thisLine = EndOfLine
+			end if
 			fldCode.SelText = thisLine
 			end if
 			next
