@@ -548,13 +548,7 @@ End
 			//
 			// Select the affected lines
 			//
-			dim startPos as integer = fldCode.CharPosAtLineNum( lineIndexes( 0 ) )
-			dim endPos as integer = fldCode.CharPosAtLineNum( lineIndexes( lineIndexes.Ubound ) + 1 )
-			if endPos = -1 then
-			endPos = fldCode.Text.Len
-			end if
-			fldCode.SelStart = startPos
-			fldCode.SelLength = endPos - startPos
+			SelectLineRange( lineIndexes( 0 ), lineIndexes( lineIndexes.Ubound ) )
 			
 			fldCode.IgnoreRepaint = false
 			fldCode.Invalidate
