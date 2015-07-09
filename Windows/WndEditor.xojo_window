@@ -1355,6 +1355,19 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub SelectLineRange(firstLineIndex As Integer, lastLineIndex As Integer)
+		  dim startPos as integer = fldCode.CharPosAtLineNum( firstLineIndex )
+		  dim endPos as integer = fldCode.CharPosAtLineNum( lastLineIndex + 1 )
+		  if endPos = -1 then
+		    endPos = fldCode.Text.Len
+		  end if
+		  
+		  fldCode.SelStart = startPos
+		  fldCode.SelLength = endPos - startPos
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
 		  if AutocompleterKeywords is nil then
 		    
