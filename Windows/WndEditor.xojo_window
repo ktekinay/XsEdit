@@ -1038,8 +1038,15 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function IsLineCommented(lineIndex As Integer) As Boolean
+		  static rx as RegEx
+		  if rx is nil then
+		    rx = new RegEx
+		    rx.SearchPattern = "^\s*(?://|'|rem\b)"
 		  end if
 		  
+		  dim line as string = fldCode.GetLine( lineIndex )
+		  return rx.Search( line ) isa RegExMatch
 		End Function
 	#tag EndMethod
 
