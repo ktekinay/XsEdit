@@ -1335,8 +1335,15 @@ End
 		Private Function SelectedLineIndexes() As Integer()
 		  // Returns an array of the line indexes that cover the current selection
 		  
+		  dim selText as string = fldCode.SelText
+		  
 		  dim startLine as integer = fldCode.LineNumAtCharPos( fldCode.SelStart )
 		  dim endLine as integer = fldCode.LineNumAtCharPos( fldCode.SelStart + fldCode.SelLength )
+		  
+		  dim lastChar as string = selText.Right( 1 )
+		  if startLine <> endLine and ( lastChar = &uA or lastChar = &u0D ) then
+		    endLine = endLine - 1
+		  end if
 		  
 		  dim r() as integer
 		  for i as integer = startLine to endLine
