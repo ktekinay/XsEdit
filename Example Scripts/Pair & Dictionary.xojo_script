@@ -13,24 +13,53 @@ End Sub
 End Class
 
 Class Dictionary
-Private Const kBinCount = 100000
+Private Const kBinCount = 10000
 
 Private Bins() As Variant
+Private mIsCaseSensitive As Boolean
 
 Private Function KeyToStorageKey( key As Variant ) As Variant
+if not mIsCaseSensitive then
 select case key.Type
 case Variant.TypeString, Variant.TypeText
 key = key.StringValue.Lowercase
 end select
+end if
+
 return key
 End Function
 
 Private Function StorageIndexOf( storageKeyArr() As Variant, storageKey As Variant ) As Integer
+if mIsCaseSensitive and _
+( storageKey.Type = Variant.TypeString or storageKey.Type = Variant.TypeText ) then
+dim storageKeyString as string = storageKey.StringValue
+
 for i as integer = 0 to storageKeyArr.Ubound
-if storageKeyArr( i ) = storageKey then
+dim thisKey as variant = storageKeyArr( i )
+select case thisKey.Type
+case Variant.TypeString, Variant.TypeText
+if StrComp( thisKey.StringValue, storageKeyString, 0 ) = 0 then
 return i
 end if
-next
+
+case else
+if thisKey = storageKey then
+return i
+end if
+end select
+next i
+
+else
+
+for i as integer = 0 to storageKeyArr.Ubound
+dim thisKey as variant = storageKeyArr( i )
+if thisKey = storageKey then
+return i
+end if
+next i
+
+end if
+
 return -1
 End Function
 
@@ -54,6 +83,14 @@ end if
 '", binIndex: " + str( binIndex ) + _
 '", subBinIndex: " + str( subBinIndex )
 End Sub
+
+Sub Constructor( caseSensitive As Boolean = False )
+mIsCaseSensitive = caseSensitive
+End Sub
+
+Function IsCaseSensitive() As Boolean
+return mIsCaseSensitive
+End Function
 
 Function HasKey( key As Variant ) As Boolean
 dim binIndex as integer
@@ -170,14 +207,21 @@ PrintVariantArray( self.Values )
 End Sub
 End Class
 
-dim d as Dictionary = new Dictionary
+dim startms as double = Microseconds
+dim d as Dictionary = new Dictionary( true )
+for i as integer = 1 to 1000
+d.Value( i ) = nil
+next
+dim endms as double = Microseconds
+print format( endms - startms, "#," )
+
+d = new Dictionary( false )
 
 d.Value( 12 ) = 12
-
 d.Value( "a" ) = "a"
 d.Value( "A" ) = "b"
-print d.Value( "a" )
 
+print d.Value( "a" )
 if d.HasKey( 1 ) then
 print "what?!?"
 end if
@@ -186,12 +230,15 @@ d.Value( 1 ) = nil
 if d.HasKey( 1 ) then
 print "ok then"
 end if
+
 if d.HasKey( "1" ) then
 print "well, that makes no sense"
 end if
 
+print "last section"
 d.Value( 13 ) = &cFFFFFF
 d.Value( new Pair ) = "pair"
 
+print "printing keys"
 d.PrintKeys
 d.PrintValues
