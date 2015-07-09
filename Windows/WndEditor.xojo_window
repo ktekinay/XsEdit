@@ -531,6 +531,14 @@ End
 			thisLine = EndOfLine
 			end if
 			fldCode.SelText = thisLine
+			
+			//
+			// Mark it dirty
+			//
+			fldCode.SelText = " "
+			fldCode.SelStart = fldCode.SelStart - 1
+			fldCode.SelLength = 1
+			fldCode.SelText = ""
 			end if
 			next
 			
