@@ -501,17 +501,56 @@ End
 			
 			fldCode.IgnoreRepaint = true
 			
-			for each index as integer in lineIndexes
-			dim charPos as integer = fldCode.CharPosAtLineNum( index )
+			//
+			// See if the first line is already commented
+			//
+			dim doUncomment as boolean = IsLineCommented( lineIndexes( 0 ) )
+			
+			if doUncomment then
+			
+			dim rx as new RegEx
+			rx.SearchPattern = "^\s*(?://|'|rem\b)\s*(.*)"
+			rx.ReplacementPattern = "$1"
+			
+			for each lineIndex as integer in lineIndexes
+			dim startPos as integer = fldCode.CharPosAtLineNum( lineIndex )
+			dim endPos as integer = fldCode.CharPosAtLineNum( lineIndex + 1 )
+			if endPos = -1 then
+			endPos = fldCode.Text.Len
+			end if
+			
+			fldCode.SelStart = startPos
+			fldCode.SelLength = endPos - startPos
+			dim thisLine as string = fldCode.SelText
+			dim origLine as string = thisLine
+			
+			thisLine = rx.Replace( thisLine )
+			if thisLine <> origLine then
+			fldCode.SelText = thisLine
+			end if
+			next
+			
+			else
+			
+			for each lineIndex as integer in lineIndexes
+			dim charPos as integer = fldCode.CharPosAtLineNum( lineIndex )
 			fldCode.SelStart = charPos
 			fldCode.SelLength = 0
 			fldCode.SelText = kCommentToken
 			next
 			
+			end if
+			
 			//
-			// Select after the last line
+			// Select the affected lines
 			//
-			SelectAfterLineIndex( lineIndexes( lineIndexes.Ubound ) )
+			dim startPos as integer = fldCode.CharPosAtLineNum( lineIndexes( 0 ) )
+			dim endPos as integer = fldCode.CharPosAtLineNum( lineIndexes( lineIndexes.Ubound ) + 1 )
+			if endPos = -1 then
+			endPos = fldCode.Text.Len
+			end if
+			fldCode.SelStart = startPos
+			fldCode.SelLength = endPos - startPos
 			
 			fldCode.IgnoreRepaint = false
 			fldCode.Invalidate
