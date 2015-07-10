@@ -157,6 +157,18 @@ Protected Class Preferences
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function GetWindowToolbar(win As Window) As Toolbar
+		  for i as integer = 0 to win.ControlCount - 1
+		    if win.Control(i) isa Toolbar then
+		      return Toolbar(win.Control(i))
+		    end if
+		  next
+		  
+		  return nil
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Sub InformWatchers()
 		  WatcherTimer.Mode = Timer.ModeSingle
@@ -233,8 +245,8 @@ Protected Class Preferences
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Function MakeKey(prefix As String, o As Object) As String
+	#tag Method, Flags = &h1
+		Protected Function MakeKey(prefix As String, o As Object) As String
 		  dim key() as string
 		  
 		  if prefix <> "" then
@@ -365,6 +377,15 @@ Protected Class Preferences
 		  dim fk as string = MakeKey(prefix, win)
 		  dim child as Xojo.Core.Dictionary = ChildWindowValues.Lookup(fk, nil)
 		  if child isa Xojo.Core.Dictionary then
+		    
+		    //
+		    // Restore the Toolbar first
+		    //
+		    dim tb as Toolbar = GetWindowToolbar(win)
+		    if tb isa Toolbar then
+		      tb.Visible = child.Lookup("ToolbarVisible", tb.Visible)
+		    end if
+		    
 		    proposedLeft = child.Lookup("Left", proposedLeft)
 		    proposedTop = child.Lookup("Top", proposedTop)
 		    
@@ -505,6 +526,11 @@ Protected Class Preferences
 		  child.Value("Top") = bounds.Top
 		  child.Value("Width") = bounds.Width
 		  child.Value("Height") = bounds.Height
+		  
+		  dim tb as Toolbar = GetWindowToolbar(win)
+		  if tb isa Toolbar then
+		    child.Value("ToolbarVisible") = tb.Visible
+		  end if
 		  
 		  dim fk as string = MakeKey(prefix, win)
 		  ChildWindowValues.Value(fk) = child
