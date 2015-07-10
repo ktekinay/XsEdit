@@ -215,7 +215,7 @@ next
 dim endms as double = Microseconds
 print format( endms - startms, "#," )
 
-d = new Dictionary( false )
+d = new Dictionary( true )
 
 d.Value( 12 ) = 12
 d.Value( "a" ) = "a"
