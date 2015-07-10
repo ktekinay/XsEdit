@@ -398,6 +398,7 @@ End
 		  end if
 		  
 		  dim doItAgain as boolean
+		  dim myBounds as REALbasic.Rect = self.Bounds
 		  do
 		    doItAgain = false
 		    
@@ -406,16 +407,18 @@ End
 		      if testWindow is self then
 		        continue for i
 		      end if
-		      if testWindow.Left = self.Left then
-		        self.Left = self.Left + 10
+		      if testWindow.Bounds.Left = myBounds.Left then
+		        myBounds.Left = myBounds.Left + 10
 		        doItAgain = true
 		      end if
-		      if testWindow.Top = self.Top then
-		        self.Top = self.Top + 10
+		      if testWindow.Bounds.Top = myBounds.Top then
+		        myBounds.Top = myBounds.Top + 10
 		        doItAgain = true
 		      end if
 		    next
 		  loop until not doItAgain
+		  
+		  self.Bounds = myBounds
 		  
 		  dim hd as new HighlightDefinition
 		  if not hd.LoadFromXml( App.SyntaxDefinitionFile ) then
