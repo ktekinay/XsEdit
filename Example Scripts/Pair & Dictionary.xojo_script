@@ -13,7 +13,7 @@ End Sub
 End Class
 
 Class Dictionary
-Private Const kBinCount = 10000
+Private Const kBinCount = &hFFFF
 
 Private Bins() As Variant
 Private mIsCaseSensitive As Boolean
@@ -206,6 +206,10 @@ Sub PrintValues()
 PrintVariantArray( self.Values )
 End Sub
 End Class
+
+//
+// Tests
+//
 
 dim startms as double = Microseconds
 dim d as Dictionary = new Dictionary( true )
