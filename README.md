@@ -84,3 +84,8 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 - Added additional keywords.
 - Files will be saved with the EOL for the given platform.
 - Comment/Uncomment has been combined and improved.
+
+1.2 (_____, 2015)
+
+- When window position is restored, the Toolbar visibility will be considered.
+- Window staggering code fixed.
