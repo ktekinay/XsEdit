@@ -89,3 +89,6 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 
 - When window position is restored, the Toolbar visibility will be considered.
 - Window staggering code fixed.
+- Switched to true indents so code can be copied to other editors better.
+- Commenting will start at the first non-whitespace character.
+- Fixed bug where line-continuation character within a comment was treated as a true line-continuation character.
