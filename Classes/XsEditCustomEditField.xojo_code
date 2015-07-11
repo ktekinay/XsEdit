@@ -22,6 +22,23 @@ Inherits CustomEditField
 		  end if
 		End Sub
 	#tag EndMethod
+	#tag MenuHandler
+		Function EditCopy() As Boolean Handles EditCopy.Action
+			
+			Return False
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditCut() As Boolean Handles EditCut.Action
+			
+			Return False
+			
+		End Function
+	#tag EndMenuHandler
+
+
 
 
 	#tag ViewBehavior
