@@ -1201,11 +1201,13 @@ End
 		  //
 		  // Trim the leading whitespace of each line
 		  //
-		  dim srcLines() as string = src.Split( EndOfLine )
-		  for i as integer = 0 to srcLines.Ubound
-		    srcLines( i ) = srcLines( i ).LTrim
-		  next
-		  src = join( srcLines, EndOfLine )
+		  if not fldCode.IndentVisually then
+		    dim srcLines() as string = src.Split( EndOfLine )
+		    for i as integer = 0 to srcLines.Ubound
+		      srcLines( i ) = srcLines( i ).LTrim
+		    next
+		    src = join( srcLines, EndOfLine )
+		  end if
 		  
 		  MyDocument.TextContents_MTC = src
 		  ContentsChanged = false
