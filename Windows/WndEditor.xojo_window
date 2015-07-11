@@ -1240,6 +1240,7 @@ End
 		Private Sub ScriptCompile()
 		  LastCompilerErrorCode = -1
 		  LastCompilerErrorLine = -1
+		  IsScriptCancelled = false
 		  
 		  dim src as string = fldCode.Text
 		  
@@ -1589,6 +1590,10 @@ End
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
+		Private IsScriptCancelled As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private LastCompilerErrorCode As Integer = -1
 	#tag EndProperty
 
@@ -1905,18 +1910,28 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Print(msg As String)
-		  dim dlg as new MessageDialog
-		  dlg.Title = "Print"
-		  dlg.Message = msg
-		  dlg.CancelButton.Visible = false
-		  
-		  call dlg.ShowModalWithin( self )
+		  if not IsScriptCancelled then
+		    dim dlg as new MessageDialog
+		    dlg.Title = "Print"
+		    dlg.Message = msg
+		    dlg.CancelButton.Visible = true
+		    dlg.CancelButton.Caption = "Go Silent"
+		    dlg.ActionButton.Caption = "Continue"
+		    
+		    dim btn as MessageDialogButton = dlg.ShowModalWithin( self )
+		    
+		    if btn is dlg.CancelButton then
+		      IsScriptCancelled = true
+		    end if
+		  end if
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Function Input(prompt As String) As String
-		  dim dlg as new DlgInput
-		  return dlg.ShowModalWithin( self, prompt )
+		  if not IsScriptCancelled then
+		    dim dlg as new DlgInput
+		    return dlg.ShowModalWithin( self, prompt )
+		  end if
 		End Function
 	#tag EndEvent
 #tag EndEvents
