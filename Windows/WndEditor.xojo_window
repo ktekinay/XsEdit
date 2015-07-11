@@ -1186,7 +1186,19 @@ End
 		    return SaveAs()
 		  end if
 		  
-		  MyDocument.TextContents_MTC = ReplaceLineEndings( fldCode.Text, EndOfLine )
+		  dim src as string = fldCode.Text
+		  src = ReplaceLineEndings( src, EndOfLine )
+		  
+		  //
+		  // Trim the leading whitespace of each line
+		  //
+		  dim srcLines() as string = src.Split( EndOfLine )
+		  for i as integer = 0 to srcLines.Ubound
+		    srcLines( i ) = srcLines( i ).LTrim
+		  next
+		  src = join( srcLines, EndOfLine )
+		  
+		  MyDocument.TextContents_MTC = src
 		  ContentsChanged = false
 		  fldCode.ClearDirtyLines
 		  
