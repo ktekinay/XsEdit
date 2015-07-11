@@ -1386,6 +1386,8 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub SelectLineRange(firstLineIndex As Integer, lastLineIndex As Integer)
+		  fldCode.ReindentText
+		  
 		  dim startPos as integer = fldCode.CharPosAtLineNum( firstLineIndex )
 		  dim endPos as integer = fldCode.CharPosAtLineNum( lastLineIndex + 1 )
 		  if endPos = -1 then
