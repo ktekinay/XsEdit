@@ -17,7 +17,8 @@ Private Const kBinCount = &hFFFF
 
 Private Bins() As Variant
 Private mIsCaseSensitive As Boolean
-Private mDebug As Boolean
+
+Dim DebugMode As Boolean = False
 
 Private Function KeyToStorageKey( key As Variant ) As Variant
 if not mIsCaseSensitive then
@@ -78,7 +79,7 @@ dim storageKeyArr() as variant = entry.LeftValue
 subBinIndex = StorageIndexOf( storageKeyArr, storageKey )
 end if
 
-if mDebug then
+if DebugMode then
 print "key: " + key + _
 ", sk: " + storageKey + _
 ", hash: " + str( keyHash ) + _
@@ -87,9 +88,8 @@ print "key: " + key + _
 end if
 End Sub
 
-Sub Constructor( caseSensitive As Boolean = False, debugMode As Boolean = False )
-mIsCaseSensitive = caseSensitive
-mDebug = debugMode
+Sub Constructor( caseSensitive As Boolean = False )
+mIsCaseSensitive = caseSensitive		
 End Sub
 
 Function IsCaseSensitive() As Boolean
@@ -257,10 +257,11 @@ dim d as Dictionary = new Dictionary( true )
 // Test collisions
 //
 
-d = new Dictionary( true, true )
+d = new Dictionary( true )
 dim key1 as variant = CType( 12, UInt64 )
 dim key2 as variant = CType( &hFFFF + 12, UInt64 )
 
+d.DebugMode = true
 d.Value( key1 ) = 1
 d.Value( key2 ) = 2
 d.PrintKeys
