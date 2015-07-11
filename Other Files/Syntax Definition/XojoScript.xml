@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<highlightDefinition version="1.3">
+<highlightDefinition version="1.4">
 	<name>XojoScript</name>
 
 <!-- MODULE block -->
@@ -18,7 +18,7 @@
 	<blockStartMarker indent="1" newstate="inside_interface">^\s*(protected\b|private\b)?\s*interface\b</blockStartMarker>
 	<blockEndMarker condition="inside_interface" newstate="">^\s*end\s+interface\b</blockEndMarker>
 
-	<lineContinuationMarker indent="2">^(|.*\W)_\s*(|//.*|'.*)$</lineContinuationMarker>
+	<lineContinuationMarker indent="2">^(?![^_\r\n]*(?:'|//|\brem\b))(|[^\r\n]*[^\w\r\n])_[\t\x20]*(|//[^\r\n]*|'[^\r\n]*|\brem\b[^\r\n]*)$</lineContinuationMarker>
 
 	<symbols> <!-- these are used to identify declared symbols that are useful for natigation inside larger source file -->
 		<symbol type="Method">
