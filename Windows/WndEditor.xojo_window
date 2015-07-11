@@ -39,7 +39,7 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Top             =   0
       Width           =   32
    End
-   Begin CustomEditField fldCode
+   Begin XsEditCustomEditField fldCode
       AcceptFocus     =   False
       AcceptTabs      =   False
       AutoCloseBrackets=   False
@@ -567,6 +567,41 @@ End
 			
 			fldCode.IgnoreRepaint = false
 			fldCode.Invalidate
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditCopy() As Boolean Handles EditCopy.Action
+			if fldCode.IndentVisually then
+			dim tmpWnd as new WndEditor
+			tmpWnd.SetAndCopyText( fldCode.SelText )
+			tmpWnd.Close
+			else
+			fldCode.Copy
+			end if
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditCut() As Boolean Handles EditCut.Action
+			//
+			// Peform copy first
+			//
+			if fldCode.IndentVisually then
+			dim tmpWnd as new WndEditor
+			tmpWnd.SetAndCopyText( fldCode.SelText )
+			tmpWnd.Close
+			else
+			fldCode.Copy
+			end if
+			
+			fldCode.SelText = ""
 			
 			Return True
 			
@@ -1402,6 +1437,23 @@ End
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Sub SetAndCopyText(s As String)
+		  dim origText as string = fldCode.Text
+		  
+		  fldCode.IgnoreRepaint = true
+		  fldCode.Text = s
+		  fldCode.IndentVisually = false
+		  fldCode.ReindentText
+		  fldCode.SelectAll
+		  fldCode.Copy
+		  
+		  fldCode.Text = origText
+		  ContentsChanged = false
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Sub SetAutocompleteWords()
 		  if AutocompleterKeywords is nil then
@@ -1497,7 +1549,7 @@ End
 		  fldCode.IgnoreRepaint = true
 		  
 		  fldCode.AutoIndentNewLines = true
-		  fldCode.IndentVisually = false
+		  fldCode.IndentVisually = true
 		  fldCode.TabWidth = 2
 		  
 		  fldCode.Border = false
