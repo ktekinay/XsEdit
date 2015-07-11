@@ -10,6 +10,7 @@ Folder=Windows;Windows;&h1B897FFF;&h0;false
 Folder=Dialogs;Dialogs;&h11A577FF;&h0;false
 Toolbar=TBEditor;Windows/TBEditor.xojo_toolbar;&h28F3D7FF;&h1B897FFF;false
 Folder=Classes;Classes;&h8E0CFFF;&h0;false
+Class=XsEditCustomEditField;Classes/XsEditCustomEditField.xojo_code;&h5D9F9FFF;&h8E0CFFF;false
 Folder=Search Stuff;Search Stuff;&h758907FF;&h0;false
 Window=WndSearch;Search Stuff/WndSearch.xojo_window;&h43CF17FF;&h758907FF;false
 Class=SearchReceiverWindowBase;Search Stuff/SearchReceiverWindowBase.xojo_code;&h4F462FFF;&h758907FF;false
