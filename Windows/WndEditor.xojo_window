@@ -1471,7 +1471,8 @@ End
 		  fldCode.IgnoreRepaint = true
 		  
 		  fldCode.AutoIndentNewLines = true
-		  fldCode.IndentVisually = true
+		  fldCode.IndentVisually = false
+		  fldCode.TabWidth = 2
 		  
 		  fldCode.Border = false
 		  fldCode.UseFocusRing  = false
