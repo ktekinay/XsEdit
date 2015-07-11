@@ -1113,12 +1113,17 @@ End
 		  
 		  MyDocumentAlias = f
 		  fldCode.Text = f.TextContents_MTC( Encodings.UTF8 )
+		  fldCode.ReindentText
+		  tmrReindent.Mode = Timer.ModeOff // TextChange would have turned it on
 		  CodeBeforeChanges = fldCode.Text
 		  
 		  fldCode.ResetUndo
 		  fldCode.ResetUndoDirtyFlag
 		  
 		  self.ContentsChanged = false
+		  fldCode.ClearLineIcons
+		  fldCode.ClearDirtyLines
+		  
 		  SetTitle()
 		End Sub
 	#tag EndMethod
