@@ -548,7 +548,11 @@ End
 			else
 			
 			for each lineIndex as integer in lineIndexes
-			dim charPos as integer = fldCode.CharPosAtLineNum( lineIndex )
+			dim thisLine as string = fldCode.GetLine( lineIndex )
+			dim trimmedLine as string = thisLine.LTrim
+			dim spaceCount as integer = thisLine.Len - trimmedLine.Len
+			
+			dim charPos as integer = fldCode.CharPosAtLineNum( lineIndex ) + spaceCount
 			fldCode.SelStart = charPos
 			fldCode.SelLength = 0
 			fldCode.SelText = kCommentToken
