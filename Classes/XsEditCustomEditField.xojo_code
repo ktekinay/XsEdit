@@ -1,27 +1,6 @@
 #tag Class
 Protected Class XsEditCustomEditField
 Inherits CustomEditField
-	#tag Method, Flags = &h0
-		Sub Copy()
-		  if IndentVisually then
-		    //
-		    // Copy the indents too
-		    //
-		    IgnoreRepaint = true
-		    
-		    IndentVisually = false
-		    ReindentText
-		    super.Copy
-		    IndentVisually = true
-		    ReindentText
-		    
-		    IgnoreRepaint = false
-		    Invalidate
-		  else
-		    super.Copy
-		  end if
-		End Sub
-	#tag EndMethod
 	#tag MenuHandler
 		Function EditCopy() As Boolean Handles EditCopy.Action
 			
