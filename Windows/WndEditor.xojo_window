@@ -574,6 +574,33 @@ End
 	#tag EndMenuHandler
 
 	#tag MenuHandler
+		Function EditCopy() As Boolean Handles EditCopy.Action
+			dim tmpWnd as new WndEditor
+			tmpWnd.SetAndCopyText( fldCode.SelText )
+			tmpWnd.Close
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditCut() As Boolean Handles EditCut.Action
+			//
+			// Peform copy first
+			//
+			dim tmpWnd as new WndEditor
+			tmpWnd.SetAndCopyText( fldCode.SelText )
+			tmpWnd.Close
+			
+			fldCode.SelText = ""
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function EditFindNext() As Boolean Handles EditFindNext.Action
 			DoFindNext
 			
@@ -1399,6 +1426,23 @@ End
 		  
 		  fldCode.SelStart = startPos
 		  fldCode.SelLength = endPos - startPos
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub SetAndCopyText(s As String)
+		  dim origText as string = fldCode.Text
+		  
+		  fldCode.IgnoreRepaint = true
+		  fldCode.Text = s
+		  fldCode.IndentVisually = false
+		  fldCode.ReindentText
+		  fldCode.SelectAll
+		  fldCode.Copy
+		  
+		  fldCode.Text = origText
+		  ContentsChanged = false
+		  
 		End Sub
 	#tag EndMethod
 
