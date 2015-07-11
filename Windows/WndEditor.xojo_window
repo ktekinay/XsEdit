@@ -575,9 +575,13 @@ End
 
 	#tag MenuHandler
 		Function EditCopy() As Boolean Handles EditCopy.Action
+			if fldCode.IndentVisually then
 			dim tmpWnd as new WndEditor
 			tmpWnd.SetAndCopyText( fldCode.SelText )
 			tmpWnd.Close
+			else
+			fldCode.Copy
+			end if
 			
 			Return True
 			
@@ -589,9 +593,13 @@ End
 			//
 			// Peform copy first
 			//
+			if fldCode.IndentVisually then
 			dim tmpWnd as new WndEditor
 			tmpWnd.SetAndCopyText( fldCode.SelText )
 			tmpWnd.Close
+			else
+			fldCode.Copy
+			end if
 			
 			fldCode.SelText = ""
 			
