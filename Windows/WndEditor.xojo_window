@@ -548,7 +548,11 @@ End
 			else
 			
 			for each lineIndex as integer in lineIndexes
-			dim charPos as integer = fldCode.CharPosAtLineNum( lineIndex )
+			dim thisLine as string = fldCode.GetLine( lineIndex )
+			dim trimmedLine as string = thisLine.LTrim
+			dim spaceCount as integer = thisLine.Len - trimmedLine.Len
+			
+			dim charPos as integer = fldCode.CharPosAtLineNum( lineIndex ) + spaceCount
 			fldCode.SelStart = charPos
 			fldCode.SelLength = 0
 			fldCode.SelText = kCommentToken
@@ -1113,12 +1117,17 @@ End
 		  
 		  MyDocumentAlias = f
 		  fldCode.Text = f.TextContents_MTC( Encodings.UTF8 )
+		  fldCode.ReindentText
+		  tmrReindent.Mode = Timer.ModeOff // TextChange would have turned it on
 		  CodeBeforeChanges = fldCode.Text
 		  
 		  fldCode.ResetUndo
 		  fldCode.ResetUndoDirtyFlag
 		  
 		  self.ContentsChanged = false
+		  fldCode.ClearLineIcons
+		  fldCode.ClearDirtyLines
+		  
 		  SetTitle()
 		End Sub
 	#tag EndMethod
@@ -1186,7 +1195,19 @@ End
 		    return SaveAs()
 		  end if
 		  
-		  MyDocument.TextContents_MTC = ReplaceLineEndings( fldCode.Text, EndOfLine )
+		  dim src as string = fldCode.Text
+		  src = ReplaceLineEndings( src, EndOfLine )
+		  
+		  //
+		  // Trim the leading whitespace of each line
+		  //
+		  dim srcLines() as string = src.Split( EndOfLine )
+		  for i as integer = 0 to srcLines.Ubound
+		    srcLines( i ) = srcLines( i ).LTrim
+		  next
+		  src = join( srcLines, EndOfLine )
+		  
+		  MyDocument.TextContents_MTC = src
 		  ContentsChanged = false
 		  fldCode.ClearDirtyLines
 		  
@@ -1365,6 +1386,8 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub SelectLineRange(firstLineIndex As Integer, lastLineIndex As Integer)
+		  fldCode.ReindentText
+		  
 		  dim startPos as integer = fldCode.CharPosAtLineNum( firstLineIndex )
 		  dim endPos as integer = fldCode.CharPosAtLineNum( lastLineIndex + 1 )
 		  if endPos = -1 then
@@ -1471,7 +1494,8 @@ End
 		  fldCode.IgnoreRepaint = true
 		  
 		  fldCode.AutoIndentNewLines = true
-		  fldCode.IndentVisually = true
+		  fldCode.IndentVisually = false
+		  fldCode.TabWidth = 2
 		  
 		  fldCode.Border = false
 		  fldCode.UseFocusRing  = false

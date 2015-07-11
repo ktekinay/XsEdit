@@ -17,6 +17,7 @@ Private Const kBinCount = &hFFFF
 
 Private Bins() As Variant
 Private mIsCaseSensitive As Boolean
+Private mDebug As Boolean
 
 Private Function KeyToStorageKey( key As Variant ) As Variant
 if not mIsCaseSensitive then
@@ -77,15 +78,18 @@ dim storageKeyArr() as variant = entry.LeftValue
 subBinIndex = StorageIndexOf( storageKeyArr, storageKey )
 end if
 
-'print "key: " + key + _
-'", sk: " + storageKey + _
-'", hash: " + str( keyHash ) + _
-'", binIndex: " + str( binIndex ) + _
-'", subBinIndex: " + str( subBinIndex )
+if mDebug then
+print "key: " + key + _
+", sk: " + storageKey + _
+", hash: " + str( keyHash ) + _
+", binIndex: " + str( binIndex ) + _
+", subBinIndex: " + str( subBinIndex )
+end if
 End Sub
 
-Sub Constructor( caseSensitive As Boolean = False )
+Sub Constructor( caseSensitive As Boolean = False, debugMode As Boolean = False )
 mIsCaseSensitive = caseSensitive
+mDebug = debugMode
 End Sub
 
 Function IsCaseSensitive() As Boolean
@@ -187,7 +191,8 @@ dim v as variant = arr( i )
 select case v.Type
 case Variant.TypeString, Variant.TypeText
 s.Append """" + v.StringValue + """"
-case Variant.TypeBoolean, Variant.TypeInteger, Variant.TypeDouble, Variant.TypeSingle, Variant.TypeColor
+case Variant.TypeBoolean, Variant.TypeInteger, Variant.TypeLong, _
+Variant.TypeDouble, Variant.TypeSingle, Variant.TypeColor
 s.Append v
 case Variant.TypeNil
 s.Append "nil"
@@ -211,38 +216,52 @@ End Class
 // Tests
 //
 
-dim startms as double = Microseconds
 dim d as Dictionary = new Dictionary( true )
-for i as integer = 1 to 1000
-d.Value( i ) = nil
-next
-dim endms as double = Microseconds
-print format( endms - startms, "#," )
 
-d = new Dictionary( true )
+'dim startms as double = Microseconds
+'for i as integer = 1 to 1000
+'	d.Value( i ) = nil
+'next
+'dim endms as double = Microseconds
+'print format( endms - startms, "#," )
+'
+'d = new Dictionary( true )
+'
+'d.Value( 12 ) = 12
+'d.Value( "a" ) = "a"
+'d.Value( "A" ) = "b"
+'
+'print d.Value( "a" )
+'if d.HasKey( 1 ) then
+'	print "what?!?"
+'end if
+'
+'d.Value( 1 ) = nil
+'if d.HasKey( 1 ) then
+'	print "ok then"
+'end if
+'
+'if d.HasKey( "1" ) then
+'	print "well, that makes no sense"
+'end if
+'
+'print "last section"
+'d.Value( 13 ) = &cFFFFFF
+'d.Value( new Pair ) = "pair"
+'
+'print "printing keys"
+'d.PrintKeys
+'d.PrintValues
 
-d.Value( 12 ) = 12
-d.Value( "a" ) = "a"
-d.Value( "A" ) = "b"
+//
+// Test collisions
+//
 
-print d.Value( "a" )
-if d.HasKey( 1 ) then
-print "what?!?"
-end if
+d = new Dictionary( true, true )
+dim key1 as variant = CType( 12, UInt64 )
+dim key2 as variant = CType( &hFFFF + 12, UInt64 )
 
-d.Value( 1 ) = nil
-if d.HasKey( 1 ) then
-print "ok then"
-end if
-
-if d.HasKey( "1" ) then
-print "well, that makes no sense"
-end if
-
-print "last section"
-d.Value( 13 ) = &cFFFFFF
-d.Value( new Pair ) = "pair"
-
-print "printing keys"
+d.Value( key1 ) = 1
+d.Value( key2 ) = 2
 d.PrintKeys
 d.PrintValues
