@@ -18,6 +18,16 @@ Inherits CustomEditField
 	#tag EndMenuHandler
 
 
+	#tag Note, Name = Why
+		For purposes of speed, it's better to turn IdentVisually on, but that means
+		that copied text will not be indented.
+		
+		Instead, we overide the handling of Cut and Copy in WndEditor to 
+		perform those operations in a new, temporary window. That window opens,
+		pastes just the text it needs into the field, reindents and copies it. That
+		window is then closed, the user none the wiser.
+		
+	#tag EndNote
 
 
 	#tag ViewBehavior
