@@ -30,7 +30,7 @@ Inherits CustomEditField
 
 	#tag Method, Flags = &h0
 		Sub ReindentText(timed As Boolean)
-		  if timed then 
+		  if timed then
 		    ReindentTimer.Mode = Timer.ModeSingle
 		    ReindentTimer.Reset
 		    
@@ -58,6 +58,8 @@ Inherits CustomEditField
 
 	#tag Method, Flags = &h21
 		Private Sub ReindentTimerAction(sender As Timer)
+		  #pragma unused sender
+		  
 		  ReindentText( false )
 		End Sub
 	#tag EndMethod
