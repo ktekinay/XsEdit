@@ -14,6 +14,8 @@ Inherits Application
 		    FileClose.Text = "Close"
 		    FileClose.KeyboardShortcut = "cmd-W"
 		  end if
+		  
+		  FileSaveWithIndents.Checked = Prefs.SaveWithIndents
 		End Sub
 	#tag EndEvent
 
@@ -120,6 +122,15 @@ Inherits Application
 			if f IsA FolderItem then
 			OpenDocument f
 			end if
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function FileSaveWithIndents() As Boolean Handles FileSaveWithIndents.Action
+			Prefs.SaveWithIndents = not Prefs.SaveWithIndents
 			
 			Return True
 			
