@@ -176,8 +176,7 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Width           =   100
    End
    Begin XojoScript XS
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -186,12 +185,10 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Source          =   ""
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin IPCSocket IDESocket
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -200,12 +197,10 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin Timer tmrSetAutocompleteScript
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -215,12 +210,10 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Scope           =   0
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin Timer tmrSetContentsChanged
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -230,12 +223,10 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Scope           =   0
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
    Begin Timer tmrCheckForXojoIDE
-      Enabled         =   True
-      Height          =   "32"
+      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -245,8 +236,7 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Scope           =   0
       TabPanelIndex   =   0
       Top             =   0
-      Visible         =   True
-      Width           =   "32"
+      Width           =   32
    End
 End
 #tag EndWindow
@@ -1226,18 +1216,40 @@ End
 		    return SaveAs()
 		  end if
 		  
-		  dim src as string = fldCode.Text
-		  src = ReplaceLineEndings( src, EndOfLine )
+		  dim src as string 
 		  
-		  //
-		  // Trim the leading whitespace of each line
-		  //
-		  if not fldCode.IndentVisually then
+		  dim alreadyIndented as boolean = not fldCode.IndentVisually
+		  dim saveWithIndents as boolean = App.Prefs.SaveWithIndents
+		  
+		  if alreadyIndented and not saveWithIndents then
+		    //
+		    // Trim the leading whitespace of each line
+		    //
+		    src = fldCode.Text
+		    src = ReplaceLineEndings( src, EndOfLine )
+		    
 		    dim srcLines() as string = src.Split( EndOfLine )
 		    for i as integer = 0 to srcLines.Ubound
 		      srcLines( i ) = srcLines( i ).LTrim
 		    next
 		    src = join( srcLines, EndOfLine )
+		    
+		  elseif not alreadyIndented and saveWithIndents then
+		    //
+		    // Put back the whitespace
+		    //
+		    fldCode.IgnoreRepaint = true
+		    fldCode.IndentVisually = false
+		    src = fldCode.Text
+		    src = ReplaceLineEndings( src, EndOfLine )
+		    fldCode.IndentVisually = true
+		    fldCode.IgnoreRepaint = false
+		    
+		  else // Already indented the way it ought to be
+		    
+		    src = fldCode.Text
+		    src = ReplaceLineEndings( src, EndOfLine )
+		    
 		  end if
 		  
 		  MyDocument.TextContents_MTC = src
