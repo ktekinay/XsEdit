@@ -95,4 +95,5 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 - Fixed bug where line-continuation character within a comment was treated as a true line-continuation character.
 - In Test Run, ability to ignore the remaining Print and Input events in the script (a sort-of cancel function).
 - Copying code will copy with indents.
+- Option to save a script with indents.
 

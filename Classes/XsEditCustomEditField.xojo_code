@@ -31,6 +31,7 @@ Inherits CustomEditField
 	#tag Method, Flags = &h0
 		Sub ReindentText(timed As Boolean)
 		  if timed then
+		    
 		    ReindentTimer.Mode = Timer.ModeSingle
 		    ReindentTimer.Reset
 		    

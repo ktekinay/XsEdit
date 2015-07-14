@@ -64,6 +64,20 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin MenuItem UntitledSeparator9
+         SpecialMenu = 0
+         Text = "-"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
+      Begin MenuItem FileSaveWithIndents
+         SpecialMenu = 0
+         Text = "Save With Indents"
+         Index = -2147483648
+         AutoEnable = True
+         Visible = True
+      End
       Begin MenuItem UntitledSeparator0
          SpecialMenu = 0
          Text = "-"
