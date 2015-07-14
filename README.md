@@ -96,4 +96,5 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 - In Test Run, ability to ignore the remaining Print and Input events in the script (a sort-of cancel function).
 - Copying code will copy with indents.
 - Option to save a script with indents.
+- Added keyboard shortcuts to menus for Windows and Linux.
 
