@@ -8,7 +8,7 @@ Begin Menu MainMenuBar
       Visible = True
       Begin MenuItem FileNew
          SpecialMenu = 0
-         Text = "New Script"
+         Text = "&New Script"
          Index = -2147483648
          ShortcutKey = "N"
          Shortcut = "Cmd+N"
@@ -18,7 +18,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem FileOpen
          SpecialMenu = 0
-         Text = "Open..."
+         Text = "&Open..."
          Index = -2147483648
          ShortcutKey = "O"
          Shortcut = "Cmd+O"
@@ -28,7 +28,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem FileClose
          SpecialMenu = 0
-         Text = "Close"
+         Text = "&Close"
          Index = -2147483648
          ShortcutKey = "W"
          Shortcut = "Cmd+W"
@@ -45,7 +45,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem FileSave
          SpecialMenu = 0
-         Text = "Save"
+         Text = "&Save"
          Index = -2147483648
          ShortcutKey = "S"
          Shortcut = "Cmd+S"
@@ -55,7 +55,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem FileSaveAs
          SpecialMenu = 0
-         Text = "Save As..."
+         Text = "Save &As..."
          Index = -2147483648
          ShortcutKey = "S"
          Shortcut = "Cmd+Shift+S"
@@ -73,8 +73,13 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem FileSaveWithIndents
          SpecialMenu = 0
-         Text = "Save With Indents"
+         Text = "Should Save &Indents"
          Index = -2147483648
+         ShortcutKey = "S"
+         Shortcut = "Cmd+Option+Alt+S"
+         MenuModifier = True
+         MacOptionKey = True
+         PCAltKey = True
          AutoEnable = True
          Visible = True
       End
@@ -113,7 +118,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem EditRedo
          SpecialMenu = 0
-         Text = "Redo"
+         Text = "&Redo"
          Index = -2147483648
          ShortcutKey = "Z"
          Shortcut = "Cmd+Shift+Z"
@@ -209,7 +214,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem EditFind
          SpecialMenu = 0
-         Text = "Find"
+         Text = "&Find"
          Index = -2147483648
          ShortcutKey = "F"
          Shortcut = "Cmd+F"
@@ -219,7 +224,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem EditFindNext
          SpecialMenu = 0
-         Text = "Find Next"
+         Text = "Find &Next"
          Index = -2147483648
          ShortcutKey = "G"
          Shortcut = "Cmd+G"
@@ -229,7 +234,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem EditFindPrevious
          SpecialMenu = 0
-         Text = "Find Previous"
+         Text = "Fin&d Previous"
          Index = -2147483648
          ShortcutKey = "G"
          Shortcut = "Cmd+Shift+G"
@@ -247,7 +252,7 @@ Begin Menu MainMenuBar
       End
       Begin PrefsMenuItem EditPreferences
          SpecialMenu = 0
-         Text = "Preferences..."
+         Text = "Preference&s..."
          Index = -2147483648
          AutoEnable = True
          Visible = True
@@ -383,7 +388,7 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem ScriptInsertInclude
          SpecialMenu = 0
-         Text = "Insert Include File..."
+         Text = "&Insert Include File..."
          Index = -2147483648
          AutoEnable = True
          Visible = True
@@ -397,7 +402,7 @@ Begin Menu MainMenuBar
       Visible = True
       Begin MenuItem HelpXojoScriptingLanguageDocs
          SpecialMenu = 0
-         Text = "Xojo Scripting Language Documentation"
+         Text = "&Xojo Scripting Language Documentation"
          Index = -2147483648
          AutoEnable = True
          Visible = True
@@ -411,7 +416,7 @@ Begin Menu MainMenuBar
       End
       Begin ApplicationMenuItem HelpAbout
          SpecialMenu = 0
-         Text = "About"
+         Text = "&About"
          Index = -2147483648
          AutoEnable = True
          Visible = True

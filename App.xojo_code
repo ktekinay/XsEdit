@@ -214,10 +214,10 @@ Inherits Application
 		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"&Delete"
 	#tag EndConstant
 
-	#tag Constant, Name = kEditComment, Type = String, Dynamic = False, Default = \"Comment", Scope = Public
+	#tag Constant, Name = kEditComment, Type = String, Dynamic = False, Default = \"Co&mment", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = kEditUncomment, Type = String, Dynamic = False, Default = \"Uncomment", Scope = Public
+	#tag Constant, Name = kEditUncomment, Type = String, Dynamic = False, Default = \"Unco&mment", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = kFileQuit, Type = String, Dynamic = False, Default = \"&Quit", Scope = Public
@@ -229,10 +229,10 @@ Inherits Application
 		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"Ctrl+Q"
 	#tag EndConstant
 
-	#tag Constant, Name = kViewHideToolbar, Type = String, Dynamic = False, Default = \"Hide Toolbar", Scope = Public
+	#tag Constant, Name = kViewHideToolbar, Type = String, Dynamic = False, Default = \"Hide &Toolbar", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = kViewShowToolbar, Type = String, Dynamic = False, Default = \"Show Toolbar", Scope = Public
+	#tag Constant, Name = kViewShowToolbar, Type = String, Dynamic = False, Default = \"Show &Toolbar", Scope = Public
 	#tag EndConstant
 
 
