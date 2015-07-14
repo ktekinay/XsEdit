@@ -73,8 +73,13 @@ Begin Menu MainMenuBar
       End
       Begin MenuItem FileSaveWithIndents
          SpecialMenu = 0
-         Text = "Save With Indents"
+         Text = "Should Save &Indents"
          Index = -2147483648
+         ShortcutKey = "S"
+         Shortcut = "Cmd+Option+Alt+S"
+         MenuModifier = True
+         MacOptionKey = True
+         PCAltKey = True
          AutoEnable = True
          Visible = True
       End
