@@ -26,19 +26,6 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
    Title           =   "Untitled"
    Visible         =   True
    Width           =   600
-   Begin Timer tmrReindent
-      Height          =   32
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Left            =   0
-      LockedInPosition=   False
-      Mode            =   0
-      Period          =   50
-      Scope           =   2
-      TabPanelIndex   =   0
-      Top             =   0
-      Width           =   32
-   End
    Begin XsEditCustomEditField fldCode
       AcceptFocus     =   False
       AcceptTabs      =   False
@@ -189,7 +176,8 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Width           =   100
    End
    Begin XojoScript XS
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -198,10 +186,12 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Source          =   ""
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
    Begin IPCSocket IDESocket
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -210,10 +200,12 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Scope           =   2
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
    Begin Timer tmrSetAutocompleteScript
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -223,10 +215,12 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Scope           =   0
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
    Begin Timer tmrSetContentsChanged
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -236,10 +230,12 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Scope           =   0
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
    Begin Timer tmrCheckForXojoIDE
-      Height          =   32
+      Enabled         =   True
+      Height          =   "32"
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   0
@@ -249,7 +245,8 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
       Scope           =   0
       TabPanelIndex   =   0
       Top             =   0
-      Width           =   32
+      Visible         =   True
+      Width           =   "32"
    End
 End
 #tag EndWindow
@@ -1152,8 +1149,7 @@ End
 		  
 		  MyDocumentAlias = f
 		  fldCode.Text = f.TextContents_MTC( Encodings.UTF8 )
-		  fldCode.ReindentText
-		  tmrReindent.Mode = Timer.ModeOff // TextChange would have turned it on
+		  'fldCode.ReindentText()
 		  CodeBeforeChanges = fldCode.Text
 		  
 		  fldCode.ResetUndo
@@ -1424,7 +1420,7 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub SelectLineRange(firstLineIndex As Integer, lastLineIndex As Integer)
-		  fldCode.ReindentText
+		  fldCode.ReindentText( false )
 		  
 		  dim startPos as integer = fldCode.CharPosAtLineNum( firstLineIndex )
 		  dim endPos as integer = fldCode.CharPosAtLineNum( lastLineIndex + 1 )
@@ -1444,7 +1440,6 @@ End
 		  fldCode.IgnoreRepaint = true
 		  fldCode.Text = s
 		  fldCode.IndentVisually = false
-		  fldCode.ReindentText
 		  fldCode.SelectAll
 		  fldCode.Copy
 		  
@@ -1706,18 +1701,10 @@ End
 
 #tag EndWindowCode
 
-#tag Events tmrReindent
-	#tag Event
-		Sub Action()
-		  fldCode.ReindentText
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag Events fldCode
 	#tag Event
 		Sub TextChanged()
-		  tmrReindent.Mode = Timer.ModeSingle
-		  tmrReindent.Reset
+		  fldCode.ReindentText( true )
 		  
 		  me.ClearLineIcons
 		  me.HelpTag = ""

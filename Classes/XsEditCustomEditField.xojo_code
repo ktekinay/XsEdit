@@ -18,6 +18,53 @@ Inherits CustomEditField
 	#tag EndMenuHandler
 
 
+	#tag Method, Flags = &h21
+		Private Sub Destructor()
+		  if mReindentTimer isa Timer then
+		    mReindentTimer.Mode = Timer.ModeOff
+		    RemoveHandler mReindentTimer.Action, AddressOf ReindentTimerAction
+		    mReindentTimer = nil
+		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ReindentText(timed As Boolean)
+		  if timed then
+		    ReindentTimer.Mode = Timer.ModeSingle
+		    ReindentTimer.Reset
+		    
+		  else
+		    
+		    super.ReindentText()
+		    
+		  end if
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ReindentText(fromLine as Integer, toLine as integer)
+		  if IsReindenting then
+		    return
+		  end if
+		  
+		  IsReindenting = true
+		  super.ReindentText( fromLine, toLine )
+		  IsReindenting = false
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub ReindentTimerAction(sender As Timer)
+		  #pragma unused sender
+		  
+		  ReindentText( false )
+		End Sub
+	#tag EndMethod
+
+
 	#tag Note, Name = Why
 		For purposes of speed, it's better to turn IdentVisually on, but that means
 		that copied text will not be indented.
@@ -28,6 +75,32 @@ Inherits CustomEditField
 		window is then closed, the user none the wiser.
 		
 	#tag EndNote
+
+
+	#tag Property, Flags = &h21
+		Private IsReindenting As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mReindentTimer As Timer
+	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h21
+		#tag Getter
+			Get
+			  if mReindentTimer is nil then
+			    mReindentTimer = new Timer
+			    mReindentTimer.Mode = Timer.ModeOff
+			    mReindentTimer.Period = 50
+			    
+			    AddHandler mReindentTimer.Action, AddressOf ReindentTimerAction
+			  end if
+			  
+			  return mReindentTimer
+			End Get
+		#tag EndGetter
+		Private ReindentTimer As Timer
+	#tag EndComputedProperty
 
 
 	#tag ViewBehavior
