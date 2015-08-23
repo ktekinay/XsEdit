@@ -586,16 +586,6 @@ Protected Class IDEEmulator
 			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="BuildWebProtocol"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="BuildWin32"
-			Group="Behavior"
-			Type="Boolean"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
@@ -608,11 +598,6 @@ Protected Class IDEEmulator
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Location"
-			Group="Behavior"
-			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
