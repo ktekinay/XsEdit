@@ -65,7 +65,7 @@ Protected Class IDEEmulator
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function CurrentBuildTarget() As String
+		Protected Function CurrentBuildTarget() As Integer
 		  Extras.ShowWarning
 		End Function
 	#tag EndMethod
