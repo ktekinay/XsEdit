@@ -87,7 +87,7 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 - Files will be saved with the EOL for the given platform.
 - Comment/Uncomment has been combined and improved.
 
-1.2 (_____, 2015)
+1.2 (August 24, 2015)
 
 - When window position is restored, the Toolbar visibility will be considered.
 - Window staggering code fixed.
@@ -98,4 +98,3 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 - Option to save a script with indents.
 - Added keyboard shortcuts to menus for Windows and Linux.
 - CurrentBuildTarget returns an integer instead of a string.
-
