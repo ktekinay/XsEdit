@@ -26,6 +26,8 @@ Download and build the project. Start up the XsEdit app and either create a new 
 
 The Test Run button will force your script to run directly in XsEdit. This is good for testing small scripts but any IDE scripting methods or functions like `Location` will not actually do anything.
 
+One benefit of Test Run is the ability to ignore the remaining Print and Input events in a script. Although there is no way to cancel the running script, you can fake it this way.
+
 ## About Auto-complete
 
 Auto-complete works, but it is not scope or context aware. It merely auto-completes any known keyword or any variable, module, class, interface, etc., that you've defined earlier in the script whether you can access to it at that point or not, and whether it makes sense the way you are using it or not.
@@ -84,3 +86,15 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 - Added additional keywords.
 - Files will be saved with the EOL for the given platform.
 - Comment/Uncomment has been combined and improved.
+
+1.2 (August 24, 2015)
+
+- When window position is restored, the Toolbar visibility will be considered.
+- Window staggering code fixed.
+- Commenting will start at the first non-whitespace character.
+- Fixed bug where line-continuation character within a comment was treated as a true line-continuation character.
+- In Test Run, ability to ignore the remaining Print and Input events in the script (a sort-of cancel function).
+- Copying code will copy with indents.
+- Option to save a script with indents.
+- Added keyboard shortcuts to menus for Windows and Linux.
+- CurrentBuildTarget returns an integer instead of a string.

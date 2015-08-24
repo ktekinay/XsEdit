@@ -13,10 +13,12 @@ End Sub
 End Class
 
 Class Dictionary
-Private Const kBinCount = 10000
+Private Const kBinCount = &hFFFF
 
 Private Bins() As Variant
 Private mIsCaseSensitive As Boolean
+
+Dim DebugMode As Boolean = False
 
 Private Function KeyToStorageKey( key As Variant ) As Variant
 if not mIsCaseSensitive then
@@ -77,15 +79,17 @@ dim storageKeyArr() as variant = entry.LeftValue
 subBinIndex = StorageIndexOf( storageKeyArr, storageKey )
 end if
 
-'print "key: " + key + _
-'", sk: " + storageKey + _
-'", hash: " + str( keyHash ) + _
-'", binIndex: " + str( binIndex ) + _
-'", subBinIndex: " + str( subBinIndex )
+if DebugMode then
+print "key: " + key + _
+", sk: " + storageKey + _
+", hash: " + str( keyHash ) + _
+", binIndex: " + str( binIndex ) + _
+", subBinIndex: " + str( subBinIndex )
+end if
 End Sub
 
 Sub Constructor( caseSensitive As Boolean = False )
-mIsCaseSensitive = caseSensitive
+mIsCaseSensitive = caseSensitive		
 End Sub
 
 Function IsCaseSensitive() As Boolean
@@ -187,7 +191,8 @@ dim v as variant = arr( i )
 select case v.Type
 case Variant.TypeString, Variant.TypeText
 s.Append """" + v.StringValue + """"
-case Variant.TypeBoolean, Variant.TypeInteger, Variant.TypeDouble, Variant.TypeSingle, Variant.TypeColor
+case Variant.TypeBoolean, Variant.TypeInteger, Variant.TypeLong, _
+Variant.TypeDouble, Variant.TypeSingle, Variant.TypeColor
 s.Append v
 case Variant.TypeNil
 s.Append "nil"
@@ -205,17 +210,34 @@ End Sub
 Sub PrintValues()
 PrintVariantArray( self.Values )
 End Sub
+
+Function CountCollisions() As Integer
+dim cnt as integer
+for each entry as Pair in Bins
+if entry isa Pair then				
+dim p as Pair = entry.RightValue
+dim keyArr() as variant = p.LeftValue
+cnt = cnt + keyArr.Ubound
+end if
+next
+return cnt
+End Function
 End Class
 
-dim startms as double = Microseconds
+//
+// Tests
+//
+
 dim d as Dictionary = new Dictionary( true )
+
+dim startms as double = Microseconds
 for i as integer = 1 to 1000
 d.Value( i ) = nil
 next
 dim endms as double = Microseconds
-print format( endms - startms, "#," )
+print "Processing Time: " + format( endms - startms, "#," )
 
-d = new Dictionary( false )
+d = new Dictionary( true )
 
 d.Value( 12 ) = 12
 d.Value( "a" ) = "a"
@@ -242,3 +264,18 @@ d.Value( new Pair ) = "pair"
 print "printing keys"
 d.PrintKeys
 d.PrintValues
+
+//
+// Test collisions
+//
+
+d = new Dictionary( true )
+dim key1 as variant = CType( 12, UInt64 )
+dim key2 as variant = CType( &hFFFF + 12, UInt64 )
+
+d.DebugMode = true
+d.Value( key1 ) = 1
+d.Value( key2 ) = 2
+d.PrintKeys
+d.PrintValues
+print "Collisions: " + str( d.CountCollisions )

@@ -127,6 +127,21 @@ Inherits Preferences
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  return BooleanValue( kPrefSaveWithIndents, kDefaultSaveWithIndents )
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  BooleanValue( kPrefSaveWithIndents ) = value
+			  
+			End Set
+		#tag EndSetter
+		SaveWithIndents As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
 			  return BooleanValue( kPrefShowInvisibles, kDefaultShowInvisibles )
 			End Get
 		#tag EndGetter
@@ -198,6 +213,9 @@ Inherits Preferences
 	#tag Constant, Name = kDefaultCodeFontSize, Type = Double, Dynamic = False, Default = \"0", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = kDefaultSaveWithIndents, Type = Boolean, Dynamic = False, Default = \"False", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = kDefaultShowInvisibles, Type = Boolean, Dynamic = False, Default = \"False", Scope = Public
 	#tag EndConstant
 
@@ -223,6 +241,9 @@ Inherits Preferences
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefCodeFontSize, Type = String, Dynamic = False, Default = \"CodeFontSize", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefSaveWithIndents, Type = String, Dynamic = False, Default = \"SaveWithIndents", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefShowInvisibles, Type = String, Dynamic = False, Default = \"ShowInvisibles", Scope = Public

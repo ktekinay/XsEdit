@@ -26,20 +26,7 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
    Title           =   "Untitled"
    Visible         =   True
    Width           =   600
-   Begin Timer tmrReindent
-      Height          =   32
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Left            =   0
-      LockedInPosition=   False
-      Mode            =   0
-      Period          =   50
-      Scope           =   2
-      TabPanelIndex   =   0
-      Top             =   0
-      Width           =   32
-   End
-   Begin CustomEditField fldCode
+   Begin XsEditCustomEditField fldCode
       AcceptFocus     =   False
       AcceptTabs      =   False
       AutoCloseBrackets=   False
@@ -398,6 +385,7 @@ End
 		  end if
 		  
 		  dim doItAgain as boolean
+		  dim myBounds as REALbasic.Rect = self.Bounds
 		  do
 		    doItAgain = false
 		    
@@ -406,16 +394,18 @@ End
 		      if testWindow is self then
 		        continue for i
 		      end if
-		      if testWindow.Left = self.Left then
-		        self.Left = self.Left + 10
+		      if testWindow.Bounds.Left = myBounds.Left then
+		        myBounds.Left = myBounds.Left + 10
 		        doItAgain = true
 		      end if
-		      if testWindow.Top = self.Top then
-		        self.Top = self.Top + 10
+		      if testWindow.Bounds.Top = myBounds.Top then
+		        myBounds.Top = myBounds.Top + 10
 		        doItAgain = true
 		      end if
 		    next
 		  loop until not doItAgain
+		  
+		  self.Bounds = myBounds
 		  
 		  dim hd as new HighlightDefinition
 		  if not hd.LoadFromXml( App.SyntaxDefinitionFile ) then
@@ -545,7 +535,11 @@ End
 			else
 			
 			for each lineIndex as integer in lineIndexes
-			dim charPos as integer = fldCode.CharPosAtLineNum( lineIndex )
+			dim thisLine as string = fldCode.GetLine( lineIndex )
+			dim trimmedLine as string = thisLine.LTrim
+			dim spaceCount as integer = thisLine.Len - trimmedLine.Len
+			
+			dim charPos as integer = fldCode.CharPosAtLineNum( lineIndex ) + spaceCount
 			fldCode.SelStart = charPos
 			fldCode.SelLength = 0
 			fldCode.SelText = kCommentToken
@@ -560,6 +554,41 @@ End
 			
 			fldCode.IgnoreRepaint = false
 			fldCode.Invalidate
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditCopy() As Boolean Handles EditCopy.Action
+			if fldCode.IndentVisually then
+			dim tmpWnd as new WndEditor
+			tmpWnd.SetAndCopyText( fldCode.SelText )
+			tmpWnd.Close
+			else
+			fldCode.Copy
+			end if
+			
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function EditCut() As Boolean Handles EditCut.Action
+			//
+			// Peform copy first
+			//
+			if fldCode.IndentVisually then
+			dim tmpWnd as new WndEditor
+			tmpWnd.SetAndCopyText( fldCode.SelText )
+			tmpWnd.Close
+			else
+			fldCode.Copy
+			end if
+			
+			fldCode.SelText = ""
 			
 			Return True
 			
@@ -1110,12 +1139,16 @@ End
 		  
 		  MyDocumentAlias = f
 		  fldCode.Text = f.TextContents_MTC( Encodings.UTF8 )
+		  'fldCode.ReindentText()
 		  CodeBeforeChanges = fldCode.Text
 		  
 		  fldCode.ResetUndo
 		  fldCode.ResetUndoDirtyFlag
 		  
 		  self.ContentsChanged = false
+		  fldCode.ClearLineIcons
+		  fldCode.ClearDirtyLines
+		  
 		  SetTitle()
 		End Sub
 	#tag EndMethod
@@ -1183,7 +1216,43 @@ End
 		    return SaveAs()
 		  end if
 		  
-		  MyDocument.TextContents_MTC = ReplaceLineEndings( fldCode.Text, EndOfLine )
+		  dim src as string 
+		  
+		  dim alreadyIndented as boolean = not fldCode.IndentVisually
+		  dim saveWithIndents as boolean = App.Prefs.SaveWithIndents
+		  
+		  if alreadyIndented and not saveWithIndents then
+		    //
+		    // Trim the leading whitespace of each line
+		    //
+		    src = fldCode.Text
+		    src = ReplaceLineEndings( src, EndOfLine )
+		    
+		    dim srcLines() as string = src.Split( EndOfLine )
+		    for i as integer = 0 to srcLines.Ubound
+		      srcLines( i ) = srcLines( i ).LTrim
+		    next
+		    src = join( srcLines, EndOfLine )
+		    
+		  elseif not alreadyIndented and saveWithIndents then
+		    //
+		    // Put back the whitespace
+		    //
+		    fldCode.IgnoreRepaint = true
+		    fldCode.IndentVisually = false
+		    src = fldCode.Text
+		    src = ReplaceLineEndings( src, EndOfLine )
+		    fldCode.IndentVisually = true
+		    fldCode.IgnoreRepaint = false
+		    
+		  else // Already indented the way it ought to be
+		    
+		    src = fldCode.Text
+		    src = ReplaceLineEndings( src, EndOfLine )
+		    
+		  end if
+		  
+		  MyDocument.TextContents_MTC = src
 		  ContentsChanged = false
 		  fldCode.ClearDirtyLines
 		  
@@ -1216,6 +1285,7 @@ End
 		Private Sub ScriptCompile()
 		  LastCompilerErrorCode = -1
 		  LastCompilerErrorLine = -1
+		  IsScriptCancelled = false
 		  
 		  dim src as string = fldCode.Text
 		  
@@ -1362,6 +1432,8 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub SelectLineRange(firstLineIndex As Integer, lastLineIndex As Integer)
+		  fldCode.ReindentText( false )
+		  
 		  dim startPos as integer = fldCode.CharPosAtLineNum( firstLineIndex )
 		  dim endPos as integer = fldCode.CharPosAtLineNum( lastLineIndex + 1 )
 		  if endPos = -1 then
@@ -1370,6 +1442,22 @@ End
 		  
 		  fldCode.SelStart = startPos
 		  fldCode.SelLength = endPos - startPos
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub SetAndCopyText(s As String)
+		  dim origText as string = fldCode.Text
+		  
+		  fldCode.IgnoreRepaint = true
+		  fldCode.Text = s
+		  fldCode.IndentVisually = false
+		  fldCode.SelectAll
+		  fldCode.Copy
+		  
+		  fldCode.Text = origText
+		  ContentsChanged = false
+		  
 		End Sub
 	#tag EndMethod
 
@@ -1469,6 +1557,7 @@ End
 		  
 		  fldCode.AutoIndentNewLines = true
 		  fldCode.IndentVisually = true
+		  fldCode.TabWidth = 2
 		  
 		  fldCode.Border = false
 		  fldCode.UseFocusRing  = false
@@ -1562,6 +1651,10 @@ End
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
+		Private IsScriptCancelled As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private LastCompilerErrorCode As Integer = -1
 	#tag EndProperty
 
@@ -1620,18 +1713,10 @@ End
 
 #tag EndWindowCode
 
-#tag Events tmrReindent
-	#tag Event
-		Sub Action()
-		  fldCode.ReindentText
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag Events fldCode
 	#tag Event
 		Sub TextChanged()
-		  tmrReindent.Mode = Timer.ModeSingle
-		  tmrReindent.Reset
+		  fldCode.ReindentText( true )
 		  
 		  me.ClearLineIcons
 		  me.HelpTag = ""
@@ -1878,18 +1963,28 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Print(msg As String)
-		  dim dlg as new MessageDialog
-		  dlg.Title = "Print"
-		  dlg.Message = msg
-		  dlg.CancelButton.Visible = false
-		  
-		  call dlg.ShowModalWithin( self )
+		  if not IsScriptCancelled then
+		    dim dlg as new MessageDialog
+		    dlg.Title = "Print"
+		    dlg.Message = msg
+		    dlg.CancelButton.Visible = true
+		    dlg.CancelButton.Caption = "Go Silent"
+		    dlg.ActionButton.Caption = "Continue"
+		    
+		    dim btn as MessageDialogButton = dlg.ShowModalWithin( self )
+		    
+		    if btn is dlg.CancelButton then
+		      IsScriptCancelled = true
+		    end if
+		  end if
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Function Input(prompt As String) As String
-		  dim dlg as new DlgInput
-		  return dlg.ShowModalWithin( self, prompt )
+		  if not IsScriptCancelled then
+		    dim dlg as new DlgInput
+		    return dlg.ShowModalWithin( self, prompt )
+		  end if
 		End Function
 	#tag EndEvent
 #tag EndEvents
