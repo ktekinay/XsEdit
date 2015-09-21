@@ -100,4 +100,5 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 - CurrentBuildTarget returns an integer instead of a string.
 
 1.2.1 (September 21, 2015)
+
 - Fixed typo (SubLocations, not SubLocation).
