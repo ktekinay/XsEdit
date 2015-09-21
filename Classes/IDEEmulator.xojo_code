@@ -277,7 +277,7 @@ Protected Class IDEEmulator
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function SubLocation(baseLocation As String) As String
+		Protected Function SubLocations(baseLocation As String) As String
 		  #pragma unused baseLocation
 		  
 		  Extras.ShowWarning
