@@ -102,3 +102,7 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 1.2.1 (September 21, 2015)
 
 - Fixed typo (SubLocations, not SubLocation).
+
+1.2.2 (November 30, 2015)
+
+- Fixed WindowTitle so it returns a String.
