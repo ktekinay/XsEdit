@@ -297,11 +297,11 @@ Protected Class IDEEmulator
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub WindowTitle(index As Integer)
+		Protected Function WindowTitle(index As Integer) As String
 		  #pragma unused index
 		  
 		  Extras.ShowWarning
-		End Sub
+		End Function
 	#tag EndMethod
 
 
