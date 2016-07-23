@@ -6,6 +6,7 @@
 		MacCreator=
 		MacType=
 		Name=text/script
+		UTI=
 		UTIConformsTo=
 		Description=
 		MimeType=
@@ -19,6 +20,7 @@
 		MacCreator=????
 		MacType=TEXT
 		Name=text/plain
+		UTI=
 		UTIConformsTo=
 		Description=
 		MimeType=
