@@ -106,3 +106,9 @@ Fork the project to your GitHub account. Use the "develop" branch for general fi
 1.2.2 (November 30, 2015)
 
 - Fixed WindowTitle so it returns a String.
+
+1.3 (___, 2016)
+
+- Fixed access to Resources folder on Windows.
+- Added new constants, functions, and methods.
+- Added functionality to some functions when a script is run within XsEdit.
