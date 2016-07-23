@@ -3,6 +3,7 @@ Protected Class IDEEmulator
 	#tag Method, Flags = &h1
 		Protected Sub Beep()
 		  Extras.ShowWarning
+		  REALbasic.Beep
 		End Sub
 	#tag EndMethod
 
@@ -124,6 +125,7 @@ Protected Class IDEEmulator
 	#tag Method, Flags = &h1
 		Protected Function EndOfLine() As String
 		  Extras.ShowWarning
+		  return REALbasic.EndOfLine
 		End Function
 	#tag EndMethod
 
@@ -264,63 +266,87 @@ Protected Class IDEEmulator
 
 	#tag Method, Flags = &h1
 		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String) As String
-		  #pragma unused message
-		  #pragma unused explanation
-		  #pragma unused defaultButtonCaption
-		  
 		  Extras.ShowWarning
+		  return ShowDialog( message, explanation, defaultButtonCaption, "", "", -1 )
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String, CancelButtonCaption As String) As String
-		  #pragma unused message
-		  #pragma unused explanation
-		  #pragma unused defaultButtonCaption
-		  #pragma unused CancelButtonCaption
-		  
+		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String, cancelButtonCaption As String) As String
 		  Extras.ShowWarning
+		  return ShowDialog( message, explanation, defaultButtonCaption, cancelButtonCaption, "", -1 )
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String, CancelButtonCaption As String, altButtonCaption As String) As String
-		  #pragma unused message
-		  #pragma unused explanation
-		  #pragma unused defaultButtonCaption
-		  #pragma unused CancelButtonCaption
-		  #pragma unused altButtonCaption
-		  
+		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String, cancelButtonCaption As String, altButtonCaption As String) As String
 		  Extras.ShowWarning
+		  return ShowDialog( message, explanation, defaultButtonCaption, cancelButtonCaption, altButtonCaption, -1 )
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String, CancelButtonCaption As String, altButtonCaption As String, icon As Integer) As String
-		  #pragma unused message
-		  #pragma unused explanation
-		  #pragma unused defaultButtonCaption
-		  #pragma unused CancelButtonCaption
-		  #pragma unused altButtonCaption
-		  #pragma unused icon
-		  
+		Protected Function ShowDialog(message As String, explanation As String, defaultButtonCaption As String, cancelButtonCaption As String, altButtonCaption As String, icon As Integer) As String
 		  Extras.ShowWarning
+		  
+		  message = message.Trim
+		  explanation = explanation.Trim
+		  defaultButtonCaption = defaultButtonCaption.Trim
+		  cancelButtonCaption = cancelButtonCaption.Trim
+		  altButtonCaption = altButtonCaption.Trim
+		  
+		  dim dlg as new MessageDialog
+		  dlg.Message = message
+		  dlg.Explanation = explanation
+		  dlg.ActionButton.Caption = defaultButtonCaption
+		  
+		  if cancelButtonCaption = "" then
+		    dlg.CancelButton.Visible = false
+		  else
+		    dlg.CancelButton.Visible = true
+		    dlg.CancelButton.Caption = cancelButtonCaption
+		  end if
+		  
+		  if altButtonCaption = "" then
+		    dlg.AlternateActionButton.Visible = false
+		  else
+		    dlg.AlternateActionButton.Visible = true
+		    dlg.AlternateActionButton.Caption = altButtonCaption
+		  end if
+		  
+		  dlg.Icon = icon
+		  dim result as MessageDialogButton = dlg.ShowModal
+		  if result is nil then
+		    return ""
+		  else
+		    return result.Caption
+		  end if
+		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub ShowURL(url As String)
-		  #pragma unused url
-		  
 		  Extras.ShowWarning
+		  
+		  try
+		    REALbasic.ShowURL url
+		    
+		  catch err as RuntimeException
+		    if err isa EndException or err isa ThreadEndException then
+		      raise err
+		    end if
+		    
+		  end try
+		  
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub Speak(s As String)
-		  #pragma unused s
-		  
 		  Extras.ShowWarning
+		  REALbasic.Speak s
+		  
 		End Sub
 	#tag EndMethod
 
@@ -535,13 +561,21 @@ Protected Class IDEEmulator
 		#tag Getter
 			Get
 			  Extras.ShowWarning
+			  
+			  dim c as new Clipboard
+			  if c.TextAvailable then
+			    return c.Text
+			  else
+			    return ""
+			  end if
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
-			  #pragma unused value
-			  
 			  Extras.ShowWarning
+			  
+			  dim c as new Clipboard
+			  c.Text = value
 			End Set
 		#tag EndSetter
 		Protected Clipboard As String

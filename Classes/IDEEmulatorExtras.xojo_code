@@ -5,7 +5,7 @@ Protected Class IDEEmulatorExtras
 		  if not WasWarningShown then
 		    MsgBox "You are running an IDE script within XsEdit. " + _
 		    "While the methods, functions, and properties available to you within the IDE are replicated here, " + _
-		    "they are only to allow compilation and do not perform any true function or return a value."
+		    "they are only to allow compilation and usually do not perform any true function or return a value."
 		    WasWarningShown = true
 		  end if
 		  
@@ -51,6 +51,11 @@ Protected Class IDEEmulatorExtras
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="WasWarningShown"
+			Group="Behavior"
+			Type="Boolean"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
