@@ -164,79 +164,60 @@ Begin SearchReceiverWindowBase WndEditor Implements PreferenceWatcher
    End
    Begin TBEditor tbToolbar
       Enabled         =   True
-      Height          =   32
       Index           =   -2147483648
       InitialParent   =   ""
-      Left            =   0
       LockedInPosition=   False
       Scope           =   2
       TabPanelIndex   =   0
-      Top             =   0
       Visible         =   True
-      Width           =   100
    End
    Begin XojoScript XS
-      Height          =   32
+      Enabled         =   True
       Index           =   -2147483648
       InitialParent   =   ""
-      Left            =   0
       LockedInPosition=   False
       Scope           =   2
       Source          =   ""
       TabPanelIndex   =   0
-      Top             =   0
-      Width           =   32
    End
    Begin IPCSocket IDESocket
-      Height          =   32
+      Enabled         =   True
       Index           =   -2147483648
       InitialParent   =   ""
-      Left            =   0
       LockedInPosition=   False
       Path            =   ""
       Scope           =   2
       TabPanelIndex   =   0
-      Top             =   0
-      Width           =   32
    End
    Begin Timer tmrSetAutocompleteScript
-      Height          =   32
+      Enabled         =   True
       Index           =   -2147483648
       InitialParent   =   ""
-      Left            =   0
       LockedInPosition=   False
       Mode            =   0
       Period          =   10
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   0
-      Width           =   32
    End
    Begin Timer tmrSetContentsChanged
-      Height          =   32
+      Enabled         =   True
       Index           =   -2147483648
       InitialParent   =   ""
-      Left            =   0
       LockedInPosition=   False
       Mode            =   0
       Period          =   250
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   0
-      Width           =   32
    End
    Begin Timer tmrCheckForXojoIDE
-      Height          =   32
+      Enabled         =   True
       Index           =   -2147483648
       InitialParent   =   ""
-      Left            =   0
       LockedInPosition=   False
       Mode            =   2
       Period          =   1000
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   0
-      Width           =   32
    End
 End
 #tag EndWindow
@@ -938,7 +919,6 @@ End
 		  
 		  fldCode.HelpTag = msg
 		  
-		  #pragma warning "How to handle the msg?"
 		End Sub
 	#tag EndMethod
 
@@ -1931,7 +1911,6 @@ End
 		  
 		  call dlg.ShowModalWithin( self )
 		  
-		  #pragma warning "Finish this!"
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -2140,7 +2119,6 @@ End
 			"7 - Global Floating Window"
 			"8 - Sheet Window"
 			"9 - Metal Window"
-			"10 - Drawer Window"
 			"11 - Modeless Dialog"
 		#tag EndEnumValues
 	#tag EndViewProperty
