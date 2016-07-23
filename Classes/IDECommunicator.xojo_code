@@ -60,7 +60,7 @@ Protected Module IDECommunicator
 		  // in your own code, you'll probably want to replace this
 		  // with some error reporting mechanism that fits into your app.
 		  
-		  #If Not TargetHasGUI
+		  #If Not TargetDesktop
 		    stderr.WriteLine "Socket error: " + Str(errorCode)
 		  #else
 		    #pragma unused errorCode
