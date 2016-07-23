@@ -185,12 +185,20 @@ Inherits Application
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  dim f as FolderItem = App.ExecutableFile.Parent
+			  dim p as FolderItem = App.ExecutableFile.Parent
+			  dim f as FolderItem
 			  
 			  #if TargetMacOS then
-			    f = f.Parent.Child( "Resources" )
+			    f = p.Parent.Child( "Resources" )
 			  #else
-			    f = f.Child( "Resources" )
+			    f = p.Child( "Resources" )
+			    if not f.Exists then
+			      dim appName as string = App.ExecutableFile.Name
+			      if appName.Right( 4 ) = ".exe" then
+			        appName = appName.Left( appName.Len - 4 )
+			      end if
+			      f = p.Child( appName + " Resources" )
+			    end if
 			  #endif
 			  
 			  return f
