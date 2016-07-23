@@ -124,6 +124,39 @@ Protected Class IDEEmulator
 	#tag Method, Flags = &h1
 		Protected Function EndOfLine() As String
 		  Extras.ShowWarning
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function EnvironmentVariable(s As String) As String
+		  Extras.ShowWarning
+		  
+		  //
+		  // We can get the variable though
+		  //
+		  
+		  try
+		    
+		    dim sh as new Shell
+		    #if Global.TargetWindows 
+		      sh.Execute "echo %" + s + "%"
+		    #else
+		      sh.Execute "echo ""${" + s + "}"""
+		    #endif
+		    
+		    if sh.ErrorCode = 0 then
+		      return sh.Result
+		    else
+		      return ""
+		    end if
+		    
+		  catch err as RuntimeException
+		    if err isa EndException or err isa ThreadEndException then
+		      raise err
+		    end if
+		    
+		    return ""
+		  end try
 		  
 		End Function
 	#tag EndMethod
@@ -136,6 +169,12 @@ Protected Class IDEEmulator
 
 	#tag Method, Flags = &h1
 		Protected Sub NewGUIProject()
+		  Extras.ShowWarning
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub NewiOSProject()
 		  Extras.ShowWarning
 		End Sub
 	#tag EndMethod
@@ -289,6 +328,24 @@ Protected Class IDEEmulator
 		Protected Function SubLocations(baseLocation As String) As String
 		  #pragma unused baseLocation
 		  
+		  Extras.ShowWarning
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function TargetLinux() As Boolean
+		  Extras.ShowWarning
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function TargetMacOS() As Boolean
+		  Extras.ShowWarning
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function TargetWindows() As Boolean
 		  Extras.ShowWarning
 		End Function
 	#tag EndMethod
