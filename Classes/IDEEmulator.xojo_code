@@ -71,6 +71,15 @@ Protected Class IDEEmulator
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function DebugBuild() As Boolean
+		  Extras.ShowWarning
+		  
+		  return true
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function DecryptItem(password As String) As Boolean
 		  #pragma unused password
 		  
