@@ -300,13 +300,6 @@ Inherits Thread
 			EditorType="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Left"
-			Visible=true
-			Group="Position"
-			InitialValue="0"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
@@ -333,13 +326,6 @@ Inherits Thread
 			Group="ID"
 			Type="String"
 			EditorType="String"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Top"
-			Visible=true
-			Group="Position"
-			InitialValue="0"
-			Type="Integer"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

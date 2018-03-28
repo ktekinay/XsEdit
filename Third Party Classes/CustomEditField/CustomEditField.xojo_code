@@ -157,6 +157,56 @@ Implements MessageReceiver
 
 	#tag Event
 		Function KeyDown(Key As String) As Boolean
+		  #if TargetCocoa
+		    // Workaround for Cocoa
+		    //  (dead keys are usually handled by NSTextView/Field but here we are using a Canvas so we need to handle them by ourselves)
+		    // When pressing a dead key, we are passed Chr(0) by Xojo
+		    // Here we use directly the current NSEvent
+		    // Implemented after http://stackoverflow.com/questions/22566665/how-to-capture-unicode-from-key-events-without-an-nstextview
+		    // Written by Stéphane Mons
+		    
+		    try
+		      // Declares
+		      const CarbonLib = "Carbon.framework"
+		      const CocoaLib = "Cocoa.framework"
+		      declare function TISCopyCurrentKeyboardInputSource lib CarbonLib () as Ptr
+		      declare function TISGetInputSourceProperty lib CarbonLib (kbd as Ptr, propkey as CFStringRef) as Ptr
+		      declare function CFDataGetBytePtr lib CarbonLib (p as Ptr) as Ptr
+		      declare function UCKeyTranslate lib CarbonLib (layout as Ptr, virtualKeyCode as UInt16, keyAction as integer, modifierKeyState as integer, kbdType as UInt32, _
+		      transOpt as integer, byref deadKeyState as integer, maxLength as integer, byref actualLength as integer, unicodeString as Ptr) as integer
+		      declare function LMGetKbdType lib CarbonLib () as UInt32
+		      declare sub CFRelease lib CarbonLib (p as Ptr)
+		      declare function CFStringCreateWithCharacters lib CarbonLib (alloc as Ptr, str as Ptr, length as integer) as CFStringRef
+		      declare function NSClassFromString lib CocoaLib (name as CFStringRef) as Ptr
+		      declare function sharedApplication lib CocoaLib selector "sharedApplication" (cls as Ptr) as Ptr
+		      declare function currentEvent lib CocoaLib selector "currentEvent" (cls as Ptr) as Ptr
+		      declare function keyCode lib CocoaLib selector "keyCode" (id as Ptr) as UInt16
+		      declare function modifierFlags lib CocoaLib selector "modifierFlags" (id as Ptr) as integer
+		      
+		      static NSAppObject as Ptr = sharedApplication( NSClassFromString( "NSApplication" ))
+		      dim evt as Ptr = currentEvent( NSAppObject )
+		      static deadKeyState as integer //Dead keys state is kept between calls
+		      
+		      const unicodeStringLength = 4
+		      static unicodeString as new MemoryBlock( unicodeStringLength )
+		      
+		      dim currentKeyboard as Ptr = TISCopyCurrentKeyboardInputSource
+		      dim layoutData as Ptr = TISGetInputSourceProperty( currentKeyboard, "TISPropertyUnicodeKeyLayoutData" )
+		      
+		      dim realLength as integer
+		      call UCKeyTranslate( CFDataGetBytePtr( layoutData ), keyCode( evt ), 0, ShiftRight( modifierFlags( evt ), 16 ) AND &hFF, LMGetKbdType, 0, deadKeyState, unicodeStringLength, realLength, unicodeString )
+		      CFRelease currentKeyboard
+		      
+		      key = CFStringCreateWithCharacters( nil, unicodeString, realLength )
+		      
+		      if key = "" then
+		        return true
+		      end if
+		    catch exc as RuntimeException
+		      beep
+		    end try
+		  #endif
+		  
 		  if keyDown(key) then
 		    Redraw
 		    Return true
@@ -411,7 +461,13 @@ Implements MessageReceiver
 	#tag MenuHandler
 		Function EditCut() As Boolean Handles EditCut.Action
 			dim c as new Clipboard
+			
+			#if EditFieldGlobals.Replace00With01
 			c.Text = me.SelText.ReplaceAll (Chr(1), Chr(0))
+			#else
+			c.Text = me.SelText
+			#endif
+			
 			me.SelText = ""
 			Redraw
 			Return true
@@ -463,7 +519,7 @@ Implements MessageReceiver
 		Protected Sub AutocompleteEOL()
 		  //get Autocomplete options from client window
 		  call fetchAutocompleteOptions
-		  if  CurrentAutocompleteOptions = nil then Return //nothing to autocomplete.
+		  if CurrentAutocompleteOptions = nil then Return //nothing to autocomplete.
 		  
 		  dim maxIndex as Integer = UBound(CurrentAutocompleteOptions.Options)
 		  dim firstMatch, longestCommonPrefix, currentPathComponent as String
@@ -518,7 +574,7 @@ Implements MessageReceiver
 		  //get all Autocomplete options for word
 		  
 		  call fetchAutocompleteOptions
-		  if  CurrentAutocompleteOptions = nil then Return //nothing to autocomplete
+		  if CurrentAutocompleteOptions = nil then Return //nothing to autocomplete
 		  if ubound(CurrentAutocompleteOptions.Options) < 0 then Return
 		  
 		  //find XY pos of caret
@@ -976,11 +1032,7 @@ Implements MessageReceiver
 		  dim doubleClickTime, currentClickTicks as Integer
 		  
 		  #if targetMacOS then
-		    #if targetCarbon or TargetCocoa then
-		      Declare Function GetDblTime Lib "Carbon" () as Integer
-		    #else
-		      Declare Function GetDblTime Lib "InterfaceLib" () as Integer Inline68K("2EB802F0")
-		    #endif
+		    Declare Function GetDblTime Lib "Carbon" () as Integer
 		    doubleClickTime = GetDblTime()
 		    if doubleClickTime <= 0 then
 		      doubleClickTime = 30
@@ -1033,11 +1085,7 @@ Implements MessageReceiver
 		    dim doubleClickTime, currentClickTicks as Integer
 		    
 		    #if targetMacOS then
-		      #if targetCarbon or TargetCocoa then
-		        Declare Function GetDblTime Lib "Carbon" () as Integer
-		      #else
-		        Declare Function GetDblTime Lib "InterfaceLib" () as Integer Inline68K("2EB802F0")
-		      #endif
+		      Declare Function GetDblTime Lib "Carbon" () as Integer
 		      doubleClickTime = GetDblTime()
 		    #endif
 		    
@@ -1141,8 +1189,12 @@ Implements MessageReceiver
 		Sub Copy()
 		  if SelLength = 0 then Return
 		  dim c as new Clipboard
-		  c.Text = me.SelText.ReplaceAll (Chr(1), Chr(0))
 		  
+		  #if EditFieldGlobals.Replace00With01
+		    c.Text = me.SelText.ReplaceAll (Chr(1), Chr(0))
+		  #else
+		    c.Text = me.SelText
+		  #endif
 		End Sub
 	#tag EndMethod
 
@@ -1741,12 +1793,12 @@ Implements MessageReceiver
 		      
 		      dim tmpPic as Picture
 		      if mBackBuffer <> nil then
-		        tmpPic = NewPicture(gr.Width, gr.Height, 32)
+		        tmpPic = New Picture(gr.Width, gr.Height, 32)
 		        g = tmpPic.Graphics
 		        g.DrawPicture mBackBuffer, 0, 0, Width, Height, 0, 0, Width, Height
 		      end
 		      
-		      dim blockPicture as Picture = NewPicture(self.Width - LineNumOffset, self.Height, 32)
+		      dim blockPicture as Picture = New Picture(self.Width - LineNumOffset, self.Height, 32)
 		      Dim gb As Graphics = blockPicture.Graphics
 		      
 		      gb.ForeColor = &c000000
@@ -1792,7 +1844,7 @@ Implements MessageReceiver
 		  
 		  //paint the location of the Previous/next block char
 		  if blockBeginPosX >= 0 then
-		    PaintHighlightedBlock(gr, line.VisualIndent(self.IndentVisually))
+		    PaintHighlightedBlock(gr)
 		    blockBeginPosX = -1
 		    blockBeginPosY = -1
 		  end if
@@ -3339,14 +3391,14 @@ Implements MessageReceiver
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub PaintHighlightedBlock(g as graphics, indent as Integer)
+		Protected Sub PaintHighlightedBlock(g as graphics)
 		  if not HighlightMatchingBrackets then Return
 		  
 		  //paints a blue circle over the highlighted block char.
 		  g.PenWidth = 2
 		  g.PenHeight = 2
 		  g.ForeColor = &c4444FF
-		  g.DrawOval indent + blockBeginPosX - 2 - g.StringWidth("(")/2, blockBeginPosY - g.TextHeight - 1, g.TextHeight + 4, g.TextHeight + 4
+		  g.DrawOval blockBeginPosX - 2 - g.StringWidth("(")/2, blockBeginPosY - g.TextHeight - 1, g.TextHeight + 4, g.TextHeight + 4
 		  g.PenWidth = 1
 		  g.PenHeight = 1
 		End Sub
@@ -3364,7 +3416,9 @@ Implements MessageReceiver
 		    t = LTrimLines(t)
 		  end
 		  
-		  t = t.ReplaceAll (Chr(0), Chr(1))
+		  #if EditFieldGlobals.Replace00With01
+		    t = t.ReplaceAll (Chr(0), Chr(1))
+		  #endif
 		  
 		  me.SelText = t
 		  
@@ -6317,6 +6371,14 @@ Implements MessageReceiver
 
 	#tag ViewBehavior
 		#tag ViewProperty
+			Name="Transparent"
+			Visible=true
+			Group="Behavior"
+			InitialValue="True"
+			Type="Boolean"
+			EditorType="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="AcceptFocus"
 			Visible=true
 			Group="Behavior"
@@ -6495,6 +6557,7 @@ Implements MessageReceiver
 			Group="Behavior"
 			InitialValue="True"
 			Type="Boolean"
+			EditorType="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="GutterBackgroundColor"
@@ -6810,14 +6873,6 @@ Implements MessageReceiver
 			Visible=true
 			Group="Position"
 			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Transparent"
-			Visible=true
-			Group="Behavior"
-			InitialValue="True"
-			Type="Boolean"
-			EditorType="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="UseFocusRing"

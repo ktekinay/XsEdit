@@ -123,6 +123,7 @@ Begin Window FindWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   15
+      Transparent     =   True
       Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
@@ -155,6 +156,7 @@ Begin Window FindWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   47
+      Transparent     =   True
       Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
@@ -187,6 +189,7 @@ Begin Window FindWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   79
+      Transparent     =   True
       Underline       =   False
       Value           =   True
       Visible         =   True
@@ -219,6 +222,7 @@ Begin Window FindWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   79
+      Transparent     =   True
       Underline       =   False
       Value           =   True
       Visible         =   True
@@ -251,6 +255,7 @@ Begin Window FindWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   114
+      Transparent     =   True
       Underline       =   False
       Visible         =   True
       Width           =   93
@@ -282,6 +287,7 @@ Begin Window FindWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   114
+      Transparent     =   True
       Underline       =   False
       Visible         =   True
       Width           =   80
@@ -313,6 +319,7 @@ Begin Window FindWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   114
+      Transparent     =   True
       Underline       =   False
       Visible         =   True
       Width           =   118
@@ -344,6 +351,7 @@ Begin Window FindWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   114
+      Transparent     =   True
       Underline       =   False
       Visible         =   True
       Width           =   80
@@ -475,7 +483,7 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function findNext() As boolean
+		Shared Function findNext() As boolean
 		  if CurrentFindWindow <> nil then
 		    CurrentFindWindow.results.Text = ""
 		    lastIgnoreCaseValue = CurrentFindWindow.ignoreCase.Value
@@ -508,7 +516,7 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Sub replace()
+		Shared Sub replace()
 		  if CurrentFindWindow <> nil then
 		    CurrentFindWindow.results.Text = ""
 		    lastIgnoreCaseValue = CurrentFindWindow.ignoreCase.Value
@@ -551,7 +559,7 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Sub replaceAndFind()
+		Shared Sub replaceAndFind()
 		  replace
 		  call findNext
 		End Sub
@@ -671,37 +679,72 @@ End
 #tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
-		Name="BackColor"
+		Name="Name"
 		Visible=true
-		Group="Appearance"
-		InitialValue="&hFFFFFF"
-		Type="Color"
+		Group="ID"
+		Type="String"
+		EditorType="String"
 	#tag EndViewProperty
 	#tag ViewProperty
-		Name="Backdrop"
+		Name="Interfaces"
 		Visible=true
-		Group="Appearance"
-		Type="Picture"
-		EditorType="Picture"
+		Group="ID"
+		Type="String"
+		EditorType="String"
 	#tag EndViewProperty
 	#tag ViewProperty
-		Name="CloseButton"
+		Name="Super"
 		Visible=true
-		Group="Appearance"
-		InitialValue="True"
-		Type="Boolean"
-		EditorType="Boolean"
+		Group="ID"
+		Type="String"
+		EditorType="String"
 	#tag EndViewProperty
 	#tag ViewProperty
-		Name="Composite"
-		Group="Appearance"
-		InitialValue="False"
-		Type="Boolean"
+		Name="Width"
+		Visible=true
+		Group="Size"
+		InitialValue="600"
+		Type="Integer"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Height"
+		Visible=true
+		Group="Size"
+		InitialValue="400"
+		Type="Integer"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MinWidth"
+		Visible=true
+		Group="Size"
+		InitialValue="64"
+		Type="Integer"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MinHeight"
+		Visible=true
+		Group="Size"
+		InitialValue="64"
+		Type="Integer"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MaxWidth"
+		Visible=true
+		Group="Size"
+		InitialValue="32000"
+		Type="Integer"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MaxHeight"
+		Visible=true
+		Group="Size"
+		InitialValue="32000"
+		Type="Integer"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Frame"
 		Visible=true
-		Group="Appearance"
+		Group="Frame"
 		InitialValue="0"
 		Type="Integer"
 		EditorType="Enum"
@@ -716,137 +759,80 @@ End
 			"7 - Global Floating Window"
 			"8 - Sheet Window"
 			"9 - Metal Window"
-			"10 - Drawer Window"
 			"11 - Modeless Dialog"
 		#tag EndEnumValues
 	#tag EndViewProperty
 	#tag ViewProperty
-		Name="FullScreen"
-		Group="Appearance"
-		InitialValue="False"
+		Name="Title"
+		Visible=true
+		Group="Frame"
+		InitialValue="Untitled"
+		Type="String"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="CloseButton"
+		Visible=true
+		Group="Frame"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Resizeable"
+		Visible=true
+		Group="Frame"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MaximizeButton"
+		Visible=true
+		Group="Frame"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MinimizeButton"
+		Visible=true
+		Group="Frame"
+		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="FullScreenButton"
 		Visible=true
-		Group="Appearance"
+		Group="Frame"
 		InitialValue="False"
 		Type="Boolean"
 		EditorType="Boolean"
 	#tag EndViewProperty
 	#tag ViewProperty
-		Name="HasBackColor"
-		Visible=true
-		Group="Appearance"
+		Name="Composite"
+		Group="OS X (Carbon)"
 		InitialValue="False"
 		Type="Boolean"
 	#tag EndViewProperty
 	#tag ViewProperty
-		Name="Height"
-		Visible=true
-		Group="Position"
-		InitialValue="400"
+		Name="MacProcID"
+		Group="OS X (Carbon)"
+		InitialValue="0"
 		Type="Integer"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="ImplicitInstance"
 		Visible=true
-		Group="Appearance"
+		Group="Behavior"
 		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="Interfaces"
-		Visible=true
-		Group="ID"
-		Type="String"
-		EditorType="String"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="LiveResize"
-		Visible=true
-		Group="Appearance"
-		InitialValue="True"
-		Type="Boolean"
-		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MacProcID"
-		Group="Appearance"
-		InitialValue="0"
-		Type="Integer"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MaxHeight"
-		Visible=true
-		Group="Position"
-		InitialValue="32000"
-		Type="Integer"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MaximizeButton"
-		Visible=true
-		Group="Appearance"
-		InitialValue="True"
-		Type="Boolean"
-		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MaxWidth"
-		Visible=true
-		Group="Position"
-		InitialValue="32000"
-		Type="Integer"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MenuBar"
-		Visible=true
-		Group="Appearance"
-		Type="MenuBar"
-		EditorType="MenuBar"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MenuBarVisible"
-		Group="Appearance"
-		InitialValue="True"
-		Type="Boolean"
-		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MinHeight"
-		Visible=true
-		Group="Position"
-		InitialValue="64"
-		Type="Integer"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MinimizeButton"
-		Visible=true
-		Group="Appearance"
-		InitialValue="True"
-		Type="Boolean"
-		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MinWidth"
-		Visible=true
-		Group="Position"
-		InitialValue="64"
-		Type="Integer"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="Name"
-		Visible=true
-		Group="ID"
-		Type="String"
-		EditorType="String"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Placement"
 		Visible=true
-		Group="Position"
+		Group="Behavior"
 		InitialValue="0"
 		Type="Integer"
 		EditorType="Enum"
@@ -859,40 +845,61 @@ End
 		#tag EndEnumValues
 	#tag EndViewProperty
 	#tag ViewProperty
-		Name="Resizeable"
-		Visible=true
-		Group="Appearance"
-		InitialValue="True"
-		Type="Boolean"
-		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="Super"
-		Visible=true
-		Group="ID"
-		Type="String"
-		EditorType="String"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="Title"
-		Visible=true
-		Group="Appearance"
-		InitialValue="Untitled"
-		Type="String"
-	#tag EndViewProperty
-	#tag ViewProperty
 		Name="Visible"
 		Visible=true
-		Group="Appearance"
+		Group="Behavior"
 		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
 	#tag EndViewProperty
 	#tag ViewProperty
-		Name="Width"
+		Name="LiveResize"
+		Group="Behavior"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="FullScreen"
+		Group="Behavior"
+		InitialValue="False"
+		Type="Boolean"
+		EditorType="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="HasBackColor"
 		Visible=true
-		Group="Position"
-		InitialValue="600"
-		Type="Integer"
+		Group="Background"
+		InitialValue="False"
+		Type="Boolean"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="BackColor"
+		Visible=true
+		Group="Background"
+		InitialValue="&hFFFFFF"
+		Type="Color"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Backdrop"
+		Visible=true
+		Group="Background"
+		Type="Picture"
+		EditorType="Picture"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MenuBar"
+		Visible=true
+		Group="Menus"
+		Type="MenuBar"
+		EditorType="MenuBar"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MenuBarVisible"
+		Visible=true
+		Group="Deprecated"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType="Boolean"
 	#tag EndViewProperty
 #tag EndViewBehavior

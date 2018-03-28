@@ -46,7 +46,7 @@ Protected Class HighlightDefinition
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function ColorToText(c as Color) As String
+		Shared Function ColorToText(c as Color) As String
 		  dim v as Variant = c
 		  return Right("0000000"+Hex(v.IntegerValue),6) // aIntegerValue doesn't include a Color's transparency, so we're safe here
 		End Function

@@ -46,12 +46,6 @@ Inherits timer
 			EditorType="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Left"
-			Visible=true
-			Group="Position"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Mode"
 			Visible=true
 			Group="Behavior"
@@ -84,12 +78,6 @@ Inherits timer
 			Group="ID"
 			Type="String"
 			EditorType="String"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Top"
-			Visible=true
-			Group="Position"
-			Type="Integer"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

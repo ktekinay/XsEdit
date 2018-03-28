@@ -13,9 +13,10 @@ Protected Class TextLineAttributes
 
 	#tag ViewBehavior
 		#tag ViewProperty
-			Name="Icon"
-			Group="Behavior"
-			Type="Picture"
+			Name="Name"
+			Visible=true
+			Group="ID"
+			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -25,6 +26,12 @@ Protected Class TextLineAttributes
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="Super"
+			Visible=true
+			Group="ID"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
@@ -32,23 +39,16 @@ Protected Class TextLineAttributes
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Name"
-			Visible=true
-			Group="ID"
-			Type="String"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Super"
-			Visible=true
-			Group="ID"
-			Type="String"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Icon"
+			Group="Behavior"
+			Type="Picture"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
