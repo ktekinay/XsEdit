@@ -1260,7 +1260,7 @@ End
 	#tag Method, Flags = &h21
 		Private Sub ScriptRunInIDE()
 		  ScriptCompile
-		  if LastCompilerErrorCode <> -1 then
+		  if XS.Source.Trim = "" or LastCompilerErrorCode <> -1 then
 		    return
 		  end if
 		  
